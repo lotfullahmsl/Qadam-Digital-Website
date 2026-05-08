@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useLanguage } from '../../hooks/useLanguage'
@@ -16,6 +16,13 @@ export default function Navbar() {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const navLinks = [
     { label: t('nav.scholarships'), to: ROUTES.SCHOLARSHIPS },
@@ -30,23 +37,32 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path
 
   return (
-    <nav className="bg-surface/10 backdrop-blur-xl sticky top-0 w-full z-50 border-b border-white/10 shadow-xl">
-      <div className="flex justify-between items-center px-lg py-md max-w-screen-xl mx-auto">
+    <nav className={`sticky top-0 w-full z-50 transition-all duration-300 ${
+      scrolled
+        ? 'bg-white shadow-md border-b border-border'
+        : 'bg-white/95 backdrop-blur-sm border-b border-border'
+    }`}>
+      <div className="flex justify-between items-center px-6 py-4 max-w-screen-xl mx-auto">
         {/* Brand */}
-        <Link to={ROUTES.HOME} className="font-heading text-2xl font-bold text-primary tracking-tight">
-          QADAM Digital
+        <Link to={ROUTES.HOME} className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <span className="material-symbols-outlined text-white text-lg">school</span>
+          </div>
+          <span className="font-heading text-xl font-bold text-navy tracking-tight">
+            QADAM <span className="text-primary">Digital</span>
+          </span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden lg:flex gap-6 items-center">
+        <div className="hidden lg:flex gap-1 items-center">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className={`text-xs font-semibold tracking-widest uppercase transition-colors duration-200 ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive(link.to)
-                  ? 'text-primary border-b-2 border-primary pb-0.5'
-                  : 'text-on-surface-variant hover:text-primary'
+                  ? 'bg-primary/10 text-primary font-semibold'
+                  : 'text-text-secondary hover:bg-primary-pale hover:text-primary'
               }`}
             >
               {link.label}
@@ -60,18 +76,21 @@ export default function Navbar() {
           <div className="relative">
             <button
               onClick={() => setLangOpen(!langOpen)}
-              className="text-xs font-semibold tracking-widest text-on-surface-variant hover:text-primary transition-colors border border-outline-variant rounded-full px-3 py-1.5"
+              className="flex items-center gap-1 text-xs font-semibold tracking-widest uppercase text-text-secondary hover:text-primary border border-border rounded-full px-3 py-1.5 hover:border-primary transition-all duration-200"
             >
+              <span className="material-symbols-outlined text-sm">language</span>
               {LANGUAGES.find((l) => l.code === language)?.label || 'EN'}
             </button>
             {langOpen && (
-              <div className="absolute right-0 mt-2 bg-surface-container border border-outline-variant/30 rounded-lg shadow-xl overflow-hidden z-50">
+              <div className="absolute right-0 mt-2 bg-white border border-border rounded-xl shadow-card-hover overflow-hidden z-50 min-w-[80px]">
                 {LANGUAGES.map((lang) => (
                   <button
                     key={lang.code}
                     onClick={() => { changeLanguage(lang.code); setLangOpen(false) }}
-                    className={`block w-full text-left px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors ${
-                      language === lang.code ? 'text-primary bg-primary/10' : 'text-on-surface-variant hover:text-primary hover:bg-white/5'
+                    className={`block w-full text-left px-4 py-2.5 text-xs font-semibold tracking-widest uppercase transition-colors ${
+                      language === lang.code
+                        ? 'text-primary bg-primary/10'
+                        : 'text-text-secondary hover:text-primary hover:bg-primary-pale'
                     }`}
                   >
                     {lang.label}
@@ -86,15 +105,15 @@ export default function Navbar() {
             href="https://wa.me/93700000000"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-1.5 bg-primary text-on-primary text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full glow-button transition-all duration-300"
+            className="hidden sm:flex items-center gap-1.5 bg-primary text-white text-xs font-semibold tracking-wide uppercase px-4 py-2.5 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200"
           >
             <span className="material-symbols-outlined text-base">chat</span>
-            {t('nav.whatsapp')}
+            WhatsApp
           </a>
 
           {/* Mobile Hamburger */}
           <button
-            className="lg:hidden text-on-surface-variant hover:text-primary transition-colors"
+            className="lg:hidden text-text-secondary hover:text-primary transition-colors p-1"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -107,14 +126,16 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="lg:hidden bg-surface-container border-t border-outline-variant/30 px-lg py-md flex flex-col gap-3">
+        <div className="lg:hidden bg-white border-t border-border px-6 py-4 flex flex-col gap-1 shadow-lg">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               onClick={() => setMenuOpen(false)}
-              className={`text-xs font-semibold tracking-widest uppercase py-2 transition-colors ${
-                isActive(link.to) ? 'text-primary' : 'text-on-surface-variant hover:text-primary'
+              className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                isActive(link.to)
+                  ? 'bg-primary/10 text-primary font-semibold'
+                  : 'text-text-secondary hover:bg-primary-pale hover:text-primary'
               }`}
             >
               {link.label}
@@ -124,10 +145,10 @@ export default function Navbar() {
             href="https://wa.me/93700000000"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 bg-primary text-on-primary text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full w-fit mt-2"
+            className="mt-3 flex items-center justify-center gap-2 bg-primary text-white font-semibold py-2.5 rounded-lg text-sm"
           >
             <span className="material-symbols-outlined text-base">chat</span>
-            {t('nav.whatsapp')}
+            Chat on WhatsApp
           </a>
         </div>
       )}

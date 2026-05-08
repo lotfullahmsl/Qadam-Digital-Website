@@ -9,9 +9,9 @@ export default function SectionHeader({ badge, title, subtitle, center = true })
           {badge}
         </div>
       )}
-      <h2 className="font-heading text-h2 text-on-surface">{title}</h2>
+      <h2 className="font-heading font-bold text-navy" style={{ fontSize: '2.25rem', lineHeight: '1.2' }}>{title}</h2>
       {subtitle && (
-        <p className="text-body-lg text-on-surface-variant max-w-2xl mx-auto">{subtitle}</p>
+        <p className="text-text-muted text-lg max-w-2xl mx-auto leading-relaxed">{subtitle}</p>
       )}
     </div>
   )

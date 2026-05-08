@@ -7,55 +7,71 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-on-background font-sans antialiased;
+    @apply bg-background text-text-primary font-sans antialiased;
   }
-  h1, h2, h3 {
-    @apply font-heading;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-text-primary;
   }
 }
 
 @layer components {
+  /* ── Cards ── */
+  .card {
+    @apply bg-surface rounded-xl border border-border shadow-card transition-all duration-300;
+  }
+  .card:hover {
+    @apply shadow-card-hover border-primary/40 -translate-y-0.5;
+  }
+
+  /* ── Glass panel (used on dark hero sections) ── */
   .glass-panel {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.75rem;
   }
-  .glass-panel:hover {
-    border-color: rgba(242, 202, 80, 0.3);
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200 text-sm tracking-wide;
   }
-  .glass-card {
-    background: rgba(18, 20, 20, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-primary text-primary font-semibold px-6 py-3 rounded-lg hover:bg-primary hover:text-white transition-all duration-200 text-sm tracking-wide;
   }
-  .glass-card:hover {
-    border-color: rgba(242, 202, 80, 0.5);
-    background: rgba(18, 20, 20, 0.25);
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 text-primary font-semibold px-6 py-3 rounded-lg hover:bg-primary-pale transition-all duration-200 text-sm tracking-wide;
   }
-  .glow-button {
-    box-shadow: 0 0 20px rgba(242, 202, 80, 0.2);
+
+  /* ── Section backgrounds ── */
+  .section-light {
+    @apply bg-background;
   }
-  .glow-button:hover {
-    box-shadow: 0 0 30px rgba(242, 202, 80, 0.4);
+  .section-pale {
+    @apply bg-primary-pale;
   }
-  .btn-glow {
-    box-shadow: 0 0 15px rgba(242, 202, 80, 0.4);
-    transition: all 0.3s ease;
+  .section-dark {
+    @apply bg-navy text-text-on-dark;
   }
-  .btn-glow:hover {
-    box-shadow: 0 0 25px rgba(242, 202, 80, 0.6);
-  }
-  .premium-border {
-    border: 1px solid rgba(242, 202, 80, 0.8);
-    box-shadow: 0 0 30px rgba(242, 202, 80, 0.15);
-  }
+
+  /* ── Hero gradient ── */
   .hero-bg {
-    background: radial-gradient(circle at 50% 50%, rgba(242, 202, 80, 0.05) 0%, rgba(18, 20, 20, 1) 100%);
+    background: linear-gradient(135deg, #062030 0%, #0A5C7A 50%, #00AAFF 100%);
   }
+
+  /* ── Input fields ── */
+  .input-field {
+    @apply w-full bg-white border border-border rounded-lg px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200;
+  }
+
+  /* ── Badge ── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase border border-primary/20;
+  }
+
+  /* ── Divider ── */
   .section-divider {
-    @apply border-t border-outline-variant/30;
+    @apply border-t border-border;
   }
 }
 

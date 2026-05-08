@@ -9,136 +9,80 @@ const VALUES = [
   { icon: 'rocket_launch', title: 'Innovation', desc: 'We embrace cutting-edge technology to deliver modern, future-ready solutions.' },
 ]
 
-const TEAM = [
-  { name: 'QADAM Team', role: 'Education Consultants', icon: 'school' },
-  { name: 'Tech Division', role: 'Web & Database Developers', icon: 'code' },
-  { name: 'Marketing Team', role: 'Social Media & Digital Marketing', icon: 'campaign' },
-  { name: 'Support Team', role: '24/7 Client Support', icon: 'support_agent' },
-]
-
 export default function About() {
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="relative pt-section pb-xl px-lg hero-bg text-center">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/10 blur-[100px] rounded-full pointer-events-none" />
-        <div className="relative z-10 max-w-3xl mx-auto space-y-5">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase border border-primary/20">
+      <section className="hero-bg py-24 px-6">
+        <div className="max-w-screen-xl mx-auto text-center space-y-5">
+          <span className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/20">
             <span className="material-symbols-outlined text-sm">info</span>
             About Us
-          </div>
-          <h1 className="font-heading text-h1 text-on-surface">
-            Who is{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container">
-              QADAM Digital?
-            </span>
+          </span>
+          <h1 className="font-heading font-bold text-white text-5xl">
+            Who is <span className="text-primary">QADAM Digital?</span>
           </h1>
-          <p className="text-body-lg text-on-surface-variant">
-            QADAM Digital is a professional digital services platform focused on education, scholarship support, document services, website development, database solutions, digital subscription guidance, social media marketing, and consulting services.
+          <p className="text-primary-light/90 text-lg max-w-2xl mx-auto leading-relaxed">
+            A professional digital services platform focused on education, scholarship support, web development, database solutions, and digital services.
           </p>
         </div>
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-section px-lg max-w-screen-xl mx-auto w-full">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
-          <div className="glass-panel rounded-xl p-xl space-y-4">
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-              <span className="material-symbols-outlined text-2xl">flag</span>
+      <section className="py-20 px-6 bg-background">
+        <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            { icon: 'flag', title: 'Our Mission', text: 'To empower students and businesses in Afghanistan, Pakistan, and beyond by providing world-class educational consultancy and cutting-edge digital services — making global opportunities accessible to everyone.' },
+            { icon: 'visibility', title: 'Our Vision', text: 'To become the most trusted digital services platform in the region — a bridge between local talent and global opportunities, powered by technology, expertise, and a deep commitment to excellence.' },
+          ].map((item) => (
+            <div key={item.title} className="card p-8 space-y-4">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <span className="material-symbols-outlined text-2xl">{item.icon}</span>
+              </div>
+              <h2 className="font-heading font-bold text-navy text-2xl">{item.title}</h2>
+              <p className="text-text-muted leading-relaxed">{item.text}</p>
             </div>
-            <h2 className="font-heading text-2xl font-semibold text-on-surface">Our Mission</h2>
-            <p className="text-on-surface-variant leading-relaxed">
-              To empower students and businesses in Afghanistan, Pakistan, and beyond by providing world-class educational consultancy and cutting-edge digital services — making global opportunities accessible to everyone.
-            </p>
-          </div>
-          <div className="glass-panel rounded-xl p-xl space-y-4">
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-              <span className="material-symbols-outlined text-2xl">visibility</span>
-            </div>
-            <h2 className="font-heading text-2xl font-semibold text-on-surface">Our Vision</h2>
-            <p className="text-on-surface-variant leading-relaxed">
-              To become the most trusted digital services platform in the region — a bridge between local talent and global opportunities, powered by technology, expertise, and a deep commitment to excellence.
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
       {/* Values */}
-      <section className="py-section px-lg bg-surface-container-low border-y border-outline-variant/30">
+      <section className="py-20 px-6 bg-primary-pale">
         <div className="max-w-screen-xl mx-auto">
-          <div className="text-center space-y-3 mb-12">
-            <h2 className="font-heading text-h2 text-on-surface">Our Core Values</h2>
-            <p className="text-body-lg text-on-surface-variant">The principles that guide everything we do.</p>
+          <div className="text-center mb-12">
+            <span className="badge mb-3">Our Values</span>
+            <h2 className="font-heading font-bold text-navy text-4xl">Core Principles</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {VALUES.map((v) => (
-              <div key={v.title} className="glass-panel rounded-xl p-6 flex flex-col gap-3 text-center items-center">
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+              <div key={v.title} className="card p-6 flex flex-col gap-3 items-center text-center">
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                   <span className="material-symbols-outlined text-2xl">{v.icon}</span>
                 </div>
-                <h3 className="font-heading font-semibold text-on-surface text-lg">{v.title}</h3>
-                <p className="text-sm text-on-surface-variant">{v.desc}</p>
+                <h3 className="font-heading font-semibold text-navy text-lg">{v.title}</h3>
+                <p className="text-sm text-text-muted">{v.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* What We Do */}
-      <section className="py-section px-lg max-w-screen-xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-center">
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase border border-primary/20">
-              <span className="material-symbols-outlined text-sm">business_center</span>
-              What We Do
-            </div>
-            <h2 className="font-heading text-h2 text-on-surface">Education Meets Digital Innovation</h2>
-            <p className="text-on-surface-variant leading-relaxed">
-              QADAM Digital bridges the gap between education and technology. We help students find and apply for scholarships, write professional CVs and motivation letters, translate documents, and access premium digital tools.
-            </p>
-            <p className="text-on-surface-variant leading-relaxed">
-              For businesses, we build modern websites, develop powerful database systems, manage social media campaigns, and provide strategic digital consulting — all under one roof.
-            </p>
-            <Link
-              to={ROUTES.SERVICES}
-              className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-lg glow-button transition-all duration-300"
-            >
-              Explore Our Services
-              <span className="material-symbols-outlined">arrow_forward</span>
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { icon: 'school', label: 'Scholarship Guidance', count: '500+' },
-              { icon: 'web', label: 'Websites Built', count: '1000+' },
-              { icon: 'description', label: 'CVs Written', count: '2000+' },
-              { icon: 'translate', label: 'Documents Translated', count: '500+' },
-            ].map((item) => (
-              <div key={item.label} className="glass-panel rounded-xl p-5 flex flex-col gap-2 items-center text-center">
-                <span className="material-symbols-outlined text-primary text-3xl">{item.icon}</span>
-                <span className="font-heading text-2xl font-bold text-primary">{item.count}</span>
-                <span className="text-xs text-on-surface-variant">{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Team */}
-      <section className="py-section px-lg bg-surface-container-low border-y border-outline-variant/30">
+      {/* Stats */}
+      <section className="py-20 px-6 bg-navy">
         <div className="max-w-screen-xl mx-auto">
-          <div className="text-center space-y-3 mb-12">
-            <h2 className="font-heading text-h2 text-on-surface">Our Team</h2>
-            <p className="text-body-lg text-on-surface-variant">Dedicated professionals committed to your success.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-            {TEAM.map((member) => (
-              <div key={member.name} className="glass-panel rounded-xl p-6 flex flex-col gap-3 items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                  <span className="material-symbols-outlined text-3xl">{member.icon}</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { icon: 'school', label: 'Scholarships', count: '500+' },
+              { icon: 'web', label: 'Websites Built', count: '1,000+' },
+              { icon: 'description', label: 'CVs Written', count: '2,000+' },
+              { icon: 'people', label: 'Students Helped', count: '5,000+' },
+            ].map((item) => (
+              <div key={item.label} className="text-center space-y-2">
+                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary mx-auto">
+                  <span className="material-symbols-outlined text-2xl">{item.icon}</span>
                 </div>
-                <h3 className="font-heading font-semibold text-on-surface">{member.name}</h3>
-                <p className="text-sm text-on-surface-variant">{member.role}</p>
+                <div className="font-heading font-bold text-white text-3xl">{item.count}</div>
+                <div className="text-primary-light/70 text-sm">{item.label}</div>
               </div>
             ))}
           </div>
@@ -146,21 +90,19 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="py-section px-lg">
-        <div className="max-w-screen-xl mx-auto glass-panel rounded-2xl p-xl text-center space-y-6">
-          <h2 className="font-heading text-h2 text-on-surface">Ready to Work With Us?</h2>
-          <p className="text-body-lg text-on-surface-variant max-w-xl mx-auto">
-            Whether you're a student seeking scholarships or a business needing digital solutions, we're here to help.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to={ROUTES.CONTACT} className="bg-primary text-on-primary font-semibold px-xl py-md rounded-lg glow-button transition-all duration-300 flex items-center justify-center gap-2">
-              Contact Us
-              <span className="material-symbols-outlined">arrow_forward</span>
-            </Link>
-            <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer" className="glass-panel text-primary font-semibold px-xl py-md rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
-              <span className="material-symbols-outlined">chat</span>
-              WhatsApp
-            </a>
+      <section className="py-20 px-6 bg-background">
+        <div className="max-w-screen-xl mx-auto">
+          <div className="bg-primary rounded-2xl p-12 text-center space-y-6">
+            <h2 className="font-heading font-bold text-white text-4xl">Ready to Work With Us?</h2>
+            <p className="text-white/80 text-lg max-w-xl mx-auto">Whether you're a student seeking scholarships or a business needing digital solutions, we're here to help.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to={ROUTES.CONTACT} className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200">
+                Contact Us <span className="material-symbols-outlined text-base">arrow_forward</span>
+              </Link>
+              <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold px-8 py-3.5 rounded-lg border border-white/30 hover:bg-white/25 transition-all duration-200">
+                <span className="material-symbols-outlined text-base">chat</span> WhatsApp
+              </a>
+            </div>
           </div>
         </div>
       </section>

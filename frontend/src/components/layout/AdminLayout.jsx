@@ -27,13 +27,15 @@ export default function AdminLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen flex bg-background text-on-background">
+    <div className="min-h-screen flex bg-background">
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col`}>
+      <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 bg-navy flex flex-col flex-shrink-0`}>
         {/* Logo */}
-        <div className="flex items-center gap-3 px-4 py-5 border-b border-outline-variant/30">
-          <span className="material-symbols-outlined text-primary text-2xl">admin_panel_settings</span>
-          {sidebarOpen && <span className="font-heading font-bold text-primary text-lg">QADAM Admin</span>}
+        <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+            <span className="material-symbols-outlined text-white text-lg">admin_panel_settings</span>
+          </div>
+          {sidebarOpen && <span className="font-heading font-bold text-white text-base">QADAM Admin</span>}
         </div>
 
         {/* Nav */}
@@ -44,13 +46,13 @@ export default function AdminLayout({ children }) {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`flex items-center gap-3 px-4 py-3 transition-colors duration-200 ${
+                className={`flex items-center gap-3 px-4 py-3 transition-all duration-200 ${
                   active
-                    ? 'bg-primary/10 text-primary border-r-2 border-primary'
-                    : 'text-on-surface-variant hover:bg-white/5 hover:text-primary'
+                    ? 'bg-primary text-white'
+                    : 'text-primary-light/70 hover:bg-white/10 hover:text-white'
                 }`}
               >
-                <span className="material-symbols-outlined text-xl">{item.icon}</span>
+                <span className="material-symbols-outlined text-xl flex-shrink-0">{item.icon}</span>
                 {sidebarOpen && <span className="text-sm font-medium">{item.label}</span>}
               </Link>
             )
@@ -58,13 +60,13 @@ export default function AdminLayout({ children }) {
         </nav>
 
         {/* User + Logout */}
-        <div className="border-t border-outline-variant/30 p-4">
+        <div className="border-t border-white/10 p-4">
           {sidebarOpen && (
-            <p className="text-xs text-on-surface-variant mb-2 truncate">{admin?.email || 'Admin'}</p>
+            <p className="text-xs text-primary-light/50 mb-3 truncate">{admin?.email || 'Admin'}</p>
           )}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 text-on-surface-variant hover:text-error transition-colors text-sm"
+            className="flex items-center gap-2 text-primary-light/70 hover:text-red-400 transition-colors text-sm"
           >
             <span className="material-symbols-outlined text-xl">logout</span>
             {sidebarOpen && 'Logout'}
@@ -75,20 +77,20 @@ export default function AdminLayout({ children }) {
       {/* Main */}
       <div className="flex-grow flex flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="bg-surface-container border-b border-outline-variant/30 px-6 py-4 flex items-center gap-4">
+        <header className="bg-white border-b border-border px-6 py-4 flex items-center gap-4 shadow-sm">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-on-surface-variant hover:text-primary transition-colors"
+            className="text-text-secondary hover:text-primary transition-colors"
           >
             <span className="material-symbols-outlined">menu</span>
           </button>
-          <h1 className="font-heading font-semibold text-on-surface text-lg">
+          <h1 className="font-heading font-semibold text-navy text-lg">
             {NAV_ITEMS.find((n) => n.to === location.pathname)?.label || 'Admin Panel'}
           </h1>
         </header>
 
         {/* Content */}
-        <main className="flex-grow overflow-y-auto p-6">
+        <main className="flex-grow overflow-y-auto p-6 bg-background">
           {children}
         </main>
       </div>
