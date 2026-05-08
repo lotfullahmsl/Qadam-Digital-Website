@@ -22,6 +22,8 @@ import Contact from '../pages/public/Contact'
 
 // Auth
 import Login from '../pages/auth/Login'
+import UserLogin from '../pages/auth/UserLogin'
+import UserSignup from '../pages/auth/UserSignup'
 
 // Admin Pages
 import AdminLayout from '../components/layout/AdminLayout'
@@ -79,6 +81,8 @@ export default function AppRoutes() {
       <Route path={ROUTES.CONTACT} element={<PublicPage component={Contact} />} />
 
       {/* Auth */}
+      <Route path={ROUTES.USER_LOGIN} element={<UserLogin />} />
+      <Route path={ROUTES.USER_SIGNUP} element={<UserSignup />} />
       <Route path={ROUTES.LOGIN} element={<Login />} />
 
       {/* Admin */}

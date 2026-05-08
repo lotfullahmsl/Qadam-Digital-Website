@@ -15,7 +15,12 @@ export const ROUTES = {
   BLOG_DETAILS: '/blog/:slug',
   CONTACT: '/contact',
 
-  // Auth
+  // User Auth
+  USER_LOGIN: '/login',
+  USER_SIGNUP: '/signup',
+  USER_DASHBOARD: '/dashboard',
+
+  // Admin Auth
   LOGIN: '/admin/login',
 
   // Admin
