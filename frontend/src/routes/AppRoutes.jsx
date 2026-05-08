@@ -81,8 +81,8 @@ export default function AppRoutes() {
       <Route path={ROUTES.CONTACT} element={<PublicPage component={Contact} />} />
 
       {/* Auth */}
-      <Route path={ROUTES.USER_LOGIN} element={<UserLogin />} />
-      <Route path={ROUTES.USER_SIGNUP} element={<UserSignup />} />
+      <Route path={ROUTES.USER_LOGIN} element={<PublicPage component={UserLogin} />} />
+      <Route path={ROUTES.USER_SIGNUP} element={<PublicPage component={UserSignup} />} />
       <Route path={ROUTES.LOGIN} element={<Login />} />
 
       {/* Admin */}
