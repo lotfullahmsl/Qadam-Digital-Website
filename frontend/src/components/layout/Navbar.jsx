@@ -65,8 +65,8 @@ export default function Navbar() {
     <header className={`sticky top-0 w-full z-50 transition-all duration-300 ${
       scrolled ? 'bg-white shadow-[0_2px_20px_rgba(0,0,0,0.08)]' : 'bg-white border-b border-gray-100'
     }`}>
-      <div className="max-w-screen-xl mx-auto px-8">
-        <div className="flex items-center h-18" style={{ height: '72px' }}>
+      <div className="w-full px-6 xl:px-12">
+        <div className="flex items-center" style={{ height: '68px' }}>
 
           {/* ── Logo ── */}
           <Link to={ROUTES.HOME} className="flex items-center gap-2.5 flex-shrink-0 mr-10">
@@ -215,7 +215,7 @@ export default function Navbar() {
       {/* ── Mobile Menu ── */}
       {menuOpen && (
         <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
-          <div className="max-w-screen-xl mx-auto px-6 py-4 flex flex-col gap-1">
+          <div className="w-full px-6 xl:px-12 py-4 flex flex-col gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
