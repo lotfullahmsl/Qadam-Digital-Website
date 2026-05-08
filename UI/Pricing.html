@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pricing &amp; Subscriptions | QADAM Digital</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#e2e2e2",
+                      "surface-container-lowest": "#0c0f0f",
+                      "primary-fixed-dim": "#e9c349",
+                      "on-secondary-fixed-variant": "#39475f",
+                      "secondary": "#b9c7e4",
+                      "tertiary-fixed": "#d8e2ff",
+                      "error": "#ffb4ab",
+                      "surface-bright": "#37393a",
+                      "surface-container": "#1e2020",
+                      "surface": "#121414",
+                      "outline": "#99907c",
+                      "surface-tint": "#e9c349",
+                      "tertiary": "#becef5",
+                      "on-primary-fixed": "#241a00",
+                      "tertiary-fixed-dim": "#b6c6ed",
+                      "on-secondary-fixed": "#0d1c32",
+                      "on-primary-fixed-variant": "#574500",
+                      "error-container": "#93000a",
+                      "background": "#121414",
+                      "inverse-primary": "#735c00",
+                      "on-error-container": "#ffdad6",
+                      "outline-variant": "#4d4635",
+                      "primary": "#f2ca50",
+                      "on-tertiary-container": "#354565",
+                      "surface-container-low": "#1a1c1c",
+                      "inverse-on-surface": "#2f3131",
+                      "on-tertiary-fixed": "#091b39",
+                      "surface-container-high": "#282a2b",
+                      "on-tertiary-fixed-variant": "#374767",
+                      "on-secondary": "#233148",
+                      "on-surface-variant": "#d0c5af",
+                      "on-surface": "#e2e2e2",
+                      "on-tertiary": "#20304f",
+                      "primary-fixed": "#ffe088",
+                      "on-primary-container": "#554300",
+                      "primary-container": "#d4af37",
+                      "on-secondary-container": "#abb9d6",
+                      "surface-container-highest": "#333535",
+                      "on-error": "#690005",
+                      "secondary-fixed": "#d6e3ff",
+                      "on-primary": "#3c2f00",
+                      "surface-dim": "#121414",
+                      "secondary-container": "#3c4962",
+                      "secondary-fixed-dim": "#b9c7e4",
+                      "tertiary-container": "#a3b3d8",
+                      "on-background": "#e2e2e2",
+                      "surface-variant": "#333535"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "2rem",
+                      "section": "8rem",
+                      "gutter": "24px",
+                      "base": "8px",
+                      "xl": "4rem",
+                      "md": "1rem",
+                      "sm": "0.5rem",
+                      "xs": "0.25rem"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "h1": [
+                              "Montserrat"
+                      ],
+                      "h3": [
+                              "Montserrat"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "h2": [
+                              "Montserrat"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "1rem",
+                              {
+                                      "lineHeight": "1.5",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h1": [
+                              "4.5rem",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "h3": [
+                              "2rem",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "1.125rem",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "0.75rem",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h2": [
+                              "3rem",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Montserrat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-card {
+            background: rgba(18, 20, 20, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card:hover {
+            border-color: rgba(242, 202, 80, 0.5);
+            background: rgba(18, 20, 20, 0.25);
+        }
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(242, 202, 80, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(242, 202, 80, 0.6);
+        }
+        .premium-border {
+            border: 1px solid rgba(242, 202, 80, 0.8);
+            box-shadow: 0 0 30px rgba(242, 202, 80, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-primary/30 selection:text-primary">
+<!-- TopNavBar -->
+<nav class="bg-surface/10 dark:bg-surface/10 backdrop-blur-xl sticky top-0 w-full z-50 border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-lg py-md max-w-screen-xl mx-auto">
+<div class="font-h3 text-h3 font-bold text-primary tracking-tight">QADAM Digital</div>
+<div class="hidden md:flex items-center space-x-lg font-label-caps text-label-caps">
+<a class="text-on-surface-variant hover:text-primary transition-colors hover:bg-white/5 transition-all duration-300 px-sm py-xs rounded" href="#">Scholarships</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors hover:bg-white/5 transition-all duration-300 px-sm py-xs rounded" href="#">Digital Solutions</a>
+<a class="text-primary border-b-2 border-primary pb-1 px-sm py-xs rounded" href="#">Subscriptions</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors hover:bg-white/5 transition-all duration-300 px-sm py-xs rounded" href="#">About Us</a>
+</div>
+<div class="flex items-center space-x-md">
+<button class="hidden md:block font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors">EN/DA/PA</button>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-md py-sm rounded-full btn-glow hover:bg-primary-fixed transition-colors">Contact WhatsApp</button>
+</div>
+</div>
+</nav>
+<main class="min-h-screen pt-xl pb-section">
+<!-- Header -->
+<header class="max-w-screen-xl mx-auto px-lg mb-section text-center">
+<h1 class="font-h1 text-h1 text-on-surface mb-md">Professional Services at <br/><span class="text-primary">Competitive Rates</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Access premium AI tools and expert consulting services designed to accelerate your academic and professional journey in a digital-first world.</p>
+</header>
+<!-- AI Tool Subscriptions -->
+<section class="max-w-screen-xl mx-auto px-lg mb-section">
+<div class="flex items-center justify-between mb-xl">
+<div>
+<h2 class="font-h2 text-h2 text-on-surface mb-sm">AI Tool Subscriptions</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Shared and dedicated access to industry-leading platforms.</p>
+</div>
+<div class="hidden md:flex space-x-sm">
+<span class="bg-primary/10 text-primary px-sm py-xs rounded-full font-label-caps text-label-caps border border-primary/20">Monthly</span>
+<span class="text-on-surface-variant px-sm py-xs rounded-full font-label-caps text-label-caps hover:text-primary cursor-pointer transition-colors">Yearly (Save 20%)</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- ChatGPT -->
+<div class="glass-card rounded-xl p-lg flex flex-col transition-all duration-300 group">
+<div class="flex items-center justify-between mb-lg">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30 group-hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary text-[24px]">smart_toy</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container-high px-xs py-[2px] rounded">Shared</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-xs">ChatGPT Plus</h3>
+<div class="mb-md"><span class="font-h3 text-h3 text-primary">$10</span><span class="font-body-md text-body-md text-on-surface-variant">/mo</span></div>
+<ul class="space-y-sm mb-lg flex-grow font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> GPT-4 Access</li>
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> DALL-E Image Gen</li>
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Advanced Data Analysis</li>
+</ul>
+<button class="w-full py-sm rounded-lg border border-primary text-primary font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-all duration-300">Request Subscription</button>
+</div>
+<!-- Gemini -->
+<div class="glass-card rounded-xl p-lg flex flex-col transition-all duration-300 group">
+<div class="flex items-center justify-between mb-lg">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30 group-hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary text-[24px]">psychology</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container-high px-xs py-[2px] rounded">Shared</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-xs">Gemini Advanced</h3>
+<div class="mb-md"><span class="font-h3 text-h3 text-primary">$12</span><span class="font-body-md text-body-md text-on-surface-variant">/mo</span></div>
+<ul class="space-y-sm mb-lg flex-grow font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Gemini 1.5 Pro</li>
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Google Workspace Integration</li>
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> 2TB Cloud Storage</li>
+</ul>
+<button class="w-full py-sm rounded-lg border border-primary text-primary font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-all duration-300">Request Subscription</button>
+</div>
+<!-- Coursera -->
+<div class="glass-card rounded-xl p-lg flex flex-col transition-all duration-300 group premium-border relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-sm py-xs rounded-full font-label-caps text-label-caps text-[10px] shadow-[0_0_10px_rgba(242,202,80,0.5)]">Most Popular</div>
+<div class="flex items-center justify-between mb-lg mt-sm">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border border-primary/50">
+<span class="material-symbols-outlined text-primary text-[24px]">school</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container-high px-xs py-[2px] rounded">Dedicated</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-xs">Coursera Plus</h3>
+<div class="mb-md"><span class="font-h3 text-h3 text-primary">$45</span><span class="font-body-md text-body-md text-on-surface-variant">/mo</span></div>
+<ul class="space-y-sm mb-lg flex-grow font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Unlimited Courses</li>
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Professional Certificates</li>
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Guided Projects</li>
+</ul>
+<button class="w-full py-sm rounded-lg bg-primary text-on-primary font-label-caps text-label-caps btn-glow hover:bg-primary-fixed transition-all duration-300">Request Subscription</button>
+</div>
+<!-- Canva Pro -->
+<div class="glass-card rounded-xl p-lg flex flex-col transition-all duration-300 group">
+<div class="flex items-center justify-between mb-lg">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30 group-hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-primary text-[24px]">palette</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container-high px-xs py-[2px] rounded">Team</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-xs">Canva Pro</h3>
+<div class="mb-md"><span class="font-h3 text-h3 text-primary">$8</span><span class="font-body-md text-body-md text-on-surface-variant">/mo</span></div>
+<ul class="space-y-sm mb-lg flex-grow font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Premium Templates</li>
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Brand Kit</li>
+<li class="flex items-start"><span class="material-symbols-outlined text-primary text-[20px] mr-sm">check</span> Magic Studio AI</li>
+</ul>
+<button class="w-full py-sm rounded-lg border border-primary text-primary font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-all duration-300">Request Subscription</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest w-full py-xl border-t border-outline-variant/30">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-lg max-w-screen-xl mx-auto">
+<div class="md:col-span-1">
+<div class="font-h3 text-h3 text-primary mb-md">QADAM Digital</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg max-w-xs">Elevating academic and professional journeys through high-end digital solutions and expert consultancy.</p>
+<div class="font-body-md text-body-md text-on-surface-variant">© 2024 QADAM Digital. All rights reserved.</div>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface mb-md">Services</h4>
+<ul class="space-y-sm font-body-md text-body-md text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">Scholarship Consulting</a></li>
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">CV &amp; Motivation Letters</a></li>
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">Web Development</a></li>
+<li><a class="text-primary font-semibold" href="#">AI Tool Subscriptions</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface mb-md">Company</h4>
+<ul class="space-y-sm font-body-md text-body-md text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">Multilingual Support</a></li>
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface mb-md">Legal</h4>
+<ul class="space-y-sm font-body-md text-body-md text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary transition-colors duration-200 ease-in-out" href="#">FAQ</a></li>
+</ul>
+</div>
+</div>
+</footer>
+</body></html>

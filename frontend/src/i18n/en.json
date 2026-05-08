@@ -1,0 +1,73 @@
+{
+  "nav": {
+    "scholarships": "Scholarships",
+    "services": "Services",
+    "solutions": "Digital Solutions",
+    "subscriptions": "Subscriptions",
+    "about": "About Us",
+    "blog": "Blog",
+    "portfolio": "Portfolio",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "whatsapp": "Contact WhatsApp"
+  },
+  "hero": {
+    "badge": "Elevating Global Education",
+    "title": "Empowering Education & Digital Solutions",
+    "subtitle": "A premium fusion of high-end educational consultancy and cutting-edge digital technology, guiding your journey towards global excellence.",
+    "cta_apply": "Apply with Us",
+    "cta_explore": "Explore Services",
+    "stat_scholarships": "Scholarships",
+    "stat_websites": "Websites Developed",
+    "stat_support": "AI Support"
+  },
+  "services": {
+    "title": "High-Level Services",
+    "subtitle": "Tailored solutions for modern academic and digital needs.",
+    "scholarship": "Scholarship Guidance",
+    "web_dev": "Web Development",
+    "ai_subs": "AI Subscriptions",
+    "cv": "CV & Motivation Letters",
+    "translation": "Translation Services",
+    "database": "Database Development",
+    "smm": "Social Media Marketing",
+    "consulting": "Digital Consulting",
+    "learn_more": "Learn More"
+  },
+  "footer": {
+    "tagline": "Elevating academic and professional journeys through high-end digital solutions.",
+    "copyright": "2024 QADAM Digital. All rights reserved.",
+    "services": "Services",
+    "company": "Company",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "faq": "FAQ",
+    "careers": "Careers",
+    "multilingual": "Multilingual Support"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "We are here to help. Reach out through any channel.",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone / WhatsApp",
+    "country": "Country",
+    "message": "Message",
+    "service": "Preferred Service",
+    "submit": "Send Message",
+    "success": "Message sent successfully!",
+    "whatsapp_btn": "Chat on WhatsApp"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong.",
+    "no_results": "No results found.",
+    "view_all": "View All",
+    "read_more": "Read More",
+    "apply_now": "Apply Now",
+    "request_service": "Request Service",
+    "get_started": "Get Started",
+    "back": "Back"
+  }
+}
