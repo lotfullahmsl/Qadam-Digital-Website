@@ -84,4 +84,29 @@
 /* RTL support for Pashto/Dari */
 [dir="rtl"] {
   text-align: right;
+  font-family: 'Noto Naskh Arabic', 'Noto Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+[dir="rtl"] .font-heading {
+  font-family: 'Noto Naskh Arabic', 'Noto Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+/* Flip flex direction for RTL */
+[dir="rtl"] .flex {
+  direction: rtl;
+}
+
+/* Ensure proper line height for Arabic/Pashto text */
+[dir="rtl"] p,
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] span,
+[dir="rtl"] a,
+[dir="rtl"] button,
+[dir="rtl"] label,
+[dir="rtl"] input,
+[dir="rtl"] textarea {
+  line-height: 1.8;
+  letter-spacing: 0;
 }

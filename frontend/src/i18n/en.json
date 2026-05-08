@@ -9,7 +9,9 @@
     "portfolio": "Portfolio",
     "pricing": "Pricing",
     "contact": "Contact",
-    "whatsapp": "Contact WhatsApp"
+    "whatsapp": "Contact WhatsApp",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up"
   },
   "hero": {
     "badge": "Elevating Global Education",
@@ -19,7 +21,8 @@
     "cta_explore": "Explore Services",
     "stat_scholarships": "Scholarships",
     "stat_websites": "Websites Developed",
-    "stat_support": "AI Support"
+    "stat_support": "AI Support",
+    "stat_students": "Students Helped"
   },
   "services": {
     "title": "High-Level Services",
@@ -31,8 +34,12 @@
     "translation": "Translation Services",
     "database": "Database Development",
     "smm": "Social Media Marketing",
+    "graphic_design": "Graphic Design",
+    "video_editing": "Video Editing",
     "consulting": "Digital Consulting",
-    "learn_more": "Learn More"
+    "learn_more": "Learn More",
+    "get_started": "Get Started",
+    "all_services": "All Services"
   },
   "footer": {
     "tagline": "Elevating academic and professional journeys through high-end digital solutions.",
@@ -44,7 +51,11 @@
     "terms": "Terms of Service",
     "faq": "FAQ",
     "careers": "Careers",
-    "multilingual": "Multilingual Support"
+    "multilingual": "Multilingual Support",
+    "contact": "Contact",
+    "about": "About Us",
+    "blog": "Blog",
+    "portfolio": "Portfolio"
   },
   "contact": {
     "title": "Get in Touch",
@@ -57,7 +68,66 @@
     "service": "Preferred Service",
     "submit": "Send Message",
     "success": "Message sent successfully!",
-    "whatsapp_btn": "Chat on WhatsApp"
+    "whatsapp_btn": "Chat on WhatsApp",
+    "office": "Office",
+    "follow_us": "Follow Us"
+  },
+  "about": {
+    "title": "Who is QADAM Digital?",
+    "mission_title": "Our Mission",
+    "mission_text": "To empower students and businesses in Afghanistan, Pakistan, and beyond by providing world-class educational consultancy and cutting-edge digital services.",
+    "vision_title": "Our Vision",
+    "vision_text": "To become the most trusted digital services platform in the region — a bridge between local talent and global opportunities.",
+    "values_title": "Our Core Values",
+    "team_title": "Our Team",
+    "stats_scholarships": "Scholarships",
+    "stats_websites": "Websites Built",
+    "stats_cvs": "CVs Written",
+    "stats_students": "Students Helped"
+  },
+  "scholarships": {
+    "title": "Find Your Dream Scholarship",
+    "subtitle": "Browse 500+ fully funded and partial scholarships for BS, MS, and PhD programs worldwide.",
+    "search_placeholder": "Search scholarships...",
+    "all_countries": "All Countries",
+    "all_degrees": "All Degrees",
+    "showing": "Showing",
+    "results": "scholarships",
+    "no_results": "No scholarships found matching your filters.",
+    "apply_now": "Apply Now",
+    "details": "Details",
+    "fully_funded": "Fully Funded",
+    "partial": "Partial",
+    "deadline": "Deadline",
+    "need_help": "Need Help Applying?",
+    "help_text": "Our scholarship experts will guide you through the entire application process.",
+    "apply_with_us": "Apply With QADAM Digital"
+  },
+  "pricing": {
+    "title": "Professional Services at Competitive Rates",
+    "subtitle": "Transparent pricing for all our services. No hidden fees.",
+    "most_popular": "Most Popular",
+    "get_started": "Get Started",
+    "custom_quote": "Need a Custom Quote?",
+    "custom_text": "Have a unique project? Contact us and we'll provide a tailored quote just for you.",
+    "request_quote": "Request Custom Quote"
+  },
+  "blog": {
+    "title": "Insights & Articles",
+    "subtitle": "Expert articles on scholarships, digital tools, education, and career development.",
+    "search_placeholder": "Search articles...",
+    "all_categories": "All Categories",
+    "read_more": "Read More",
+    "no_results": "No articles found.",
+    "by": "By",
+    "share": "Share"
+  },
+  "portfolio": {
+    "title": "Our Work & Projects",
+    "subtitle": "A showcase of our best work — from enterprise systems to stunning websites.",
+    "all": "All",
+    "no_results": "No projects found in this category.",
+    "start_project": "Start Your Project"
   },
   "common": {
     "loading": "Loading...",
@@ -68,6 +138,33 @@
     "apply_now": "Apply Now",
     "request_service": "Request Service",
     "get_started": "Get Started",
-    "back": "Back"
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close",
+    "send": "Send",
+    "submit": "Submit",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "and": "and",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "name": "Name",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "sign_out": "Sign Out",
+    "welcome": "Welcome",
+    "dashboard": "Dashboard"
   }
 }
