@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const CATEGORIES = ['AI Subscriptions', 'Scholarship Services', 'CV & Translation', 'Web Development', 'Database Systems', 'Social Media Marketing']
 
@@ -37,6 +38,7 @@ const PLANS = {
 }
 
 export default function Pricing() {
+  const { t } = useTranslation()
   const [activeCategory, setActiveCategory] = useState('AI Subscriptions')
   const plans = PLANS[activeCategory] || []
 
@@ -47,12 +49,12 @@ export default function Pricing() {
         <div className="max-w-3xl mx-auto space-y-4">
           <span className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/20">
             <span className="material-symbols-outlined text-sm">sell</span>
-            Pricing
+            {t('nav.pricing')}
           </span>
           <h1 className="font-heading font-bold text-white text-5xl">
-            Professional Services at <span className="text-primary">Competitive Rates</span>
+            {t('pricing.title')}
           </h1>
-          <p className="text-primary-light/90 text-lg">Transparent pricing for all our services. No hidden fees.</p>
+          <p className="text-primary-light/90 text-lg">{t('pricing.subtitle')}</p>
         </div>
       </section>
 
@@ -84,7 +86,7 @@ export default function Pricing() {
               }`}>
                 {plan.popular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-navy text-white px-4 py-1 rounded-full text-xs font-semibold tracking-widest uppercase">
-                    Most Popular
+                    {t('pricing.most_popular')}
                   </div>
                 )}
                 {plan.badge && (
@@ -109,7 +111,7 @@ export default function Pricing() {
                   className={`w-full text-center py-2.5 rounded-lg text-sm font-semibold tracking-wide uppercase transition-all duration-200 ${
                     plan.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'bg-primary text-white hover:bg-primary-dark shadow-btn'
                   }`}>
-                  Get Started
+                  {t('pricing.get_started')}
                 </a>
               </div>
             ))}
@@ -120,11 +122,11 @@ export default function Pricing() {
       {/* Custom Quote */}
       <section className="py-16 px-6 bg-primary-pale border-t border-border">
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
-          <h2 className="font-heading font-bold text-navy text-3xl">Need a Custom Quote?</h2>
-          <p className="text-text-muted text-lg max-w-xl mx-auto">Have a unique project? Contact us and we'll provide a tailored quote just for you.</p>
+          <h2 className="font-heading font-bold text-navy text-3xl">{t('pricing.custom_quote')}</h2>
+          <p className="text-text-muted text-lg max-w-xl mx-auto">{t('pricing.custom_text')}</p>
           <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200">
             <span className="material-symbols-outlined text-base">chat</span>
-            Request Custom Quote
+            {t('pricing.request_quote')}
           </a>
         </div>
       </section>

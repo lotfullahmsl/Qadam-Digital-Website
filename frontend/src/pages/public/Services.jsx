@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
 
 const SERVICE_GROUPS = [
@@ -156,6 +157,7 @@ const SERVICE_GROUPS = [
 const TOTAL_SERVICES = SERVICE_GROUPS.reduce((acc, g) => acc + g.services.length, 0)
 
 export default function Services() {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col">
 
@@ -164,14 +166,14 @@ export default function Services() {
         <div className="max-w-screen-xl mx-auto">
           <span className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/20 mb-5">
             <span className="material-symbols-outlined text-sm">build</span>
-            Our Services
+            {t('nav.services')}
           </span>
           <h1 className="font-heading font-bold text-white text-5xl mb-4 max-w-2xl">
             Next-Gen <span className="text-primary">Digital Solutions</span>
           </h1>
           <div className="h-1 w-24 bg-primary rounded-full mb-6" />
           <p className="text-white/80 text-lg max-w-2xl leading-relaxed">
-            From scholarship guidance to graphic design and video production — we offer {TOTAL_SERVICES} premium services under one roof.
+            {t('services.subtitle')}
           </p>
 
           {/* Category pills */}
@@ -227,7 +229,7 @@ export default function Services() {
                     to={service.to}
                     className="text-primary text-xs font-semibold tracking-widest uppercase flex items-center gap-1 hover:gap-2 transition-all duration-200 mt-1"
                   >
-                    GET STARTED
+                    {t('services.get_started')}
                     <span className="material-symbols-outlined text-base">arrow_forward</span>
                   </Link>
                 </div>
@@ -251,7 +253,7 @@ export default function Services() {
             className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg"
           >
             <span className="material-symbols-outlined text-base">chat</span>
-            Chat on WhatsApp
+            {t('contact.whatsapp_btn')}
           </a>
         </div>
       </section>

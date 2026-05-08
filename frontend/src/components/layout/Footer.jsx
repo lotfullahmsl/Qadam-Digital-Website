@@ -23,7 +23,7 @@ export default function Footer() {
             </span>
           </Link>
           <p className="text-sm text-primary-light/80 leading-relaxed max-w-xs">
-            Empowering students and businesses through world-class education consultancy and digital services.
+            {t('footer.tagline')}
           </p>
           {/* Social Links */}
           <div className="flex gap-2 mt-1">
@@ -47,7 +47,7 @@ export default function Footer() {
 
         {/* Services */}
         <div>
-          <h4 className="text-xs font-semibold tracking-widest uppercase text-primary mb-5">Services</h4>
+          <h4 className="text-xs font-semibold tracking-widest uppercase text-primary mb-5">{t('footer.services')}</h4>
           <ul className="space-y-3 text-sm text-primary-light/80">
             <li><Link to={ROUTES.SCHOLARSHIPS} className="hover:text-white transition-colors">Scholarship Consulting</Link></li>
             <li><Link to={ROUTES.CV_TRANSLATION} className="hover:text-white transition-colors">CV & Motivation Letters</Link></li>
@@ -59,19 +59,19 @@ export default function Footer() {
 
         {/* Company */}
         <div>
-          <h4 className="text-xs font-semibold tracking-widest uppercase text-primary mb-5">Company</h4>
+          <h4 className="text-xs font-semibold tracking-widest uppercase text-primary mb-5">{t('footer.company')}</h4>
           <ul className="space-y-3 text-sm text-primary-light/80">
-            <li><Link to={ROUTES.ABOUT} className="hover:text-white transition-colors">About Us</Link></li>
-            <li><Link to={ROUTES.PORTFOLIO} className="hover:text-white transition-colors">Portfolio</Link></li>
-            <li><Link to={ROUTES.BLOG} className="hover:text-white transition-colors">Blog</Link></li>
-            <li><Link to={ROUTES.PRICING} className="hover:text-white transition-colors">Pricing</Link></li>
-            <li><Link to={ROUTES.CONTACT} className="hover:text-white transition-colors">Contact</Link></li>
+            <li><Link to={ROUTES.ABOUT} className="hover:text-white transition-colors">{t('nav.about')}</Link></li>
+            <li><Link to={ROUTES.PORTFOLIO} className="hover:text-white transition-colors">{t('nav.portfolio')}</Link></li>
+            <li><Link to={ROUTES.BLOG} className="hover:text-white transition-colors">{t('nav.blog')}</Link></li>
+            <li><Link to={ROUTES.PRICING} className="hover:text-white transition-colors">{t('nav.pricing')}</Link></li>
+            <li><Link to={ROUTES.CONTACT} className="hover:text-white transition-colors">{t('nav.contact')}</Link></li>
           </ul>
         </div>
 
         {/* Contact */}
         <div>
-          <h4 className="text-xs font-semibold tracking-widest uppercase text-primary mb-5">Contact</h4>
+          <h4 className="text-xs font-semibold tracking-widest uppercase text-primary mb-5">{t('footer.contact')}</h4>
           <ul className="space-y-3 text-sm text-primary-light/80">
             <li className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">chat</span>
@@ -93,7 +93,7 @@ export default function Footer() {
             className="mt-5 inline-flex items-center gap-2 bg-primary text-white text-xs font-semibold tracking-wide uppercase px-4 py-2.5 rounded-lg hover:bg-primary-dark transition-all duration-200"
           >
             <span className="material-symbols-outlined text-base">chat</span>
-            Chat on WhatsApp
+            {t('contact.whatsapp_btn')}
           </a>
         </div>
       </div>
@@ -101,11 +101,11 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
         <div className="max-w-screen-xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-primary-light/60">© 2024 QADAM Digital. All rights reserved.</p>
+          <p className="text-xs text-primary-light/60">© {t('footer.copyright')}</p>
           <div className="flex gap-5 text-xs text-primary-light/60">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">FAQ</a>
+            <a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a>
+            <a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a>
+            <a href="#" className="hover:text-white transition-colors">{t('footer.faq')}</a>
           </div>
         </div>
       </div>

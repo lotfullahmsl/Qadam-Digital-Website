@@ -47,13 +47,13 @@ export default function Navbar() {
   }, [location.pathname])
 
   const navLinks = [
-    { label: 'Scholarships', to: ROUTES.SCHOLARSHIPS },
-    { label: 'Services', to: ROUTES.SERVICES },
-    { label: 'Digital Solutions', to: ROUTES.WEBSITE_DATABASE },
-    { label: 'Pricing', to: ROUTES.PRICING },
-    { label: 'Portfolio', to: ROUTES.PORTFOLIO },
-    { label: 'Blog', to: ROUTES.BLOG },
-    { label: 'About Us', to: ROUTES.ABOUT },
+    { label: t('nav.scholarships'), to: ROUTES.SCHOLARSHIPS },
+    { label: t('nav.services'), to: ROUTES.SERVICES },
+    { label: t('nav.solutions'), to: ROUTES.WEBSITE_DATABASE },
+    { label: t('nav.pricing'), to: ROUTES.PRICING },
+    { label: t('nav.portfolio'), to: ROUTES.PORTFOLIO },
+    { label: t('nav.blog'), to: ROUTES.BLOG },
+    { label: t('nav.about'), to: ROUTES.ABOUT },
   ]
 
   const isActive = (path) => location.pathname === path
@@ -147,14 +147,14 @@ export default function Navbar() {
                   to={ROUTES.USER_LOGIN}
                   className="text-sm font-semibold text-gray-700 hover:text-primary px-4 py-2 rounded-lg hover:bg-primary/5 transition-all duration-200"
                 >
-                  Sign In
+                  {t('nav.sign_in')}
                 </Link>
                 <Link
                   to={ROUTES.USER_SIGNUP}
                   className="text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary-dark transition-all duration-200 shadow-sm"
                   style={{ boxShadow: '0 2px 8px rgba(0,170,255,0.3)' }}
                 >
-                  Sign Up Free
+                  {t('nav.sign_up')}
                 </Link>
               </>
             )}
@@ -275,14 +275,14 @@ export default function Navbar() {
                     onClick={() => setMenuOpen(false)}
                     className="text-center py-3 rounded-xl border-2 border-primary text-primary font-semibold text-sm hover:bg-primary hover:text-white transition-all duration-200"
                   >
-                    Sign In
+                    {t('nav.sign_in')}
                   </Link>
                   <Link
                     to={ROUTES.USER_SIGNUP}
                     onClick={() => setMenuOpen(false)}
                     className="text-center py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-dark transition-all duration-200"
                   >
-                    Sign Up Free
+                    {t('nav.sign_up')}
                   </Link>
                 </>
               )}

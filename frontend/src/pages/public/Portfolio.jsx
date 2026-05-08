@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import PortfolioCard from '../../components/cards/PortfolioCard'
 
 const CATEGORIES = ['All', 'Website', 'Database', 'Marketing', 'Design']
@@ -12,6 +13,7 @@ const MOCK_PROJECTS = [
 ]
 
 export default function Portfolio() {
+  const { t } = useTranslation()
   const [activeCategory, setActiveCategory] = useState('All')
   const filtered = activeCategory === 'All' ? MOCK_PROJECTS : MOCK_PROJECTS.filter((p) => p.category === activeCategory)
 
@@ -21,10 +23,10 @@ export default function Portfolio() {
         <div className="max-w-3xl mx-auto space-y-4">
           <span className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/20">
             <span className="material-symbols-outlined text-sm">work</span>
-            Portfolio
+            {t('nav.portfolio')}
           </span>
-          <h1 className="font-heading font-bold text-white text-5xl">Our <span className="text-primary">Work & Projects</span></h1>
-          <p className="text-primary-light/90 text-lg">A showcase of our best work — from enterprise systems to stunning websites.</p>
+          <h1 className="font-heading font-bold text-white text-5xl">{t('portfolio.title')}</h1>
+          <p className="text-primary-light/90 text-lg">{t('portfolio.subtitle')}</p>
         </div>
       </section>
 
@@ -35,7 +37,7 @@ export default function Portfolio() {
               className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
                 activeCategory === cat ? 'bg-primary text-white shadow-btn' : 'border border-border text-text-secondary hover:border-primary hover:text-primary bg-white'
               }`}>
-              {cat}
+              {cat === 'All' ? t('portfolio.all') : cat}
             </button>
           ))}
         </div>
@@ -46,7 +48,7 @@ export default function Portfolio() {
           {filtered.length === 0 ? (
             <div className="text-center py-20 text-text-muted">
               <span className="material-symbols-outlined text-5xl mb-4 block text-primary-light">search_off</span>
-              <p>No projects found in this category.</p>
+              <p>{t('portfolio.no_results')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -62,7 +64,7 @@ export default function Portfolio() {
           <p className="text-white/80 text-lg max-w-xl mx-auto">Let's discuss your requirements and build something amazing together.</p>
           <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg">
             <span className="material-symbols-outlined text-base">chat</span>
-            Start Your Project
+            {t('portfolio.start_project')}
           </a>
         </div>
       </section>

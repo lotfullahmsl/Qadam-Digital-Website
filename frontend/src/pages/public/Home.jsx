@@ -1,15 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
 import ServiceCard from '../../components/cards/ServiceCard'
 import AdBanner from '../../components/common/AdBanner'
-
-const STATS = [
-  { icon: 'school', value: '500+', label: 'Scholarships Listed' },
-  { icon: 'code', value: '1,000+', label: 'Websites Developed' },
-  { icon: 'people', value: '5,000+', label: 'Students Helped' },
-  { icon: 'smart_toy', value: '24/7', label: 'Support Available' },
-]
 
 const SERVICES = [
   { icon: 'menu_book', title: 'Scholarship Guidance', description: 'Expert consultation to secure fully funded educational opportunities worldwide.', to: ROUTES.SCHOLARSHIPS },
@@ -34,6 +28,15 @@ const WHY_US = [
 ]
 
 export default function Home() {
+  const { t } = useTranslation()
+
+  const STATS = [
+    { icon: 'school', value: '500+', label: t('hero.stat_scholarships') },
+    { icon: 'code', value: '1,000+', label: t('hero.stat_websites') },
+    { icon: 'people', value: '5,000+', label: t('hero.stat_students') },
+    { icon: 'smart_toy', value: '24/7', label: t('hero.stat_support') },
+  ]
+
   return (
     <div className="flex flex-col">
 
@@ -47,15 +50,13 @@ export default function Home() {
           <div className="flex-1 text-center lg:text-left space-y-6">
             <div className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/20">
               <span className="material-symbols-outlined text-sm">auto_awesome</span>
-              Education &amp; Digital Services
+              {t('hero.badge')}
             </div>
             <h1 className="font-heading font-bold text-white leading-tight" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
-              Empowering Your{' '}
-              <span className="text-primary">Education</span>{' '}
-              &amp; Digital Future
+              {t('hero.title')}
             </h1>
             <p className="text-primary-light/90 text-lg max-w-xl leading-relaxed">
-              Premium scholarship guidance, web development, AI subscriptions, and digital services — all in one trusted platform for Afghanistan and Pakistan.
+              {t('hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <a
@@ -65,13 +66,13 @@ export default function Home() {
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-white hover:text-primary transition-all duration-200 text-sm"
               >
                 <span className="material-symbols-outlined text-base">chat</span>
-                Apply With Us
+                {t('hero.cta_apply')}
               </a>
               <Link
                 to={ROUTES.SERVICES}
                 className="inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold px-8 py-3.5 rounded-lg border border-white/30 hover:bg-white hover:text-navy transition-all duration-200 text-sm"
               >
-                Explore Services
+                {t('hero.cta_explore')}
                 <span className="material-symbols-outlined text-base">arrow_forward</span>
               </Link>
             </div>
@@ -97,8 +98,8 @@ export default function Home() {
         <div className="max-w-screen-xl mx-auto">
           <div className="text-center mb-12">
             <span className="badge mb-3">Our Services</span>
-            <h2 className="font-heading font-bold text-navy text-4xl mb-3">Everything You Need</h2>
-            <p className="text-text-muted text-lg max-w-2xl mx-auto">Tailored solutions for modern academic and digital needs.</p>
+            <h2 className="font-heading font-bold text-navy text-4xl mb-3">{t('services.title')}</h2>
+            <p className="text-text-muted text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {SERVICES.map((s) => <ServiceCard key={s.title} {...s} />)}
@@ -116,9 +117,9 @@ export default function Home() {
         <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-3">
             <span className="badge">Scholarships</span>
-            <h2 className="font-heading font-bold text-navy text-3xl">Find Your Dream Scholarship</h2>
+            <h2 className="font-heading font-bold text-navy text-3xl">{t('scholarships.title')}</h2>
             <p className="text-text-muted text-lg max-w-xl">
-              Browse 500+ fully funded and partial scholarships for BS, MS, and PhD programs worldwide.
+              {t('scholarships.subtitle')}
             </p>
           </div>
           <Link
@@ -199,10 +200,10 @@ export default function Home() {
               href="https://wa.me/93700000000"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg"
+              className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-primary-pale transition-all duration-200"
             >
               <span className="material-symbols-outlined text-base">chat</span>
-              Chat on WhatsApp
+              {t('contact.whatsapp_btn')}
             </a>
             <Link
               to={ROUTES.CONTACT}

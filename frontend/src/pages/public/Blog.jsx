@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import BlogCard from '../../components/cards/BlogCard'
 import AdBanner from '../../components/common/AdBanner'
 
@@ -13,6 +14,7 @@ const MOCK_POSTS = [
 ]
 
 export default function Blog() {
+  const { t } = useTranslation()
   const [activeCategory, setActiveCategory] = useState('All')
   const [search, setSearch] = useState('')
 
@@ -28,10 +30,10 @@ export default function Blog() {
         <div className="max-w-3xl mx-auto space-y-4">
           <span className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/20">
             <span className="material-symbols-outlined text-sm">article</span>
-            Blog
+            {t('nav.blog')}
           </span>
-          <h1 className="font-heading font-bold text-white text-5xl">Insights &amp; <span className="text-primary">Articles</span></h1>
-          <p className="text-primary-light/90 text-lg">Expert articles on scholarships, digital tools, education, and career development.</p>
+          <h1 className="font-heading font-bold text-white text-5xl">{t('blog.title')}</h1>
+          <p className="text-primary-light/90 text-lg">{t('blog.subtitle')}</p>
         </div>
       </section>
 
@@ -39,7 +41,7 @@ export default function Blog() {
         <div className="max-w-screen-xl mx-auto space-y-4">
           <div className="relative max-w-md mx-auto">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-xl">search</span>
-            <input type="text" placeholder="Search articles..." value={search} onChange={(e) => setSearch(e.target.value)} className="input-field pl-10" />
+            <input type="text" placeholder={t('blog.search_placeholder')} value={search} onChange={(e) => setSearch(e.target.value)} className="input-field pl-10" />
           </div>
           <div className="flex flex-wrap gap-2 justify-center">
             {CATEGORIES.map((cat) => (
@@ -62,7 +64,7 @@ export default function Blog() {
         {filtered.length === 0 ? (
           <div className="text-center py-20 text-text-muted">
             <span className="material-symbols-outlined text-5xl mb-4 block text-primary-light">search_off</span>
-            <p>No articles found.</p>
+            <p>{t('blog.no_results')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
