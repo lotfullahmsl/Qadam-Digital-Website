@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useLanguage } from '../../hooks/useLanguage'
-import { useUserAuth } from '../../hooks/useUserAuth'
+import { useAuth } from '../../hooks/useAuth'
 import { ROUTES } from '../../constants/routes'
 
 const LANGUAGES = [
@@ -14,7 +14,8 @@ const LANGUAGES = [
 export default function Navbar() {
   const { t } = useTranslation()
   const { language, changeLanguage } = useLanguage()
-  const { user, isLoggedIn, logoutUser } = useUserAuth()
+  const { admin, isAuthenticated, logout } = useAuth()
+  const isLoggedIn = isAuthenticated
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
@@ -57,9 +58,11 @@ export default function Navbar() {
 
   const isActive = (path) => location.pathname === path
 
-  const userInitials = user?.fullName
-    ? user.fullName.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
-    : 'U'
+  const userInitials = admin?.name
+    ? admin.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
+    : admin?.email
+      ? admin.email[0].toUpperCase()
+      : 'A'
 
   return (
     <header className={`sticky top-0 w-full z-50 transition-all duration-300 ${
@@ -165,31 +168,36 @@ export default function Navbar() {
                     {userInitials}
                   </div>
                   <span className="text-sm font-semibold text-navy max-w-[100px] truncate">
-                    {user?.fullName?.split(' ')[0] || 'Account'}
+                    {admin?.name || 'Admin'}
                   </span>
                   <span className="material-symbols-outlined text-gray-400 text-base">expand_more</span>
                 </button>
                 {userMenuOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-lg overflow-hidden z-50">
                     <div className="px-4 py-3 border-b border-gray-100 bg-primary/5">
-                      <p className="text-sm font-semibold text-navy truncate">{user?.fullName}</p>
-                      <p className="text-xs text-gray-500 truncate mt-0.5">{user?.email}</p>
+                      <p className="text-sm font-semibold text-navy truncate">{admin?.name || 'Admin'}</p>
+                      <p className="text-xs text-gray-500 truncate mt-0.5">{admin?.email}</p>
+                      <span className="inline-block mt-1 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold">Administrator</span>
                     </div>
                     <div className="py-1.5">
-                      {[
-                        { icon: 'dashboard', label: 'My Dashboard', to: ROUTES.USER_DASHBOARD },
-                        { icon: 'school', label: 'My Applications', to: ROUTES.SCHOLARSHIPS },
-                        { icon: 'person', label: 'Profile Settings', to: '#' },
-                      ].map((item) => (
-                        <Link key={item.label} to={item.to}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary/5 hover:text-primary transition-colors">
-                          <span className="material-symbols-outlined text-base">{item.icon}</span>
-                          {item.label}
-                        </Link>
-                      ))}
+                      <Link to={ROUTES.ADMIN_DASHBOARD}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary/5 hover:text-primary transition-colors">
+                        <span className="material-symbols-outlined text-base">dashboard</span>
+                        Admin Dashboard
+                      </Link>
+                      <Link to={ROUTES.ADMIN_REQUESTS}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary/5 hover:text-primary transition-colors">
+                        <span className="material-symbols-outlined text-base">inbox</span>
+                        View Requests
+                      </Link>
+                      <Link to={ROUTES.ADMIN_SETTINGS}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-primary/5 hover:text-primary transition-colors">
+                        <span className="material-symbols-outlined text-base">settings</span>
+                        Settings
+                      </Link>
                     </div>
                     <div className="border-t border-gray-100 py-1.5">
-                      <button onClick={logoutUser}
+                      <button onClick={logout}
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
                         <span className="material-symbols-outlined text-base">logout</span>
                         Sign Out
@@ -241,12 +249,17 @@ export default function Navbar() {
                       {userInitials}
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-navy">{user?.fullName}</p>
-                      <p className="text-xs text-gray-500">{user?.email}</p>
+                      <p className="text-sm font-semibold text-navy">{admin?.name || 'Admin'}</p>
+                      <p className="text-xs text-gray-500">{admin?.email}</p>
                     </div>
                   </div>
+                  <Link to={ROUTES.ADMIN_DASHBOARD} onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-primary font-semibold hover:bg-primary/5 rounded-lg transition-colors">
+                    <span className="material-symbols-outlined text-base">dashboard</span>
+                    Admin Dashboard
+                  </Link>
                   <button
-                    onClick={() => { logoutUser(); setMenuOpen(false) }}
+                    onClick={() => { logout(); setMenuOpen(false) }}
                     className="flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                   >
                     <span className="material-symbols-outlined text-base">logout</span>

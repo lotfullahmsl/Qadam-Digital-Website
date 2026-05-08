@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { useUserAuth } from '../../hooks/useUserAuth'
-import { userAuthService } from '../../services/userAuthService'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 import { ROUTES } from '../../constants/routes'
 
 export default function UserLogin() {
@@ -9,10 +8,8 @@ export default function UserLogin() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const { loginUser } = useUserAuth()
+  const { login } = useAuth()
   const navigate = useNavigate()
-  const location = useLocation()
-  const from = location.state?.from || ROUTES.HOME
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
@@ -24,11 +21,12 @@ export default function UserLogin() {
       // MOCK AUTH — replace with real API call when backend is ready
       await new Promise((r) => setTimeout(r, 600))
       if (!form.email || !form.password) throw new Error('Please fill in all fields.')
-      loginUser('mock-user-token-' + Date.now(), {
-        fullName: form.email.split('@')[0],
+      login('mock-admin-token-' + Date.now(), {
+        name: form.email.split('@')[0],
         email: form.email,
+        role: 'admin',
       })
-      navigate(from, { replace: true })
+      navigate(ROUTES.ADMIN_DASHBOARD, { replace: true })
     } catch (err) {
       setError(err.message || 'Invalid email or password. Please try again.')
     } finally {
