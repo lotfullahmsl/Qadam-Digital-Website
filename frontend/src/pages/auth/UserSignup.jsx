@@ -70,14 +70,17 @@ export default function UserSignup() {
     setLoading(true)
     setError('')
     try {
-      const res = await userAuthService.signup({
-        fullName: form.fullName, email: form.email, phone: form.phone,
-        country: form.country, password: form.password, interests: form.interests,
+      // MOCK AUTH — replace with real API call when backend is ready
+      await new Promise((r) => setTimeout(r, 600))
+      loginUser('mock-user-token-' + Date.now(), {
+        fullName: form.fullName || 'User',
+        email: form.email,
+        country: form.country,
+        interests: form.interests,
       })
-      loginUser(res.data.token, res.data.user)
       navigate(ROUTES.HOME)
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.')
+      setError('Registration failed. Please try again.')
     } finally {
       setLoading(false)
     }

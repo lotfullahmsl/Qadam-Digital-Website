@@ -21,11 +21,16 @@ export default function UserLogin() {
     setLoading(true)
     setError('')
     try {
-      const res = await userAuthService.login(form)
-      loginUser(res.data.token, res.data.user)
+      // MOCK AUTH — replace with real API call when backend is ready
+      await new Promise((r) => setTimeout(r, 600))
+      if (!form.email || !form.password) throw new Error('Please fill in all fields.')
+      loginUser('mock-user-token-' + Date.now(), {
+        fullName: form.email.split('@')[0],
+        email: form.email,
+      })
       navigate(from, { replace: true })
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password. Please try again.')
+      setError(err.message || 'Invalid email or password. Please try again.')
     } finally {
       setLoading(false)
     }
