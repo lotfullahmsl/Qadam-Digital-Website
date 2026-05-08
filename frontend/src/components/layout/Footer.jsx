@@ -14,7 +14,7 @@ export default function Footer() {
         <div className="md:col-span-1 flex flex-col gap-4">
           <Link to={ROUTES.HOME} className="flex items-center gap-3">
             <img
-              src="/logo-light.jpeg"
+              src="/logo-dark.jpeg"
               alt="QADAM Digital"
               className="h-12 w-auto object-contain"
             />
