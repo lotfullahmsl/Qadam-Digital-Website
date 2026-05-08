@@ -32,39 +32,49 @@ export default function UserLogin() {
   }
 
   return (
-    <div className="py-16 px-4 bg-background min-h-[calc(100vh-140px)]">
-      <div className="max-w-screen-xl mx-auto flex flex-col lg:flex-row gap-12 items-center justify-center">
+    <div className="bg-background py-12 px-4">
+      {/* Outer wrapper — fixed max width, centered */}
+      <div className="max-w-5xl mx-auto">
+        {/* Two-column grid — both columns same height */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 rounded-2xl overflow-hidden shadow-xl border border-gray-100">
 
-        {/* ── Left — Branding Panel ── */}
-        <div className="hidden lg:flex flex-col gap-8 w-full max-w-md">
-          <div className="hero-bg rounded-2xl p-10 space-y-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none" />
-            <div className="relative z-10 space-y-4">
-              <h2 className="font-heading font-bold text-white text-3xl leading-tight">
-                Your Gateway to<br />
-                <span className="text-primary">Global Opportunities</span>
-              </h2>
-              <p className="text-primary-light/80 leading-relaxed">
-                Join thousands of students who found their dream scholarships and digital services through QADAM Digital.
-              </p>
+          {/* ── Left — Branding ── */}
+          <div className="hero-bg p-10 flex flex-col justify-between relative overflow-hidden">
+            {/* Decorative blur */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full -translate-y-1/3 translate-x-1/3 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/3 blur-2xl pointer-events-none" />
+
+            {/* Top content */}
+            <div className="relative z-10 space-y-6">
+              <div className="space-y-3">
+                <h2 className="font-heading font-bold text-white text-3xl leading-tight">
+                  Your Gateway to<br />
+                  <span className="text-primary">Global Opportunities</span>
+                </h2>
+                <p className="text-white/70 text-sm leading-relaxed">
+                  Join thousands of students who found their dream scholarships and digital services through QADAM Digital.
+                </p>
+              </div>
+
+              <ul className="space-y-3">
+                {[
+                  { icon: 'school', text: 'Apply for 500+ scholarships' },
+                  { icon: 'notifications', text: 'Get notified about new opportunities' },
+                  { icon: 'track_changes', text: 'Track your application status' },
+                  { icon: 'description', text: 'Save and manage your documents' },
+                ].map((f) => (
+                  <li key={f.text} className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 border border-white/20">
+                      <span className="material-symbols-outlined text-primary text-base">{f.icon}</span>
+                    </div>
+                    <span className="text-white/80 text-sm">{f.text}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="relative z-10 space-y-3">
-              {[
-                { icon: 'school', text: 'Apply for 500+ scholarships' },
-                { icon: 'notifications', text: 'Get notified about new opportunities' },
-                { icon: 'track_changes', text: 'Track your application status' },
-                { icon: 'description', text: 'Save and manage your documents' },
-              ].map((f) => (
-                <li key={f.text} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0 border border-white/20">
-                    <span className="material-symbols-outlined text-primary text-base">{f.icon}</span>
-                  </div>
-                  <span className="text-primary-light/90 text-sm">{f.text}</span>
-                </li>
-              ))}
-            </ul>
-            {/* Testimonial */}
-            <div className="relative z-10 bg-white/10 border border-white/20 rounded-xl p-5">
+
+            {/* Bottom — Testimonial */}
+            <div className="relative z-10 mt-8 bg-white/10 border border-white/20 rounded-xl p-5">
               <div className="flex gap-0.5 mb-3">
                 {[...Array(5)].map((_, i) => (
                   <span key={i} className="material-symbols-outlined text-primary text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
@@ -74,97 +84,97 @@ export default function UserLogin() {
                 "QADAM Digital helped me secure a fully funded scholarship to Germany. Their team was incredibly supportive throughout."
               </p>
               <div className="flex items-center gap-3 mt-4">
-                <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">AK</div>
+                <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AK</div>
                 <div>
                   <p className="text-white font-semibold text-sm">Ahmad Karimi</p>
-                  <p className="text-primary-light/60 text-xs">DAAD Scholar, Germany</p>
+                  <p className="text-white/50 text-xs">DAAD Scholar, Germany</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ── Right — Form ── */}
-        <div className="w-full max-w-md">
-          <div className="card p-8 md:p-10">
-            {/* Header */}
-            <div className="mb-8">
-              <h1 className="font-heading font-bold text-navy text-3xl mb-2">Welcome back</h1>
-              <p className="text-text-muted">Sign in to your account to continue</p>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email */}
+          {/* ── Right — Form ── */}
+          <div className="bg-white p-10 flex flex-col justify-center">
+            <div className="w-full max-w-sm mx-auto space-y-6">
+              {/* Header */}
               <div>
-                <label className="block text-sm font-semibold text-navy mb-2">Email Address</label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted text-xl">email</span>
-                  <input
-                    type="email" name="email" value={form.email} onChange={handleChange}
-                    required placeholder="you@example.com"
-                    className="input-field pl-11" autoComplete="email"
-                  />
-                </div>
+                <h1 className="font-heading font-bold text-navy text-2xl mb-1">Welcome back</h1>
+                <p className="text-gray-500 text-sm">Sign in to your account to continue</p>
               </div>
 
-              {/* Password */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-semibold text-navy">Password</label>
-                  <a href="#" className="text-xs text-primary hover:text-primary-dark font-medium transition-colors">
-                    Forgot password?
-                  </a>
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Email */}
+                <div>
+                  <label className="block text-sm font-semibold text-navy mb-1.5">Email Address</label>
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xl">email</span>
+                    <input
+                      type="email" name="email" value={form.email} onChange={handleChange}
+                      required placeholder="you@example.com"
+                      className="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-3 text-sm text-navy placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
+                      autoComplete="email"
+                    />
+                  </div>
                 </div>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted text-xl">lock</span>
-                  <input
-                    type={showPassword ? 'text' : 'password'} name="password" value={form.password} onChange={handleChange}
-                    required placeholder="Enter your password"
-                    className="input-field pl-11 pr-11" autoComplete="current-password"
-                  />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors">
-                    <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
-                  </button>
+
+                {/* Password */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-sm font-semibold text-navy">Password</label>
+                    <a href="#" className="text-xs text-primary hover:text-primary-dark font-medium transition-colors">Forgot password?</a>
+                  </div>
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xl">lock</span>
+                    <input
+                      type={showPassword ? 'text' : 'password'} name="password" value={form.password} onChange={handleChange}
+                      required placeholder="Enter your password"
+                      className="w-full border border-gray-200 rounded-xl pl-11 pr-11 py-3 text-sm text-navy placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
+                      autoComplete="current-password"
+                    />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                      <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Remember me */}
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="remember" className="w-4 h-4 accent-primary rounded" />
-                <label htmlFor="remember" className="text-sm text-text-secondary">Remember me for 30 days</label>
-              </div>
-
-              {/* Error */}
-              {error && (
-                <div className="flex items-start gap-2.5 text-red-600 text-sm bg-red-50 border border-red-200 rounded-xl px-4 py-3">
-                  <span className="material-symbols-outlined text-base flex-shrink-0 mt-0.5">error</span>
-                  <span>{error}</span>
+                {/* Remember me */}
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" id="remember" className="w-4 h-4 accent-primary rounded" />
+                  <label htmlFor="remember" className="text-sm text-gray-500">Remember me for 30 days</label>
                 </div>
-              )}
 
-              {/* Submit */}
-              <button type="submit" disabled={loading}
-                className="w-full bg-primary text-white font-semibold py-3.5 rounded-xl shadow-btn hover:bg-primary-dark transition-all duration-200 flex items-center justify-center gap-2 text-sm disabled:opacity-60 disabled:cursor-not-allowed">
-                {loading ? (
-                  <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Signing in...</>
-                ) : (
-                  <>Sign In <span className="material-symbols-outlined text-base">arrow_forward</span></>
+                {/* Error */}
+                {error && (
+                  <div className="flex items-start gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                    <span className="material-symbols-outlined text-base flex-shrink-0 mt-0.5">error</span>
+                    <span>{error}</span>
+                  </div>
                 )}
-              </button>
-            </form>
 
-            {/* Sign up link */}
-            <p className="text-center text-sm text-text-muted mt-6">
-              Don't have an account?{' '}
-              <Link to={ROUTES.USER_SIGNUP} className="text-primary font-semibold hover:text-primary-dark transition-colors">
-                Create one free
-              </Link>
-            </p>
+                {/* Submit */}
+                <button type="submit" disabled={loading}
+                  className="w-full bg-primary text-white font-semibold py-3 rounded-xl hover:bg-primary-dark transition-all duration-200 flex items-center justify-center gap-2 text-sm disabled:opacity-60"
+                  style={{ boxShadow: '0 4px 14px rgba(0,170,255,0.35)' }}>
+                  {loading
+                    ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Signing in...</>
+                    : <>Sign In <span className="material-symbols-outlined text-base">arrow_forward</span></>
+                  }
+                </button>
+              </form>
+
+              {/* Sign up link */}
+              <p className="text-center text-sm text-gray-500">
+                Don't have an account?{' '}
+                <Link to={ROUTES.USER_SIGNUP} className="text-primary font-semibold hover:text-primary-dark transition-colors">
+                  Create one free
+                </Link>
+              </p>
+            </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   )
