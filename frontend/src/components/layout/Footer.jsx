@@ -12,12 +12,15 @@ export default function Footer() {
       <div className="max-w-screen-xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="md:col-span-1 flex flex-col gap-4">
-          <Link to={ROUTES.HOME}>
+          <Link to={ROUTES.HOME} className="flex items-center gap-3">
             <img
               src="/logo-light.jpeg"
               alt="QADAM Digital"
-              className="h-10 w-auto object-contain"
+              className="h-12 w-auto object-contain"
             />
+            <span className="font-heading text-xl font-bold text-white">
+              QADAM <span className="text-primary">Digital</span>
+            </span>
           </Link>
           <p className="text-sm text-primary-light/80 leading-relaxed max-w-xs">
             Empowering students and businesses through world-class education consultancy and digital services.

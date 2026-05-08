@@ -72,12 +72,15 @@ export default function Navbar() {
         <div className="flex items-center" style={{ height: '68px' }}>
 
           {/* ── Logo ── */}
-          <Link to={ROUTES.HOME} className="flex items-center flex-shrink-0 mr-10">
+          <Link to={ROUTES.HOME} className="flex items-center gap-3 flex-shrink-0 mr-10">
             <img
               src="/logo-dark.jpeg"
               alt="QADAM Digital"
-              className="h-10 w-auto object-contain"
+              className="h-12 w-auto object-contain"
             />
+            <span className="font-heading font-bold text-navy text-xl tracking-tight">
+              QADAM <span className="text-primary">Digital</span>
+            </span>
           </Link>
 
           {/* ── Desktop Nav Links — center ── */}
