@@ -50,10 +50,12 @@ export default function AdminLayout({ children }) {
       {/* Sidebar */}
       <aside className={`${sidebarOpen ? 'w-64' : 'w-16'} transition-all duration-300 bg-navy flex flex-col flex-shrink-0 relative z-20`}>
         {/* Logo */}
-        <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10 h-16">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-            <span className="material-symbols-outlined text-white text-lg">admin_panel_settings</span>
-          </div>
+        <div className="flex items-center gap-3 px-4 py-4 border-b border-white/10 h-16">
+          <img
+            src="/logo-light.jpeg"
+            alt="QADAM Digital"
+            className={`object-contain transition-all duration-300 ${sidebarOpen ? 'h-8 w-auto' : 'h-7 w-7'}`}
+          />
           {sidebarOpen && (
             <span className="font-heading font-bold text-white text-base whitespace-nowrap">QADAM Admin</span>
           )}

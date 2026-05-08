@@ -72,13 +72,12 @@ export default function Navbar() {
         <div className="flex items-center" style={{ height: '68px' }}>
 
           {/* ── Logo ── */}
-          <Link to={ROUTES.HOME} className="flex items-center gap-2.5 flex-shrink-0 mr-10">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-sm">
-              <span className="material-symbols-outlined text-white" style={{ fontSize: '20px' }}>school</span>
-            </div>
-            <span className="font-heading font-bold text-navy text-xl tracking-tight">
-              QADAM <span className="text-primary">Digital</span>
-            </span>
+          <Link to={ROUTES.HOME} className="flex items-center flex-shrink-0 mr-10">
+            <img
+              src="/logo-dark.jpeg"
+              alt="QADAM Digital"
+              className="h-10 w-auto object-contain"
+            />
           </Link>
 
           {/* ── Desktop Nav Links — center ── */}

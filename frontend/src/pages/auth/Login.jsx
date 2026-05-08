@@ -59,10 +59,9 @@ export default function Login() {
 
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-            <span className="material-symbols-outlined text-white text-3xl">admin_panel_settings</span>
+          <div className="flex justify-center mb-4">
+            <img src="/logo-light.jpeg" alt="QADAM Digital" className="h-14 w-auto object-contain" />
           </div>
-          <h1 className="font-heading text-2xl font-bold text-white">QADAM Digital</h1>
           <div className="inline-flex items-center gap-1.5 mt-2 bg-white/15 border border-white/20 text-white/80 text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full">
             <span className="material-symbols-outlined text-sm">shield</span>
             Admin Portal
