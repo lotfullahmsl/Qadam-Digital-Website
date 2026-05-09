@@ -4,12 +4,12 @@ import ScholarshipCard from '../../components/cards/ScholarshipCard'
 import AdBanner from '../../components/common/AdBanner'
 
 const MOCK_SCHOLARSHIPS = [
-  { _id: '1', title: 'DAAD Scholarship Germany', country: 'Germany', university: 'Various German Universities', degree: 'MS/PhD', deadline: 'Oct 2026', fundingType: 'Fully Funded' },
-  { _id: '2', title: 'Chevening Scholarship UK', country: 'United Kingdom', university: 'UK Universities', degree: 'MS', deadline: 'Nov 2026', fundingType: 'Fully Funded' },
-  { _id: '3', title: 'Erasmus Mundus', country: 'Europe', university: 'Multiple EU Universities', degree: 'MS', deadline: 'Jan 2027', fundingType: 'Fully Funded' },
-  { _id: '4', title: 'Turkish Government Scholarship', country: 'Turkey', university: 'Turkish Universities', degree: 'BS/MS/PhD', deadline: 'Feb 2027', fundingType: 'Fully Funded' },
-  { _id: '5', title: 'Chinese Government Scholarship', country: 'China', university: 'Chinese Universities', degree: 'BS/MS/PhD', deadline: 'Mar 2027', fundingType: 'Fully Funded' },
-  { _id: '6', title: 'HEC Need Based Scholarship', country: 'Pakistan', university: 'Pakistani Universities', degree: 'BS', deadline: 'Dec 2026', fundingType: 'Partial' },
+  { _id: '1', title: 'DAAD Scholarship Germany', country: 'Germany', university: 'Various German Universities', degree: 'MS/PhD', deadline: 'Oct 2026', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80' },
+  { _id: '2', title: 'Chevening Scholarship UK', country: 'United Kingdom', university: 'UK Universities', degree: 'MS', deadline: 'Nov 2026', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?w=800&q=80' },
+  { _id: '3', title: 'Erasmus Mundus', country: 'Europe', university: 'Multiple EU Universities', degree: 'MS', deadline: 'Jan 2027', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80' },
+  { _id: '4', title: 'Turkish Government Scholarship', country: 'Turkey', university: 'Turkish Universities', degree: 'BS/MS/PhD', deadline: 'Feb 2027', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=80' },
+  { _id: '5', title: 'Chinese Government Scholarship', country: 'China', university: 'Chinese Universities', degree: 'BS/MS/PhD', deadline: 'Mar 2027', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800&q=80' },
+  { _id: '6', title: 'HEC Need Based Scholarship', country: 'Pakistan', university: 'Pakistani Universities', degree: 'BS', deadline: 'Dec 2026', fundingType: 'Partial', image: '' },
 ]
 
 const COUNTRIES = ['All', 'Germany', 'United Kingdom', 'Europe', 'Turkey', 'China', 'Pakistan', 'USA', 'Australia']

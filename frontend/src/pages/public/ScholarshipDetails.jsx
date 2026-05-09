@@ -14,6 +14,7 @@ const MOCK = {
     degree: 'MS/PhD',
     deadline: 'October 2026',
     fundingType: 'Fully Funded',
+    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80',
     eligibility: {
       en: ["Bachelor's degree with good GPA", 'English or German language proficiency', 'Under 32 years of age for most programs', 'Strong academic background'],
       ps: ['د لیسانس سند د ښه نمرو سره', 'د انګلیسي یا آلماني ژبې مهارت', 'د ډیرو برنامو لپاره د ۳۲ کلونو لاندې عمر', 'قوي علمي شالید'],
@@ -125,22 +126,30 @@ export default function ScholarshipDetails() {
               </div>
             </div>
 
-            {/* Right — CTA Card */}
-            <div className="bg-white rounded-2xl p-6 space-y-4 w-full lg:w-80 flex-shrink-0 shadow-xl">
-              <h3 className="font-heading font-bold text-navy text-lg">{t('scholarships.apply_cta_title')}</h3>
-              <p className="text-sm text-text-muted">{t('scholarships.apply_cta_desc')}</p>
-              <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 bg-primary text-white font-semibold py-3 rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-btn text-sm">
-                <span className="material-symbols-outlined text-base">chat</span>
-                {t('scholarships.apply_whatsapp')}
-              </a>
-              {scholarship.officialLink && (
-                <a href={scholarship.officialLink} target="_blank" rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 border-2 border-primary text-primary font-semibold py-3 rounded-xl hover:bg-primary hover:text-white transition-all duration-200 text-sm">
-                  <span className="material-symbols-outlined text-base">open_in_new</span>
-                  {t('scholarships.official_website')}
-                </a>
+            {/* Right — CTA Card with image */}
+            <div className="bg-white rounded-2xl overflow-hidden shadow-xl w-full lg:w-80 flex-shrink-0">
+              {/* University image */}
+              {scholarship.image && (
+                <div className="h-40 overflow-hidden">
+                  <img src={scholarship.image} alt={scholarship.title} className="w-full h-full object-cover" />
+                </div>
               )}
+              <div className="p-6 space-y-4">
+                <h3 className="font-heading font-bold text-navy text-lg">{t('scholarships.apply_cta_title')}</h3>
+                <p className="text-sm text-text-muted">{t('scholarships.apply_cta_desc')}</p>
+                <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 bg-primary text-white font-semibold py-3 rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-btn text-sm">
+                  <span className="material-symbols-outlined text-base">chat</span>
+                  {t('scholarships.apply_whatsapp')}
+                </a>
+                {scholarship.officialLink && (
+                  <a href={scholarship.officialLink} target="_blank" rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 border-2 border-primary text-primary font-semibold py-3 rounded-xl hover:bg-primary hover:text-white transition-all duration-200 text-sm">
+                    <span className="material-symbols-outlined text-base">open_in_new</span>
+                    {t('scholarships.official_website')}
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>

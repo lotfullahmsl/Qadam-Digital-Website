@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 
 const INITIAL_DATA = [
-  { id: 1, title: 'Chevening Scholarship 2026', country: 'UK', university: 'Various UK Universities', degree: 'MS', deadline: '2026-11-05', fundingType: 'Fully Funded', status: 'Published', description: 'UK government scholarship for future leaders.', eligibility: 'Bachelor degree, 2 years work experience', benefits: 'Tuition, living allowance, flights' },
-  { id: 2, title: 'Fulbright Program', country: 'USA', university: 'Various US Universities', degree: 'MS', deadline: '2026-10-15', fundingType: 'Fully Funded', status: 'Published', description: 'US government flagship scholarship program.', eligibility: 'Bachelor degree, strong academic record', benefits: 'Full tuition, stipend, health insurance' },
-  { id: 3, title: 'DAAD Scholarship', country: 'Germany', university: 'Various German Universities', degree: 'MS', deadline: '2026-12-01', fundingType: 'Fully Funded', status: 'Published', description: 'German Academic Exchange Service scholarship.', eligibility: 'Bachelor degree, German or English proficiency', benefits: 'Monthly stipend, travel allowance' },
-  { id: 4, title: 'Aga Khan Foundation', country: 'Multiple', university: 'Partner Universities', degree: 'MS', deadline: '2026-09-30', fundingType: 'Partial', status: 'Published', description: 'Scholarship for students from developing countries.', eligibility: 'Demonstrated financial need, academic excellence', benefits: 'Partial tuition, living costs' },
-  { id: 5, title: 'Turkish Government Scholarship', country: 'Turkey', university: 'Turkish Universities', degree: 'BS', deadline: '2027-02-20', fundingType: 'Fully Funded', status: 'Draft', description: 'Turkish government scholarship for international students.', eligibility: 'High school diploma, age under 21', benefits: 'Tuition, accommodation, monthly stipend' },
-  { id: 6, title: 'Australia Awards', country: 'Australia', university: 'Australian Universities', degree: 'MS', deadline: '2026-08-30', fundingType: 'Fully Funded', status: 'Published', description: 'Australian government development scholarship.', eligibility: 'Bachelor degree, work experience', benefits: 'Full tuition, living allowance, flights' },
+  { id: 1, title: 'Chevening Scholarship 2026', country: 'UK', university: 'Various UK Universities', degree: 'MS', deadline: '2026-11-05', fundingType: 'Fully Funded', status: 'Published', description: 'UK government scholarship for future leaders.', eligibility: 'Bachelor degree, 2 years work experience', benefits: 'Tuition, living allowance, flights', image: 'https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?w=800&q=80' },
+  { id: 2, title: 'Fulbright Program', country: 'USA', university: 'Various US Universities', degree: 'MS', deadline: '2026-10-15', fundingType: 'Fully Funded', status: 'Published', description: 'US government flagship scholarship program.', eligibility: 'Bachelor degree, strong academic record', benefits: 'Full tuition, stipend, health insurance', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80' },
+  { id: 3, title: 'DAAD Scholarship', country: 'Germany', university: 'Various German Universities', degree: 'MS', deadline: '2026-12-01', fundingType: 'Fully Funded', status: 'Published', description: 'German Academic Exchange Service scholarship.', eligibility: 'Bachelor degree, German or English proficiency', benefits: 'Monthly stipend, travel allowance', image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80' },
+  { id: 4, title: 'Aga Khan Foundation', country: 'Multiple', university: 'Partner Universities', degree: 'MS', deadline: '2026-09-30', fundingType: 'Partial', status: 'Published', description: 'Scholarship for students from developing countries.', eligibility: 'Demonstrated financial need, academic excellence', benefits: 'Partial tuition, living costs', image: '' },
+  { id: 5, title: 'Turkish Government Scholarship', country: 'Turkey', university: 'Turkish Universities', degree: 'BS', deadline: '2027-02-20', fundingType: 'Fully Funded', status: 'Draft', description: 'Turkish government scholarship for international students.', eligibility: 'High school diploma, age under 21', benefits: 'Tuition, accommodation, monthly stipend', image: '' },
+  { id: 6, title: 'Australia Awards', country: 'Australia', university: 'Australian Universities', degree: 'MS', deadline: '2026-08-30', fundingType: 'Fully Funded', status: 'Published', description: 'Australian government development scholarship.', eligibility: 'Bachelor degree, work experience', benefits: 'Full tuition, living allowance, flights', image: '' },
 ]
 
-const EMPTY_FORM = { title: '', country: '', university: '', degree: 'MS', deadline: '', fundingType: 'Fully Funded', description: '', eligibility: '', benefits: '', status: 'Draft' }
+const EMPTY_FORM = { title: '', country: '', university: '', degree: 'MS', deadline: '', fundingType: 'Fully Funded', description: '', eligibility: '', benefits: '', status: 'Draft', image: '' }
 const inputClass = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-navy placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all bg-white'
 
 const StatusBadge = ({ status }) => {
@@ -83,7 +83,24 @@ export default function ScholarshipManager() {
             <tbody className="divide-y divide-gray-50">
               {filtered.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-5 py-3.5"><p className="font-medium text-navy">{item.title}</p><p className="text-xs text-gray-400">{item.university}</p></td>
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-3">
+                      {/* Thumbnail */}
+                      <div className="w-14 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-primary-pale border border-border">
+                        {item.image ? (
+                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <span className="material-symbols-outlined text-primary/30 text-xl">image</span>
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-navy">{item.title}</p>
+                        <p className="text-xs text-gray-400">{item.university}</p>
+                      </div>
+                    </div>
+                  </td>
                   <td className="px-5 py-3.5 text-gray-600">{item.country}</td>
                   <td className="px-5 py-3.5 text-gray-600">{item.degree}</td>
                   <td className="px-5 py-3.5 text-gray-600">{item.deadline}</td>
@@ -116,6 +133,34 @@ export default function ScholarshipManager() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Title *</label><input required className={inputClass} placeholder="Scholarship title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></div>
+
+                {/* Image Upload */}
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                    University / Scholarship Image
+                    <span className="ml-1 text-gray-400 font-normal">(URL — paste a link to the university or scholarship photo)</span>
+                  </label>
+                  <div className="flex gap-3 items-start">
+                    <input
+                      className={inputClass + ' flex-1'}
+                      placeholder="https://example.com/university-photo.jpg"
+                      value={form.image}
+                      onChange={(e) => setForm({ ...form, image: e.target.value })}
+                    />
+                    {/* Live preview */}
+                    <div className="w-24 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center">
+                      {form.image ? (
+                        <img src={form.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none' }} />
+                      ) : (
+                        <span className="material-symbols-outlined text-gray-300 text-2xl">image</span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-sm">info</span>
+                    Tip: Use Google Images → right-click → "Copy image address" to get a URL. This image will appear on the scholarship card and detail page.
+                  </p>
+                </div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Country *</label><input required className={inputClass} placeholder="e.g. UK" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} /></div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">University *</label><input required className={inputClass} placeholder="University name" value={form.university} onChange={(e) => setForm({ ...form, university: e.target.value })} /></div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Degree</label><select className={inputClass} value={form.degree} onChange={(e) => setForm({ ...form, degree: e.target.value })}><option>BS</option><option>MS</option><option>PhD</option></select></div>
