@@ -5,17 +5,17 @@ import { ROUTES } from '../../constants/routes'
 
 const STAT_CARDS = [
   { label: 'Scholarships', value: 24, icon: 'school', iconBg: 'bg-blue-100', iconColor: 'text-blue-600', trend: '+12%', trendUp: true, link: ROUTES.ADMIN_SCHOLARSHIPS },
-  { label: 'Blog Posts', value: 12, icon: 'article', iconBg: 'bg-purple-100', iconColor: 'text-purple-600', trend: '+3%', trendUp: true, link: ROUTES.ADMIN_BLOGS },
   { label: 'New Requests', value: 8, icon: 'inbox', iconBg: 'bg-orange-100', iconColor: 'text-orange-600', trend: '+5 today', trendUp: true, link: ROUTES.ADMIN_REQUESTS },
   { label: 'Portfolio Items', value: 6, icon: 'work', iconBg: 'bg-green-100', iconColor: 'text-green-600', trend: '+2%', trendUp: true, link: ROUTES.ADMIN_PORTFOLIO },
   { label: 'Pricing Plans', value: 10, icon: 'sell', iconBg: 'bg-cyan-100', iconColor: 'text-cyan-600', trend: 'No change', trendUp: null, link: ROUTES.ADMIN_PRICING },
+  { label: 'Services', value: 8, icon: 'build', iconBg: 'bg-purple-100', iconColor: 'text-purple-600', trend: '+1%', trendUp: true, link: ROUTES.ADMIN_SERVICES },
   { label: 'Total Users', value: 142, icon: 'group', iconBg: 'bg-indigo-100', iconColor: 'text-indigo-600', trend: '+18%', trendUp: true, link: ROUTES.ADMIN_REQUESTS },
 ]
 
 const QUICK_ACTIONS = [
   { label: 'Add Scholarship', icon: 'school', to: ROUTES.ADMIN_SCHOLARSHIPS, color: 'bg-primary' },
-  { label: 'New Blog Post', icon: 'edit', to: ROUTES.ADMIN_BLOGS, color: 'bg-purple-600' },
   { label: 'View Requests', icon: 'inbox', to: ROUTES.ADMIN_REQUESTS, color: 'bg-orange-500' },
+  { label: 'Manage Portfolio', icon: 'work', to: ROUTES.ADMIN_PORTFOLIO, color: 'bg-green-600' },
   { label: 'Site Settings', icon: 'settings', to: ROUTES.ADMIN_SETTINGS, color: 'bg-gray-700' },
 ]
 

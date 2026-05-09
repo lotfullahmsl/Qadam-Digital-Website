@@ -29,7 +29,6 @@ import UserSignup from '../pages/auth/UserSignup'
 import AdminLayout from '../components/layout/AdminLayout'
 import Dashboard from '../pages/admin/Dashboard'
 import ScholarshipManager from '../pages/admin/ScholarshipManager'
-import BlogManager from '../pages/admin/BlogManager'
 import PortfolioManager from '../pages/admin/PortfolioManager'
 import PricingManager from '../pages/admin/PricingManager'
 import ServiceManager from '../pages/admin/ServiceManager'
@@ -88,7 +87,6 @@ export default function AppRoutes() {
       {/* Admin */}
       <Route path={ROUTES.ADMIN_DASHBOARD} element={<AdminPage component={Dashboard} />} />
       <Route path={ROUTES.ADMIN_SCHOLARSHIPS} element={<AdminPage component={ScholarshipManager} />} />
-      <Route path={ROUTES.ADMIN_BLOGS} element={<AdminPage component={BlogManager} />} />
       <Route path={ROUTES.ADMIN_PORTFOLIO} element={<AdminPage component={PortfolioManager} />} />
       <Route path={ROUTES.ADMIN_PRICING} element={<AdminPage component={PricingManager} />} />
       <Route path={ROUTES.ADMIN_SERVICES} element={<AdminPage component={ServiceManager} />} />
