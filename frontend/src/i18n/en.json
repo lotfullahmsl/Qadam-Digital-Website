@@ -1,4 +1,8 @@
 {
+  "brand": {
+    "name": "QADAM Digital",
+    "tagline_short": "Education & Digital Services"
+  },
   "nav": {
     "scholarships": "Scholarships",
     "services": "Services",
@@ -55,7 +59,14 @@
     "contact": "Contact",
     "about": "About Us",
     "blog": "Blog",
-    "portfolio": "Portfolio"
+    "portfolio": "Portfolio",
+    "service_links": {
+      "scholarship": "Scholarship Consulting",
+      "cv": "CV & Motivation Letters",
+      "web": "Web Development",
+      "ai": "AI Tool Subscriptions",
+      "smm": "Social Media Marketing"
+    }
   },
   "contact": {
     "title": "Get in Touch",
@@ -71,6 +82,44 @@
     "whatsapp_btn": "Chat on WhatsApp",
     "office": "Office",
     "follow_us": "Follow Us"
+  },
+  "home": {
+    "services_badge": "Our Services",
+    "services_title": "Everything You Need",
+    "scholarship_badge": "Scholarships",
+    "browse_scholarships": "Browse Scholarships",
+    "why_badge": "Why QADAM Digital",
+    "why_title": "Trusted by Thousands",
+    "why_subtitle": "Students and businesses across Afghanistan, Pakistan, and beyond rely on us.",
+    "testimonials_badge": "Testimonials",
+    "testimonials_title": "What Our Clients Say",
+    "cta_title": "Ready to Start Your Journey?",
+    "cta_subtitle": "Contact us today and let's discuss how QADAM Digital can help you achieve your goals.",
+    "contact_us": "Contact Us",
+    "why_items": {
+      "trusted_title": "Trusted & Reliable",
+      "trusted_desc": "Hundreds of successful scholarship applications and digital projects delivered.",
+      "multilingual_title": "Multilingual Support",
+      "multilingual_desc": "Full support in English, Pashto, and Dari for seamless communication.",
+      "support_title": "24/7 Assistance",
+      "support_desc": "Always available via WhatsApp for urgent queries and support.",
+      "quality_title": "Premium Quality",
+      "quality_desc": "High-end deliverables that meet international standards every time."
+    },
+    "service_items": {
+      "scholarship_title": "Scholarship Guidance",
+      "scholarship_desc": "Expert consultation to secure fully funded educational opportunities worldwide.",
+      "web_title": "Web Development",
+      "web_desc": "Bespoke, high-performance websites and digital platforms for businesses.",
+      "ai_title": "AI Subscriptions",
+      "ai_desc": "Access ChatGPT, Gemini, Coursera, Canva Pro and more at affordable prices.",
+      "cv_title": "CV & Motivation Letters",
+      "cv_desc": "Professional, ATS-optimized CVs and compelling motivation letters.",
+      "translation_title": "Translation Services",
+      "translation_desc": "Certified multilingual translation of academic and official documents.",
+      "smm_title": "Social Media Marketing",
+      "smm_desc": "Strategic digital marketing to grow your brand across global platforms."
+    }
   },
   "about": {
     "title": "Who is QADAM Digital?",

@@ -5,26 +5,10 @@ import { ROUTES } from '../../constants/routes'
 import ServiceCard from '../../components/cards/ServiceCard'
 import AdBanner from '../../components/common/AdBanner'
 
-const SERVICES = [
-  { icon: 'menu_book', title: 'Scholarship Guidance', description: 'Expert consultation to secure fully funded educational opportunities worldwide.', to: ROUTES.SCHOLARSHIPS },
-  { icon: 'web', title: 'Web Development', description: 'Bespoke, high-performance websites and digital platforms for businesses.', to: ROUTES.WEBSITE_DATABASE },
-  { icon: 'smart_toy', title: 'AI Subscriptions', description: 'Access ChatGPT, Gemini, Coursera, Canva Pro and more at affordable prices.', to: ROUTES.DIGITAL_TOOLS },
-  { icon: 'description', title: 'CV & Motivation Letters', description: 'Professional, ATS-optimized CVs and compelling motivation letters.', to: ROUTES.CV_TRANSLATION },
-  { icon: 'translate', title: 'Translation Services', description: 'Certified multilingual translation of academic and official documents.', to: ROUTES.CV_TRANSLATION },
-  { icon: 'campaign', title: 'Social Media Marketing', description: 'Strategic digital marketing to grow your brand across global platforms.', to: ROUTES.SOCIAL_MEDIA },
-]
-
 const TESTIMONIALS = [
   { name: 'Ahmad Karimi', country: 'Afghanistan', text: 'QADAM Digital helped me secure a fully funded scholarship to Germany. Their guidance was exceptional throughout the entire process.', avatar: 'AK' },
   { name: 'Sara Mohammadi', country: 'Pakistan', text: 'The CV writing service was outstanding. I received interview calls from 3 top universities within a week of submitting.', avatar: 'SM' },
   { name: 'Bilal Yousafzai', country: 'Pakistan', text: 'Their web development team built our clinic management system perfectly. Very professional and delivered on time.', avatar: 'BY' },
-]
-
-const WHY_US = [
-  { icon: 'verified', title: 'Trusted & Reliable', desc: 'Hundreds of successful scholarship applications and digital projects delivered.' },
-  { icon: 'language', title: 'Multilingual Support', desc: 'Full support in English, Pashto, and Dari for seamless communication.' },
-  { icon: 'support_agent', title: '24/7 Assistance', desc: 'Always available via WhatsApp for urgent queries and support.' },
-  { icon: 'workspace_premium', title: 'Premium Quality', desc: 'High-end deliverables that meet international standards every time.' },
 ]
 
 export default function Home() {
@@ -35,6 +19,22 @@ export default function Home() {
     { icon: 'code', value: '1,000+', label: t('hero.stat_websites') },
     { icon: 'people', value: '5,000+', label: t('hero.stat_students') },
     { icon: 'smart_toy', value: '24/7', label: t('hero.stat_support') },
+  ]
+
+  const SERVICES = [
+    { icon: 'menu_book', title: t('home.service_items.scholarship_title'), description: t('home.service_items.scholarship_desc'), to: ROUTES.SCHOLARSHIPS },
+    { icon: 'web', title: t('home.service_items.web_title'), description: t('home.service_items.web_desc'), to: ROUTES.WEBSITE_DATABASE },
+    { icon: 'smart_toy', title: t('home.service_items.ai_title'), description: t('home.service_items.ai_desc'), to: ROUTES.DIGITAL_TOOLS },
+    { icon: 'description', title: t('home.service_items.cv_title'), description: t('home.service_items.cv_desc'), to: ROUTES.CV_TRANSLATION },
+    { icon: 'translate', title: t('home.service_items.translation_title'), description: t('home.service_items.translation_desc'), to: ROUTES.CV_TRANSLATION },
+    { icon: 'campaign', title: t('home.service_items.smm_title'), description: t('home.service_items.smm_desc'), to: ROUTES.SOCIAL_MEDIA },
+  ]
+
+  const WHY_US = [
+    { icon: 'verified', title: t('home.why_items.trusted_title'), desc: t('home.why_items.trusted_desc') },
+    { icon: 'language', title: t('home.why_items.multilingual_title'), desc: t('home.why_items.multilingual_desc') },
+    { icon: 'support_agent', title: t('home.why_items.support_title'), desc: t('home.why_items.support_desc') },
+    { icon: 'workspace_premium', title: t('home.why_items.quality_title'), desc: t('home.why_items.quality_desc') },
   ]
 
   return (
@@ -97,8 +97,8 @@ export default function Home() {
       <section className="py-20 px-6 bg-background">
         <div className="max-w-screen-xl mx-auto">
           <div className="text-center mb-12">
-            <span className="badge mb-3">Our Services</span>
-            <h2 className="font-heading font-bold text-navy text-4xl mb-3">{t('services.title')}</h2>
+            <span className="badge mb-3">{t('home.services_badge')}</span>
+            <h2 className="font-heading font-bold text-navy text-4xl mb-3">{t('home.services_title')}</h2>
             <p className="text-text-muted text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -116,17 +116,15 @@ export default function Home() {
       <section className="py-16 px-6 bg-primary-pale border-y border-border">
         <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-3">
-            <span className="badge">Scholarships</span>
+            <span className="badge">{t('home.scholarship_badge')}</span>
             <h2 className="font-heading font-bold text-navy text-3xl">{t('scholarships.title')}</h2>
-            <p className="text-text-muted text-lg max-w-xl">
-              {t('scholarships.subtitle')}
-            </p>
+            <p className="text-text-muted text-lg max-w-xl">{t('scholarships.subtitle')}</p>
           </div>
           <Link
             to={ROUTES.SCHOLARSHIPS}
             className="flex-shrink-0 inline-flex items-center gap-2 bg-primary text-white font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200"
           >
-            Browse Scholarships
+            {t('home.browse_scholarships')}
             <span className="material-symbols-outlined">arrow_forward</span>
           </Link>
         </div>
@@ -136,9 +134,9 @@ export default function Home() {
       <section className="py-20 px-6 bg-background">
         <div className="max-w-screen-xl mx-auto">
           <div className="text-center mb-12">
-            <span className="badge mb-3">Why QADAM Digital</span>
-            <h2 className="font-heading font-bold text-navy text-4xl mb-3">Trusted by Thousands</h2>
-            <p className="text-text-muted text-lg max-w-2xl mx-auto">Students and businesses across Afghanistan, Pakistan, and beyond rely on us.</p>
+            <span className="badge mb-3">{t('home.why_badge')}</span>
+            <h2 className="font-heading font-bold text-navy text-4xl mb-3">{t('home.why_title')}</h2>
+            <p className="text-text-muted text-lg max-w-2xl mx-auto">{t('home.why_subtitle')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {WHY_US.map((item) => (
@@ -160,26 +158,26 @@ export default function Home() {
           <div className="text-center mb-12">
             <span className="inline-flex items-center gap-2 bg-white/10 text-primary-light px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/20 mb-3">
               <span className="material-symbols-outlined text-sm">star</span>
-              Testimonials
+              {t('home.testimonials_badge')}
             </span>
-            <h2 className="font-heading font-bold text-white text-4xl mb-3">What Our Clients Say</h2>
+            <h2 className="font-heading font-bold text-white text-4xl mb-3">{t('home.testimonials_title')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="bg-white/10 border border-white/15 rounded-xl p-6 flex flex-col gap-4">
+            {TESTIMONIALS.map((item) => (
+              <div key={item.name} className="bg-white/10 border border-white/15 rounded-xl p-6 flex flex-col gap-4">
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
                     <span key={i} className="material-symbols-outlined text-primary text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                   ))}
                 </div>
-                <p className="text-primary-light/90 text-sm leading-relaxed italic flex-grow">"{t.text}"</p>
+                <p className="text-primary-light/90 text-sm leading-relaxed italic flex-grow">"{item.text}"</p>
                 <div className="flex items-center gap-3 pt-2 border-t border-white/10">
                   <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                    {t.avatar}
+                    {item.avatar}
                   </div>
                   <div>
-                    <p className="font-semibold text-white text-sm">{t.name}</p>
-                    <p className="text-xs text-primary-light/60">{t.country}</p>
+                    <p className="font-semibold text-white text-sm">{item.name}</p>
+                    <p className="text-xs text-primary-light/60">{item.country}</p>
                   </div>
                 </div>
               </div>
@@ -191,10 +189,8 @@ export default function Home() {
       {/* ── Final CTA ── */}
       <section className="py-20 px-6 bg-primary">
         <div className="max-w-screen-xl mx-auto text-center space-y-6">
-          <h2 className="font-heading font-bold text-white text-4xl">Ready to Start Your Journey?</h2>
-          <p className="text-white/80 text-lg max-w-xl mx-auto">
-            Contact us today and let's discuss how QADAM Digital can help you achieve your goals.
-          </p>
+          <h2 className="font-heading font-bold text-white text-4xl">{t('home.cta_title')}</h2>
+          <p className="text-white/80 text-lg max-w-xl mx-auto">{t('home.cta_subtitle')}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="https://wa.me/93700000000"
@@ -209,7 +205,7 @@ export default function Home() {
               to={ROUTES.CONTACT}
               className="inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold px-8 py-3.5 rounded-lg border border-white/30 hover:bg-white/25 transition-all duration-200"
             >
-              Contact Us
+              {t('home.contact_us')}
               <span className="material-symbols-outlined text-base">arrow_forward</span>
             </Link>
           </div>

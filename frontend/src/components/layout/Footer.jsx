@@ -1,10 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useLanguage } from '../../hooks/useLanguage'
 import { ROUTES } from '../../constants/routes'
 
 export default function Footer() {
   const { t } = useTranslation()
+  const { language } = useLanguage()
 
   return (
     <footer className="bg-navy text-text-on-dark">
@@ -18,8 +20,20 @@ export default function Footer() {
               alt="QADAM Digital"
               className="h-12 w-auto object-contain"
             />
-            <span className="font-heading text-xl font-bold text-white">
-              QADAM <span className="text-primary">Digital</span>
+            <span
+              className="font-bold text-white text-xl"
+              style={{
+                fontFamily: language === 'en'
+                  ? "'Montserrat', sans-serif"
+                  : "'Noto Naskh Arabic', 'Noto Sans Arabic', Tahoma, Arial, sans-serif",
+                fontSize: language === 'en' ? '1.25rem' : '1.1rem',
+                letterSpacing: language === 'en' ? '-0.01em' : '0',
+              }}
+            >
+              {language === 'en'
+                ? <><span className="text-white">QADAM</span> <span className="text-primary">Digital</span></>
+                : <span className="text-white">{t('brand.name')}</span>
+              }
             </span>
           </Link>
           <p className="text-sm text-primary-light/80 leading-relaxed max-w-xs">
@@ -49,11 +63,11 @@ export default function Footer() {
         <div>
           <h4 className="text-xs font-semibold tracking-widest uppercase text-primary mb-5">{t('footer.services')}</h4>
           <ul className="space-y-3 text-sm text-primary-light/80">
-            <li><Link to={ROUTES.SCHOLARSHIPS} className="hover:text-white transition-colors">Scholarship Consulting</Link></li>
-            <li><Link to={ROUTES.CV_TRANSLATION} className="hover:text-white transition-colors">CV & Motivation Letters</Link></li>
-            <li><Link to={ROUTES.WEBSITE_DATABASE} className="hover:text-white transition-colors">Web Development</Link></li>
-            <li><Link to={ROUTES.DIGITAL_TOOLS} className="hover:text-white transition-colors">AI Tool Subscriptions</Link></li>
-            <li><Link to={ROUTES.SOCIAL_MEDIA} className="hover:text-white transition-colors">Social Media Marketing</Link></li>
+            <li><Link to={ROUTES.SCHOLARSHIPS} className="hover:text-white transition-colors">{t('footer.service_links.scholarship')}</Link></li>
+            <li><Link to={ROUTES.CV_TRANSLATION} className="hover:text-white transition-colors">{t('footer.service_links.cv')}</Link></li>
+            <li><Link to={ROUTES.WEBSITE_DATABASE} className="hover:text-white transition-colors">{t('footer.service_links.web')}</Link></li>
+            <li><Link to={ROUTES.DIGITAL_TOOLS} className="hover:text-white transition-colors">{t('footer.service_links.ai')}</Link></li>
+            <li><Link to={ROUTES.SOCIAL_MEDIA} className="hover:text-white transition-colors">{t('footer.service_links.smm')}</Link></li>
           </ul>
         </div>
 

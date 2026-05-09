@@ -78,8 +78,20 @@ export default function Navbar() {
               alt="QADAM Digital"
               className="h-12 w-auto object-contain"
             />
-            <span className="font-heading font-bold text-navy text-xl tracking-tight">
-              QADAM <span className="text-primary">Digital</span>
+            <span
+              className="font-bold text-navy text-xl tracking-tight"
+              style={{
+                fontFamily: language === 'en'
+                  ? "'Montserrat', sans-serif"
+                  : "'Noto Naskh Arabic', 'Noto Sans Arabic', Tahoma, Arial, sans-serif",
+                fontSize: language === 'en' ? '1.25rem' : '1.15rem',
+                letterSpacing: language === 'en' ? '-0.01em' : '0',
+              }}
+            >
+              {language === 'en'
+                ? <><span className="text-navy">QADAM</span> <span className="text-primary">Digital</span></>
+                : <span className="text-navy">{t('brand.name')}</span>
+              }
             </span>
           </Link>
 
