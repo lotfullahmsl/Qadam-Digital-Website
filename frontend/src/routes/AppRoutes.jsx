@@ -75,7 +75,7 @@ export default function AppRoutes() {
       <Route path={ROUTES.DIGITAL_TOOLS} element={<PublicPage component={DigitalToolsSubscriptions} />} />
       <Route path={ROUTES.SOCIAL_MEDIA} element={<PublicPage component={SocialMediaMarketing} />} />
       <Route path={ROUTES.PRICING} element={<PublicPage component={Pricing} />} />
-      <Route path={ROUTES.PORTFOLIO} element={<PublicPage component={Portfolio} />} />
+      <Route path={ROUTES.PORTFOLIO} element={<Navigate to={ROUTES.ABOUT} replace />} />
       <Route path={ROUTES.BLOG} element={<PublicPage component={Blog} />} />
       <Route path={ROUTES.BLOG_DETAILS} element={<PublicPage component={BlogDetails} />} />
       <Route path={ROUTES.CONTACT} element={<PublicPage component={Contact} />} />

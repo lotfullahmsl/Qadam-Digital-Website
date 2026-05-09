@@ -76,7 +76,6 @@ export default function Footer() {
           <h4 className="text-xs font-semibold tracking-widest uppercase text-primary mb-5">{t('footer.company')}</h4>
           <ul className="space-y-3 text-sm text-primary-light/80">
             <li><Link to={ROUTES.ABOUT} className="hover:text-white transition-colors">{t('nav.about')}</Link></li>
-            <li><Link to={ROUTES.PORTFOLIO} className="hover:text-white transition-colors">{t('nav.portfolio')}</Link></li>
             <li><Link to={ROUTES.BLOG} className="hover:text-white transition-colors">{t('nav.blog')}</Link></li>
             <li><Link to={ROUTES.PRICING} className="hover:text-white transition-colors">{t('nav.pricing')}</Link></li>
             <li><Link to={ROUTES.CONTACT} className="hover:text-white transition-colors">{t('nav.contact')}</Link></li>
