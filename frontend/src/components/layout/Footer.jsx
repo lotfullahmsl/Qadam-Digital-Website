@@ -89,11 +89,11 @@ export default function Footer() {
           <ul className="space-y-3 text-sm text-primary-light/80">
             <li className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">chat</span>
-              <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">+93 700 000 000</a>
+              <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">+92 303 939 3438</a>
             </li>
             <li className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">email</span>
-              <a href="mailto:info@qadamdigital.com" className="hover:text-white transition-colors">info@qadamdigital.com</a>
+              <a href="mailto:Qadamdigital.official@gmail.com" className="hover:text-white transition-colors">Qadamdigital.official@gmail.com</a>
             </li>
             <li className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">location_on</span>
@@ -101,7 +101,7 @@ export default function Footer() {
             </li>
           </ul>
           <a
-            href="https://wa.me/93700000000"
+            href="https://wa.me/923039393438"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-5 inline-flex items-center gap-2 bg-primary text-white text-xs font-semibold tracking-wide uppercase px-4 py-2.5 rounded-lg hover:bg-primary-dark transition-all duration-200"

@@ -113,7 +113,7 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
                   className={`w-full text-center py-2.5 rounded-lg text-sm font-semibold tracking-wide uppercase transition-all duration-200 ${
                     plan.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'bg-primary text-white hover:bg-primary-dark shadow-btn'
                   }`}>
@@ -130,7 +130,7 @@ export default function Pricing() {
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
           <h2 className="font-heading font-bold text-navy text-3xl">{t('pricing.custom_quote')}</h2>
           <p className="text-text-muted text-lg max-w-xl mx-auto">{t('pricing.custom_text')}</p>
-          <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200">
             <span className="material-symbols-outlined text-base">chat</span>
             {t('pricing.request_quote')}

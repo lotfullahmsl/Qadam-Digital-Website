@@ -4,7 +4,7 @@ export default function WhatsAppButton({ message = 'Hello, I need help with QADA
   const encoded = encodeURIComponent(message)
   return (
     <a
-      href={`https://wa.me/93700000000?text=${encoded}`}
+      href={`https://wa.me/923039393438?text=${encoded}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"

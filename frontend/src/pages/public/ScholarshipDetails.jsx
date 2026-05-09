@@ -129,7 +129,7 @@ export default function ScholarshipDetails() {
             <div className="bg-white rounded-2xl p-6 space-y-4 w-full lg:w-80 flex-shrink-0 shadow-xl">
               <h3 className="font-heading font-bold text-navy text-lg">{t('scholarships.apply_cta_title')}</h3>
               <p className="text-sm text-text-muted">{t('scholarships.apply_cta_desc')}</p>
-              <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+              <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 bg-primary text-white font-semibold py-3 rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-btn text-sm">
                 <span className="material-symbols-outlined text-base">chat</span>
                 {t('scholarships.apply_whatsapp')}
@@ -226,7 +226,7 @@ export default function ScholarshipDetails() {
               <div className="card p-6 space-y-4">
                 <h3 className="font-heading font-bold text-navy text-lg">{t('scholarships.need_help_sidebar')}</h3>
                 <p className="text-sm text-text-muted">{t('scholarships.need_help_sidebar_desc')}</p>
-                <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 bg-primary text-white font-semibold py-2.5 rounded-xl hover:bg-primary-dark transition-all duration-200 text-sm shadow-btn">
                   <span className="material-symbols-outlined text-base">chat</span>
                   {t('scholarships.chat_whatsapp')}

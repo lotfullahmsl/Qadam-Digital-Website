@@ -100,7 +100,7 @@ export default function BlogDetails() {
               <div className="card p-6 space-y-4">
                 <h3 className="font-heading font-bold text-navy text-lg">{t('blog_details.need_help')}</h3>
                 <p className="text-sm text-text-muted">{t('blog_details.need_help_desc')}</p>
-                <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 bg-primary text-white font-semibold py-2.5 rounded-xl hover:bg-primary-dark transition-all duration-200 text-sm shadow-btn">
                   <span className="material-symbols-outlined text-base">chat</span>
                   {t('blog_details.chat_whatsapp')}

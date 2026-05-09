@@ -61,7 +61,7 @@ export default function ScholarshipCard({ scholarship }) {
           {t('scholarships.details')}
         </Link>
         <a
-          href="https://wa.me/93700000000"
+          href="https://wa.me/923039393438"
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 text-center py-2 rounded-lg bg-primary text-white text-xs font-semibold tracking-wide uppercase hover:bg-primary-dark transition-all duration-200 shadow-btn"

@@ -226,7 +226,7 @@ export default function UserSignup() {
                       <label className="block text-sm font-semibold text-navy mb-1.5">Phone / WhatsApp</label>
                       <div className="relative">
                         <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xl">phone</span>
-                        <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+93 700 000 000" className={inputWithIconClass} autoComplete="tel" />
+                        <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+92 303 939 3438" className={inputWithIconClass} autoComplete="tel" />
                       </div>
                     </div>
                     <div>

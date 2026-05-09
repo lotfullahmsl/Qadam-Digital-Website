@@ -52,7 +52,7 @@ export default function Navbar() {
     { label: t('nav.solutions'), to: ROUTES.WEBSITE_DATABASE },
     { label: t('nav.pricing'), to: ROUTES.PRICING },
     { label: t('nav.portfolio'), to: ROUTES.PORTFOLIO },
-    { label: t('nav.blog'), to: ROUTES.BLOG },
+    { label: t('nav.contact'), to: ROUTES.CONTACT },
     { label: t('nav.about'), to: ROUTES.ABOUT },
   ]
 

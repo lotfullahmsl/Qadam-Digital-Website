@@ -70,7 +70,7 @@ export default function Portfolio() {
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
           <h2 className="font-heading font-bold text-white text-3xl">{t('portfolio.cta_title')}</h2>
           <p className="text-white/80 text-lg max-w-xl mx-auto">{t('portfolio.cta_subtitle')}</p>
-          <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg">
             <span className="material-symbols-outlined text-base">chat</span>
             {t('portfolio.start_project')}

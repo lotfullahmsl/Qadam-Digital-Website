@@ -102,7 +102,7 @@ export default function About() {
               <Link to={ROUTES.CONTACT} className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200">
                 {t('nav.contact')} <span className="material-symbols-outlined text-base">arrow_forward</span>
               </Link>
-              <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold px-8 py-3.5 rounded-lg border border-white/30 hover:bg-white/25 transition-all duration-200">
+              <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold px-8 py-3.5 rounded-lg border border-white/30 hover:bg-white/25 transition-all duration-200">
                 <span className="material-symbols-outlined text-base">chat</span> {t('contact.whatsapp_btn')}
               </a>
             </div>

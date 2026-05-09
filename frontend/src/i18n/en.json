@@ -93,7 +93,7 @@
     "select_service": "Select a service...",
     "your_name": "Your full name",
     "your_email": "your@email.com",
-    "your_phone": "+93 700 000 000",
+    "your_phone": "+92 303 939 3438",
     "your_country": "Your country",
     "your_message": "Tell us how we can help you...",
     "services": {
@@ -761,7 +761,7 @@
     "error_msg": "Failed to send message. Please try WhatsApp instead.",
     "name_placeholder": "Your full name",
     "email_placeholder": "your@email.com",
-    "phone_placeholder": "+93 700 000 000",
+    "phone_placeholder": "+92 303 939 3438",
     "country_placeholder": "Your country",
     "message_placeholder": "Tell us how we can help you...",
     "select_service": "Select a service...",

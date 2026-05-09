@@ -60,7 +60,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <a
-                href="https://wa.me/93700000000"
+                href="https://wa.me/923039393438"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-white hover:text-primary transition-all duration-200 text-sm"
@@ -193,7 +193,7 @@ export default function Home() {
           <p className="text-white/80 text-lg max-w-xl mx-auto">{t('home.cta_subtitle')}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://wa.me/93700000000"
+              href="https://wa.me/923039393438"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-primary-pale transition-all duration-200"

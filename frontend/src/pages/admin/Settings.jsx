@@ -38,7 +38,7 @@ export default function Settings() {
   const [toast, setToast] = useState(null)
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 3000) }
 
-  const [general, setGeneral] = useState({ siteName: 'QADAM Digital', tagline: 'Your Gateway to Global Opportunities', whatsapp: '+93 700 000 000', contactEmail: 'info@qadam.digital', officeLocation: 'Kabul, Afghanistan', maintenanceMode: false })
+  const [general, setGeneral] = useState({ siteName: 'QADAM Digital', tagline: 'Your Gateway to Global Opportunities', whatsapp: '+92 303 939 3438', contactEmail: 'info@qadam.digital', officeLocation: 'Kabul, Afghanistan', maintenanceMode: false })
   const [social, setSocial] = useState({ facebook: 'https://facebook.com/qadamdigital', instagram: 'https://instagram.com/qadamdigital', linkedin: 'https://linkedin.com/company/qadamdigital', youtube: 'https://youtube.com/@qadamdigital', tiktok: '' })
   const [analytics, setAnalytics] = useState({ googleAnalyticsId: 'G-XXXXXXXXXX', adsensePublisherId: 'ca-pub-XXXXXXXXXX', metaPixelId: '' })
   const [security, setSecurity] = useState({ currentPassword: '', newPassword: '', confirmPassword: '', sessionTimeout: '60' })
@@ -83,7 +83,7 @@ export default function Settings() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Site Name</label><input className={inputClass} value={general.siteName} onChange={(e) => setGeneral({ ...general, siteName: e.target.value })} /></div>
                   <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Tagline</label><input className={inputClass} value={general.tagline} onChange={(e) => setGeneral({ ...general, tagline: e.target.value })} /></div>
-                  <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">WhatsApp Number</label><input className={inputClass} placeholder="+93 700 000 000" value={general.whatsapp} onChange={(e) => setGeneral({ ...general, whatsapp: e.target.value })} /></div>
+                  <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">WhatsApp Number</label><input className={inputClass} placeholder="+92 303 939 3438" value={general.whatsapp} onChange={(e) => setGeneral({ ...general, whatsapp: e.target.value })} /></div>
                   <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Contact Email</label><input type="email" className={inputClass} value={general.contactEmail} onChange={(e) => setGeneral({ ...general, contactEmail: e.target.value })} /></div>
                   <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Office Location</label><input className={inputClass} value={general.officeLocation} onChange={(e) => setGeneral({ ...general, officeLocation: e.target.value })} /></div>
                 </div>
