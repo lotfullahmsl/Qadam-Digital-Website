@@ -21,6 +21,13 @@ export default function Scholarships() {
   const [country, setCountry] = useState('All')
   const [degree, setDegree] = useState('All')
 
+  const DEGREES_DISPLAY = [
+    { value: 'All', label: t('scholarships.all_degrees') },
+    { value: 'BS', label: t('scholarships.degree_bs') },
+    { value: 'MS', label: t('scholarships.degree_ms') },
+    { value: 'PhD', label: t('scholarships.degree_phd') },
+  ]
+
   const filtered = MOCK_SCHOLARSHIPS.filter((s) => {
     const matchSearch = s.title.toLowerCase().includes(search.toLowerCase()) || s.university.toLowerCase().includes(search.toLowerCase())
     const matchCountry = country === 'All' || s.country === country
@@ -51,10 +58,14 @@ export default function Scholarships() {
               className="input-field pl-10" />
           </div>
           <select value={country} onChange={(e) => setCountry(e.target.value)} className="input-field md:w-48">
-            {COUNTRIES.map((c) => <option key={c} value={c}>{c === 'All' ? t('scholarships.all_countries') : c}</option>)}
+            <option value="All">{t('scholarships.all_countries')}</option>
+            {COUNTRIES.filter(c => c !== 'All').map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
           <select value={degree} onChange={(e) => setDegree(e.target.value)} className="input-field md:w-40">
-            {DEGREES.map((d) => <option key={d} value={d}>{d === 'All' ? t('scholarships.all_degrees') : d}</option>)}
+            <option value="All">{t('scholarships.all_degrees')}</option>
+            <option value="BS">{t('scholarships.degree_bs')}</option>
+            <option value="MS">{t('scholarships.degree_ms')}</option>
+            <option value="PhD">{t('scholarships.degree_phd')}</option>
           </select>
         </div>
       </section>
