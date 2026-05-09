@@ -12,18 +12,6 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading text-text-primary;
   }
-
-  /* When RTL (Pashto/Dari), override font at root level */
-  html[dir="rtl"] body,
-  html[dir="rtl"] * {
-    font-family:
-      'Noto Naskh Arabic',
-      'Segoe UI',
-      'Tahoma',
-      'Arial Unicode MS',
-      'Geeza Pro',
-      sans-serif !important;
-  }
 }
 
 @layer components {
@@ -91,24 +79,4 @@
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   user-select: none;
-}
-
-/* RTL support for Pashto/Dari */
-[dir="rtl"] {
-  text-align: right;
-}
-
-/* Use system fonts that support Arabic/Pashto — no external download needed */
-[dir="rtl"],
-[dir="rtl"] *:not(.material-symbols-outlined) {
-  font-family:
-    'Noto Naskh Arabic',
-    'Segoe UI',        /* Windows — supports Arabic/Pashto */
-    'Tahoma',          /* Windows fallback */
-    'Arial Unicode MS',
-    'Geeza Pro',       /* macOS Arabic */
-    'Al Nile',         /* macOS */
-    sans-serif !important;
-  line-height: 1.9 !important;
-  letter-spacing: 0 !important;
 }
