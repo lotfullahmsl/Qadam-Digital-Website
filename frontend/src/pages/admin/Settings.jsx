@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { getContactInfo, saveContactInfo } from '../../utils/contactStore'
 
 const TABS = [
+  { id: 'contact', label: 'Contact Info', icon: 'contact_phone' },
   { id: 'general', label: 'General', icon: 'settings' },
   { id: 'social', label: 'Social Media', icon: 'share' },
   { id: 'analytics', label: 'Analytics & Ads', icon: 'analytics' },
@@ -34,9 +36,22 @@ function Toggle({ value, onChange, label, description }) {
 }
 
 export default function Settings() {
-  const [activeTab, setActiveTab] = useState('general')
+  const [activeTab, setActiveTab] = useState('contact')
   const [toast, setToast] = useState(null)
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 3000) }
+
+  // Contact Info — loaded from localStorage, saved back on submit
+  const [contactInfo, setContactInfo] = useState(getContactInfo())
+
+  const handleSaveContact = (e) => {
+    e.preventDefault()
+    // Auto-build WhatsApp link from number
+    const cleaned = contactInfo.whatsapp.replace(/\D/g, '')
+    const updated = { ...contactInfo, whatsappLink: `https://wa.me/${cleaned}` }
+    setContactInfo(updated)
+    saveContactInfo(updated)
+    showToast('Contact info saved! Changes are now live on the Contact page.')
+  }
 
   const [general, setGeneral] = useState({ siteName: 'QADAM Digital', tagline: 'Your Gateway to Global Opportunities', whatsapp: '+92 303 939 3438', contactEmail: 'info@qadam.digital', officeLocation: 'Kabul, Afghanistan', maintenanceMode: false })
   const [social, setSocial] = useState({ facebook: 'https://facebook.com/qadamdigital', instagram: 'https://instagram.com/qadamdigital', linkedin: 'https://linkedin.com/company/qadamdigital', youtube: 'https://youtube.com/@qadamdigital', tiktok: '' })
@@ -76,6 +91,122 @@ export default function Settings() {
 
         {/* Tab Content */}
         <div className="flex-1">
+          {activeTab === 'contact' && (
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+              <div className="px-6 py-4 border-b border-gray-100">
+                <h2 className="font-heading font-bold text-navy text-base">Contact Information</h2>
+                <p className="text-xs text-gray-400 mt-0.5">Changes save instantly and appear live on the public Contact page</p>
+              </div>
+              <form onSubmit={handleSaveContact} className="p-6 space-y-5">
+
+                {/* Live preview banner */}
+                <div className="bg-primary-pale border border-primary/20 rounded-xl p-4 flex items-start gap-3">
+                  <span className="material-symbols-outlined text-primary text-xl flex-shrink-0 mt-0.5">info</span>
+                  <div>
+                    <p className="text-sm font-semibold text-navy">Live Preview</p>
+                    <p className="text-xs text-text-muted mt-0.5">
+                      WhatsApp: <strong>{contactInfo.whatsapp}</strong> &nbsp;|&nbsp;
+                      Phone: <strong>{contactInfo.phone}</strong> &nbsp;|&nbsp;
+                      Email: <strong>{contactInfo.email}</strong>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-base text-green-500">chat</span>
+                      WhatsApp Number
+                    </label>
+                    <input
+                      className={inputClass}
+                      placeholder="+92 303 939 3438"
+                      value={contactInfo.whatsapp}
+                      onChange={(e) => setContactInfo({ ...contactInfo, whatsapp: e.target.value })}
+                    />
+                    <p className="text-xs text-gray-400 mt-1">Include country code. Link is auto-generated.</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-base text-primary">phone</span>
+                      Phone Number
+                    </label>
+                    <input
+                      className={inputClass}
+                      placeholder="+92 777 241 173"
+                      value={contactInfo.phone}
+                      onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-base text-primary">email</span>
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      className={inputClass}
+                      placeholder="info@qadamdigital.com"
+                      value={contactInfo.email}
+                      onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-base text-primary">location_on</span>
+                      Office Location
+                    </label>
+                    <input
+                      className={inputClass}
+                      placeholder="Kabul, Afghanistan"
+                      value={contactInfo.location}
+                      onChange={(e) => setContactInfo({ ...contactInfo, location: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                {/* Social links */}
+                <div className="border-t border-gray-100 pt-5">
+                  <p className="text-xs font-semibold text-gray-600 mb-4 uppercase tracking-widest">Social Media Links</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      { key: 'facebook', label: 'Facebook', icon: 'facebook' },
+                      { key: 'instagram', label: 'Instagram', icon: 'photo_camera' },
+                      { key: 'linkedin', label: 'LinkedIn', icon: 'work' },
+                      { key: 'youtube', label: 'YouTube', icon: 'smart_display' },
+                    ].map((s) => (
+                      <div key={s.key}>
+                        <label className="block text-xs font-semibold text-gray-600 mb-1.5 flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-base text-gray-400">{s.icon}</span>
+                          {s.label}
+                        </label>
+                        <input
+                          type="url"
+                          className={inputClass}
+                          placeholder={`https://${s.key}.com/qadamdigital`}
+                          value={contactInfo[s.key] || ''}
+                          onChange={(e) => setContactInfo({ ...contactInfo, [s.key]: e.target.value })}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="flex items-center gap-2 bg-primary text-white font-semibold px-6 py-2.5 rounded-xl hover:bg-primary-dark transition-all text-sm"
+                  style={{ boxShadow: '0 4px 14px rgba(0,170,255,0.3)' }}
+                >
+                  <span className="material-symbols-outlined text-base">save</span>
+                  Save & Publish Contact Info
+                </button>
+              </form>
+            </div>
+          )}
+
           {activeTab === 'general' && (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
               <div className="px-6 py-4 border-b border-gray-100"><h2 className="font-heading font-bold text-navy text-base">General Settings</h2><p className="text-xs text-gray-400 mt-0.5">Basic site configuration</p></div>

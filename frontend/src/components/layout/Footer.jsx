@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useLanguage } from '../../hooks/useLanguage'
 import { ROUTES } from '../../constants/routes'
+import { getContactInfo } from '../../utils/contactStore'
 
 export default function Footer() {
   const { t } = useTranslation()
   const { language } = useLanguage()
+  const contact = getContactInfo()
 
   return (
     <footer className="bg-navy text-text-on-dark">
@@ -42,10 +44,10 @@ export default function Footer() {
           {/* Social Links */}
           <div className="flex gap-2 mt-1">
             {[
-              { icon: 'facebook', href: '#', label: 'Facebook' },
-              { icon: 'photo_camera', href: '#', label: 'Instagram' },
-              { icon: 'work', href: '#', label: 'LinkedIn' },
-              { icon: 'smart_display', href: '#', label: 'YouTube' },
+              { icon: 'facebook', href: contact.facebook, label: 'Facebook' },
+              { icon: 'photo_camera', href: contact.instagram, label: 'Instagram' },
+              { icon: 'work', href: contact.linkedin, label: 'LinkedIn' },
+              { icon: 'smart_display', href: contact.youtube, label: 'YouTube' },
             ].map((s) => (
               <a
                 key={s.label}
@@ -88,11 +90,11 @@ export default function Footer() {
           <ul className="space-y-3 text-sm text-primary-light/80">
             <li className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">chat</span>
-              <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">+92 303 939 3438</a>
+              <a href={contact.whatsappLink} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">{contact.whatsapp}</a>
             </li>
             <li className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">email</span>
-              <a href="mailto:Qadamdigital.official@gmail.com" className="hover:text-white transition-colors">Qadamdigital.official@gmail.com</a>
+              <a href={`mailto:${contact.email}`} className="hover:text-white transition-colors">{contact.email}</a>
             </li>
             <li className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">location_on</span>
@@ -100,7 +102,7 @@ export default function Footer() {
             </li>
           </ul>
           <a
-            href="https://wa.me/923039393438"
+            href={contact.whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-5 inline-flex items-center gap-2 bg-primary text-white text-xs font-semibold tracking-wide uppercase px-4 py-2.5 rounded-lg hover:bg-primary-dark transition-all duration-200"
