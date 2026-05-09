@@ -7,8 +7,8 @@ import AdBanner from '../../components/common/AdBanner'
 
 const TESTIMONIALS = [
   { name: 'Ahmad Karimi', country: 'Afghanistan', text: 'QADAM Digital helped me secure a fully funded scholarship to Germany. Their guidance was exceptional throughout the entire process.', avatar: 'AK' },
-  { name: 'Sara Mohammadi', country: 'Pakistan', text: 'The CV writing service was outstanding. I received interview calls from 3 top universities within a week of submitting.', avatar: 'SM' },
-  { name: 'Bilal Yousafzai', country: 'Pakistan', text: 'Their web development team built our clinic management system perfectly. Very professional and delivered on time.', avatar: 'BY' },
+  { name: 'Sara Mohammadi', country: 'Afghanistan', text: 'The CV writing service was outstanding. I received interview calls from 3 top universities within a week of submitting.', avatar: 'SM' },
+  { name: 'Bilal Yousafzai', country: 'Afghanistan', text: 'Their web development team built our clinic management system perfectly. Very professional and delivered on time.', avatar: 'BY' },
 ]
 
 export default function Home() {
