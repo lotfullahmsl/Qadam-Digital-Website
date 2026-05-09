@@ -138,28 +138,71 @@ export default function ScholarshipManager() {
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-gray-600 mb-1.5">
                     University / Scholarship Image
-                    <span className="ml-1 text-gray-400 font-normal">(URL — paste a link to the university or scholarship photo)</span>
                   </label>
-                  <div className="flex gap-3 items-start">
-                    <input
-                      className={inputClass + ' flex-1'}
-                      placeholder="https://example.com/university-photo.jpg"
-                      value={form.image}
-                      onChange={(e) => setForm({ ...form, image: e.target.value })}
-                    />
-                    {/* Live preview */}
-                    <div className="w-24 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center">
+
+                  <div className="flex gap-4 items-start">
+                    {/* Preview box */}
+                    <div className="w-32 h-24 rounded-xl overflow-hidden flex-shrink-0 border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center relative group">
                       {form.image ? (
-                        <img src={form.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none' }} />
+                        <>
+                          <img src={form.image} alt="Preview" className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => setForm({ ...form, image: '' })}
+                            className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <span className="material-symbols-outlined text-sm">close</span>
+                          </button>
+                        </>
                       ) : (
-                        <span className="material-symbols-outlined text-gray-300 text-2xl">image</span>
+                        <div className="text-center">
+                          <span className="material-symbols-outlined text-gray-300 text-3xl block">image</span>
+                          <span className="text-xs text-gray-300 mt-1">No image</span>
+                        </div>
                       )}
                     </div>
+
+                    {/* Upload controls */}
+                    <div className="flex-1 space-y-3">
+                      {/* File picker button */}
+                      <label className="flex items-center gap-2 bg-primary text-white font-semibold px-4 py-2.5 rounded-xl text-sm cursor-pointer hover:bg-primary-dark transition-all w-fit"
+                        style={{ boxShadow: '0 4px 14px rgba(0,170,255,0.3)' }}>
+                        <span className="material-symbols-outlined text-base">upload</span>
+                        Upload from Device
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files[0]
+                            if (!file) return
+                            if (file.size > 5 * 1024 * 1024) {
+                              alert('Image must be under 5MB')
+                              return
+                            }
+                            const reader = new FileReader()
+                            reader.onload = (ev) => setForm({ ...form, image: ev.target.result })
+                            reader.readAsDataURL(file)
+                          }}
+                        />
+                      </label>
+
+                      <p className="text-xs text-gray-400">Supported: JPG, PNG, WEBP · Max 5MB</p>
+
+                      {/* OR paste URL */}
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-px bg-gray-200" />
+                        <span className="text-xs text-gray-400">or paste URL</span>
+                        <div className="flex-1 h-px bg-gray-200" />
+                      </div>
+                      <input
+                        className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-navy placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all bg-white"
+                        placeholder="https://example.com/university.jpg"
+                        value={form.image && form.image.startsWith('data:') ? '' : form.image}
+                        onChange={(e) => setForm({ ...form, image: e.target.value })}
+                      />
+                    </div>
                   </div>
-                  <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">info</span>
-                    Tip: Use Google Images → right-click → "Copy image address" to get a URL. This image will appear on the scholarship card and detail page.
-                  </p>
                 </div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Country *</label><input required className={inputClass} placeholder="e.g. UK" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} /></div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">University *</label><input required className={inputClass} placeholder="University name" value={form.university} onChange={(e) => setForm({ ...form, university: e.target.value })} /></div>
