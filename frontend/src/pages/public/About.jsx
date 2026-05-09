@@ -3,15 +3,16 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
 
-const VALUES = [
-  { icon: 'verified', title: 'Integrity', desc: 'We operate with full transparency and honesty in every service we provide.' },
-  { icon: 'workspace_premium', title: 'Excellence', desc: 'We deliver premium quality that meets and exceeds international standards.' },
-  { icon: 'diversity_3', title: 'Inclusivity', desc: 'We serve students and businesses from all backgrounds across Afghanistan and Pakistan.' },
-  { icon: 'rocket_launch', title: 'Innovation', desc: 'We embrace cutting-edge technology to deliver modern, future-ready solutions.' },
-]
-
 export default function About() {
   const { t } = useTranslation()
+
+  const VALUES = [
+    { icon: 'verified', title: t('about.values.integrity_title'), desc: t('about.values.integrity_desc') },
+    { icon: 'workspace_premium', title: t('about.values.excellence_title'), desc: t('about.values.excellence_desc') },
+    { icon: 'diversity_3', title: t('about.values.inclusivity_title'), desc: t('about.values.inclusivity_desc') },
+    { icon: 'rocket_launch', title: t('about.values.innovation_title'), desc: t('about.values.innovation_desc') },
+  ]
+
   return (
     <div className="flex flex-col">
       {/* Hero */}
@@ -25,7 +26,7 @@ export default function About() {
             <span className="text-primary">{t('about.title')}</span>
           </h1>
           <p className="text-primary-light/90 text-lg max-w-2xl mx-auto leading-relaxed">
-            A professional digital services platform focused on education, scholarship support, web development, database solutions, and digital services.
+            {t('about.hero_desc')}
           </p>
         </div>
       </section>
@@ -52,7 +53,7 @@ export default function About() {
       <section className="py-20 px-6 bg-primary-pale">
         <div className="max-w-screen-xl mx-auto">
           <div className="text-center mb-12">
-            <span className="badge mb-3">Our Values</span>
+            <span className="badge mb-3">{t('about.values_badge')}</span>
             <h2 className="font-heading font-bold text-navy text-4xl">{t('about.values_title')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -95,8 +96,8 @@ export default function About() {
       <section className="py-20 px-6 bg-background">
         <div className="max-w-screen-xl mx-auto">
           <div className="bg-primary rounded-2xl p-12 text-center space-y-6">
-            <h2 className="font-heading font-bold text-white text-4xl">Ready to Work With Us?</h2>
-            <p className="text-white/80 text-lg max-w-xl mx-auto">Whether you're a student seeking scholarships or a business needing digital solutions, we're here to help.</p>
+            <h2 className="font-heading font-bold text-white text-4xl">{t('about.cta_title')}</h2>
+            <p className="text-white/80 text-lg max-w-xl mx-auto">{t('about.cta_subtitle')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={ROUTES.CONTACT} className="inline-flex items-center justify-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200">
                 {t('nav.contact')} <span className="material-symbols-outlined text-base">arrow_forward</span>

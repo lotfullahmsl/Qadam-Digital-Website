@@ -1,120 +1,106 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { ROUTES } from '../../constants/routes'
-
-const SMM_SERVICES = [
-  { icon: 'thumb_up', title: 'Facebook Ads Management', desc: 'Targeted Facebook advertising campaigns to reach your ideal audience.' },
-  { icon: 'photo_camera', title: 'Instagram Ads', desc: 'Visually compelling Instagram campaigns that drive engagement and sales.' },
-  { icon: 'trending_up', title: 'Social Media Growth', desc: 'Organic growth strategies to build a genuine, engaged following.' },
-  { icon: 'rocket_launch', title: 'Post Boosting', desc: 'Amplify your best content to reach a wider targeted audience.' },
-  { icon: 'group', title: 'Audience Targeting', desc: 'Precision targeting based on demographics, interests, and behavior.' },
-  { icon: 'campaign', title: 'Content Promotion', desc: 'Strategic promotion of your content across multiple platforms.' },
-]
-
-const PACKAGES = [
-  {
-    name: 'Starter',
-    price: '50',
-    period: '/mo',
-    features: ['2 platforms', '8 posts/month', 'Basic analytics', 'WhatsApp support'],
-  },
-  {
-    name: 'Growth',
-    price: '120',
-    period: '/mo',
-    popular: true,
-    features: ['3 platforms', '20 posts/month', 'Ad campaign management', 'Monthly report', 'Priority support'],
-  },
-  {
-    name: 'Premium',
-    price: '250',
-    period: '/mo',
-    features: ['All platforms', 'Unlimited posts', 'Full ad management', 'Weekly reports', 'Dedicated manager'],
-  },
-]
+import { useTranslation } from 'react-i18next'
 
 export default function SocialMediaMarketing() {
+  const { t } = useTranslation()
+
+  const SMM_SERVICES = [
+    { icon: 'thumb_up', title: t('smm_page.services.fb_title'), desc: t('smm_page.services.fb_desc') },
+    { icon: 'photo_camera', title: t('smm_page.services.ig_title'), desc: t('smm_page.services.ig_desc') },
+    { icon: 'trending_up', title: t('smm_page.services.growth_title'), desc: t('smm_page.services.growth_desc') },
+    { icon: 'rocket_launch', title: t('smm_page.services.boost_title'), desc: t('smm_page.services.boost_desc') },
+    { icon: 'group', title: t('smm_page.services.target_title'), desc: t('smm_page.services.target_desc') },
+    { icon: 'campaign', title: t('smm_page.services.promo_title'), desc: t('smm_page.services.promo_desc') },
+  ]
+
+  const PACKAGES = [
+    {
+      nameKey: 'smm_page.packages.starter',
+      price: '50',
+      features: [t('smm_page.packages.starter_f1'), t('smm_page.packages.starter_f2'), t('smm_page.packages.starter_f3'), t('smm_page.packages.starter_f4')],
+      popular: false,
+    },
+    {
+      nameKey: 'smm_page.packages.growth',
+      price: '120',
+      popular: true,
+      features: [t('smm_page.packages.growth_f1'), t('smm_page.packages.growth_f2'), t('smm_page.packages.growth_f3'), t('smm_page.packages.growth_f4'), t('smm_page.packages.growth_f5')],
+    },
+    {
+      nameKey: 'smm_page.packages.premium',
+      price: '250',
+      features: [t('smm_page.packages.premium_f1'), t('smm_page.packages.premium_f2'), t('smm_page.packages.premium_f3'), t('smm_page.packages.premium_f4'), t('smm_page.packages.premium_f5')],
+      popular: false,
+    },
+  ]
+
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="relative pt-section pb-xl px-lg hero-bg">
-        <div className="absolute top-0 left-0 w-[500px] h-[300px] bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase border border-primary/20 mb-5">
+      <section className="hero-bg py-24 px-6">
+        <div className="max-w-screen-xl mx-auto">
+          <span className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/20 mb-5">
             <span className="material-symbols-outlined text-sm">campaign</span>
-            Social Media Marketing
-          </div>
-          <h1 className="font-heading text-h1 text-on-surface mb-4">
-            Amplify Your{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-fixed-dim">
-              Digital Presence
-            </span>
-          </h1>
-          <div className="h-1 w-32 bg-gradient-to-r from-primary to-transparent rounded-full mb-6" />
-          <p className="text-body-lg text-on-surface-variant max-w-2xl">
-            Strategic social media marketing solutions to grow your brand, reach your target audience, and drive real business results.
-          </p>
+            {t('smm_page.badge')}
+          </span>
+          <h1 className="font-heading font-bold text-white text-5xl mb-4 max-w-2xl">{t('smm_page.title')}</h1>
+          <div className="h-1 w-24 bg-primary rounded-full mb-6" />
+          <p className="text-white/80 text-lg max-w-2xl leading-relaxed">{t('smm_page.subtitle')}</p>
         </div>
       </section>
 
       {/* Services */}
-      <section className="py-section px-lg max-w-screen-xl mx-auto w-full">
-        <div className="text-center space-y-3 mb-12">
-          <h2 className="font-heading text-h2 text-on-surface">Our SMM Services</h2>
-          <p className="text-body-lg text-on-surface-variant">Everything you need to dominate social media.</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-          {SMM_SERVICES.map((s) => (
-            <div key={s.title} className="glass-panel rounded-xl p-6 flex flex-col gap-3 group hover:-translate-y-1 transition-all duration-300">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:bg-primary/20 transition-colors">
-                <span className="material-symbols-outlined text-2xl">{s.icon}</span>
+      <section className="py-16 px-6 bg-background">
+        <div className="max-w-screen-xl mx-auto">
+          <div className="text-center space-y-3 mb-12">
+            <h2 className="font-heading font-bold text-navy text-3xl">{t('smm_page.services_title')}</h2>
+            <p className="text-text-muted text-lg">{t('smm_page.services_subtitle')}</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {SMM_SERVICES.map((s) => (
+              <div key={s.title} className="card p-6 flex flex-col gap-3 group hover:-translate-y-1 transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <span className="material-symbols-outlined text-2xl">{s.icon}</span>
+                </div>
+                <h3 className="font-heading font-semibold text-navy">{s.title}</h3>
+                <p className="text-sm text-text-muted">{s.desc}</p>
               </div>
-              <h3 className="font-heading font-semibold text-on-surface">{s.title}</h3>
-              <p className="text-sm text-on-surface-variant">{s.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Packages */}
-      <section className="py-section px-lg bg-surface-container-low border-y border-outline-variant/30">
+      <section className="py-16 px-6 bg-primary-pale border-y border-border">
         <div className="max-w-screen-xl mx-auto">
           <div className="text-center space-y-3 mb-12">
-            <h2 className="font-heading text-h2 text-on-surface">Marketing Packages</h2>
-            <p className="text-body-lg text-on-surface-variant">Choose the package that fits your business goals.</p>
+            <h2 className="font-heading font-bold text-navy text-3xl">{t('smm_page.packages_title')}</h2>
+            <p className="text-text-muted text-lg">{t('smm_page.packages_subtitle')}</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter max-w-4xl mx-auto">
-            {PACKAGES.map((pkg) => (
-              <div key={pkg.name} className={`relative flex flex-col rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${pkg.popular ? 'premium-border bg-surface-container/30 backdrop-blur-xl' : 'glass-card'}`}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {PACKAGES.map((pkg, i) => (
+              <div key={i} className={`relative flex flex-col rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${pkg.popular ? 'bg-primary text-white shadow-[0_8px_32px_rgba(0,170,255,0.35)] border-2 border-primary' : 'bg-white border border-border shadow-card hover:shadow-card-hover'}`}>
                 {pkg.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase">
-                    Most Popular
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-navy text-white px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase">
+                    {t('smm_page.most_popular')}
                   </div>
                 )}
-                <h3 className="font-heading font-semibold text-on-surface text-xl mb-2">{pkg.name}</h3>
+                <h3 className={`font-heading font-semibold text-xl mb-2 ${pkg.popular ? 'text-white' : 'text-navy'}`}>{t(pkg.nameKey)}</h3>
                 <div className="mb-5">
-                  <span className="font-heading text-3xl font-bold text-primary">${pkg.price}</span>
-                  <span className="text-sm text-on-surface-variant">{pkg.period}</span>
+                  <span className={`font-heading text-3xl font-bold ${pkg.popular ? 'text-white' : 'text-primary'}`}>${pkg.price}</span>
+                  <span className={`text-sm ${pkg.popular ? 'text-white/70' : 'text-text-muted'}`}>{t('smm_page.per_month')}</span>
                 </div>
                 <ul className="space-y-2.5 mb-6 flex-grow">
-                  {pkg.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-on-surface-variant">
-                      <span className="material-symbols-outlined text-primary text-lg">check</span>
+                  {pkg.features.map((f, fi) => (
+                    <li key={fi} className={`flex items-start gap-2 text-sm ${pkg.popular ? 'text-white/90' : 'text-text-secondary'}`}>
+                      <span className={`material-symbols-outlined text-lg ${pkg.popular ? 'text-white' : 'text-primary'}`}>check</span>
                       {f}
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="https://wa.me/93700000000"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`w-full text-center py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase transition-all duration-300 ${
-                    pkg.popular
-                      ? 'bg-primary text-on-primary btn-glow hover:bg-primary-fixed'
-                      : 'border border-primary text-primary hover:bg-primary hover:text-on-primary'
-                  }`}
-                >
-                  Get Started
+                <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+                  className={`w-full text-center py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase transition-all duration-200 ${pkg.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'bg-primary text-white hover:bg-primary-dark shadow-btn'}`}>
+                  {t('smm_page.get_started')}
                 </a>
               </div>
             ))}
@@ -123,20 +109,14 @@ export default function SocialMediaMarketing() {
       </section>
 
       {/* CTA */}
-      <section className="py-section px-lg">
-        <div className="max-w-screen-xl mx-auto glass-panel rounded-2xl p-xl text-center space-y-6">
-          <h2 className="font-heading text-h2 text-on-surface">Ready to Grow Your Brand?</h2>
-          <p className="text-body-lg text-on-surface-variant max-w-xl mx-auto">
-            Contact us today and let's create a social media strategy that delivers real results for your business.
-          </p>
-          <a
-            href="https://wa.me/93700000000"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-xl py-md rounded-lg glow-button transition-all duration-300"
-          >
-            <span className="material-symbols-outlined">chat</span>
-            Start Your Campaign
+      <section className="py-16 px-6 bg-primary">
+        <div className="max-w-screen-xl mx-auto text-center space-y-5">
+          <h2 className="font-heading font-bold text-white text-3xl">{t('smm_page.cta_title')}</h2>
+          <p className="text-white/80 text-lg max-w-xl mx-auto">{t('smm_page.cta_subtitle')}</p>
+          <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg">
+            <span className="material-symbols-outlined text-base">chat</span>
+            {t('smm_page.start_campaign')}
           </a>
         </div>
       </section>

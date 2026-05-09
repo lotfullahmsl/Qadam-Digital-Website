@@ -3,18 +3,27 @@ import { useTranslation } from 'react-i18next'
 import BlogCard from '../../components/cards/BlogCard'
 import AdBanner from '../../components/common/AdBanner'
 
-const CATEGORIES = ['All', 'Scholarships', 'Technology', 'Education', 'Digital Tools', 'Career']
-const MOCK_POSTS = [
-  { _id: '1', slug: 'top-scholarships-2026', title: 'Top 10 Fully Funded Scholarships for 2026', excerpt: 'Discover the best fully funded scholarship opportunities available for Afghan and Pakistani students in 2026.', category: 'Scholarships', author: 'QADAM Team', createdAt: '2026-01-15' },
-  { _id: '2', slug: 'how-to-write-motivation-letter', title: 'How to Write a Winning Motivation Letter', excerpt: 'A step-by-step guide to writing a compelling motivation letter that gets you accepted to your dream university.', category: 'Education', author: 'QADAM Team', createdAt: '2026-02-10' },
-  { _id: '3', slug: 'chatgpt-for-students', title: 'How Students Can Use ChatGPT for Academic Success', excerpt: 'Practical tips on using AI tools like ChatGPT to enhance your research, writing, and study efficiency.', category: 'Digital Tools', author: 'QADAM Team', createdAt: '2026-03-05' },
-  { _id: '4', slug: 'daad-scholarship-guide', title: 'Complete Guide to DAAD Scholarship Application', excerpt: 'Everything you need to know about applying for the prestigious DAAD scholarship from Germany.', category: 'Scholarships', author: 'QADAM Team', createdAt: '2026-03-20' },
-  { _id: '5', slug: 'web-development-career', title: 'Starting a Web Development Career in 2026', excerpt: 'A comprehensive roadmap for beginners looking to start a successful career in web development.', category: 'Technology', author: 'QADAM Team', createdAt: '2026-04-01' },
-  { _id: '6', slug: 'cv-tips-international', title: '7 CV Tips for International Job Applications', excerpt: 'Essential tips to make your CV stand out when applying for international positions and scholarships.', category: 'Career', author: 'QADAM Team', createdAt: '2026-04-15' },
-]
-
 export default function Blog() {
   const { t } = useTranslation()
+
+  const CATEGORIES = [
+    { key: 'All', label: t('blog.all_categories') },
+    { key: 'Scholarships', label: t('blog.categories.scholarships') },
+    { key: 'Technology', label: t('blog.categories.technology') },
+    { key: 'Education', label: t('blog.categories.education') },
+    { key: 'Digital Tools', label: t('blog.categories.digital_tools') },
+    { key: 'Career', label: t('blog.categories.career') },
+  ]
+
+  const MOCK_POSTS = [
+    { _id: '1', slug: 'top-scholarships-2026', title: t('blog.posts.p1_title'), excerpt: t('blog.posts.p1_excerpt'), category: 'Scholarships', categoryLabel: t('blog.categories.scholarships'), author: 'QADAM Team', createdAt: '2026-01-15' },
+    { _id: '2', slug: 'how-to-write-motivation-letter', title: t('blog.posts.p2_title'), excerpt: t('blog.posts.p2_excerpt'), category: 'Education', categoryLabel: t('blog.categories.education'), author: 'QADAM Team', createdAt: '2026-02-10' },
+    { _id: '3', slug: 'chatgpt-for-students', title: t('blog.posts.p3_title'), excerpt: t('blog.posts.p3_excerpt'), category: 'Digital Tools', categoryLabel: t('blog.categories.digital_tools'), author: 'QADAM Team', createdAt: '2026-03-05' },
+    { _id: '4', slug: 'daad-scholarship-guide', title: t('blog.posts.p4_title'), excerpt: t('blog.posts.p4_excerpt'), category: 'Scholarships', categoryLabel: t('blog.categories.scholarships'), author: 'QADAM Team', createdAt: '2026-03-20' },
+    { _id: '5', slug: 'web-development-career', title: t('blog.posts.p5_title'), excerpt: t('blog.posts.p5_excerpt'), category: 'Technology', categoryLabel: t('blog.categories.technology'), author: 'QADAM Team', createdAt: '2026-04-01' },
+    { _id: '6', slug: 'cv-tips-international', title: t('blog.posts.p6_title'), excerpt: t('blog.posts.p6_excerpt'), category: 'Career', categoryLabel: t('blog.categories.career'), author: 'QADAM Team', createdAt: '2026-04-15' },
+  ]
+
   const [activeCategory, setActiveCategory] = useState('All')
   const [search, setSearch] = useState('')
 
@@ -45,11 +54,11 @@ export default function Blog() {
           </div>
           <div className="flex flex-wrap gap-2 justify-center">
             {CATEGORIES.map((cat) => (
-              <button key={cat} onClick={() => setActiveCategory(cat)}
+              <button key={cat.key} onClick={() => setActiveCategory(cat.key)}
                 className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
-                  activeCategory === cat ? 'bg-primary text-white shadow-btn' : 'border border-border text-text-secondary hover:border-primary hover:text-primary bg-white'
+                  activeCategory === cat.key ? 'bg-primary text-white shadow-btn' : 'border border-border text-text-secondary hover:border-primary hover:text-primary bg-white'
                 }`}>
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -68,7 +77,9 @@ export default function Blog() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((post) => <BlogCard key={post._id} post={post} />)}
+            {filtered.map((post) => (
+              <BlogCard key={post._id} post={{ ...post, category: post.categoryLabel }} />
+            ))}
           </div>
         )}
       </section>

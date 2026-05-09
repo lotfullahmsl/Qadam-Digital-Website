@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { serviceRequestService } from '../../services/serviceRequestService'
 
-const SERVICES = ['Scholarship Guidance', 'CV & Motivation Letter', 'Translation Services', 'Web Development', 'Database Development', 'AI Subscriptions', 'Social Media Marketing', 'General Inquiry']
-
 export default function Contact() {
   const { t } = useTranslation()
   const [form, setForm] = useState({ fullName: '', email: '', phone: '', country: '', service: '', message: '' })
@@ -22,11 +20,22 @@ export default function Contact() {
       setSuccess(true)
       setForm({ fullName: '', email: '', phone: '', country: '', service: '', message: '' })
     } catch {
-      setError('Failed to send message. Please try WhatsApp instead.')
+      setError(t('contact.error_msg'))
     } finally {
       setLoading(false)
     }
   }
+
+  const SERVICE_OPTIONS = [
+    { value: 'scholarship', label: t('contact.services.scholarship') },
+    { value: 'cv', label: t('contact.services.cv') },
+    { value: 'translation', label: t('contact.services.translation') },
+    { value: 'web', label: t('contact.services.web') },
+    { value: 'database', label: t('contact.services.database') },
+    { value: 'ai', label: t('contact.services.ai') },
+    { value: 'smm', label: t('contact.services.smm') },
+    { value: 'general', label: t('contact.services.general') },
+  ]
 
   return (
     <div className="flex flex-col">
@@ -45,14 +54,15 @@ export default function Contact() {
       {/* Contact Section */}
       <section className="py-16 px-6 bg-background">
         <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+
           {/* Info */}
           <div className="space-y-5">
             <div className="card p-6 space-y-5">
-              <h2 className="font-heading font-bold text-navy text-xl">Contact Information</h2>
+              <h2 className="font-heading font-bold text-navy text-xl">{t('contact.contact_info')}</h2>
               {[
-                { icon: 'chat', label: 'WhatsApp', value: '+93 700 000 000', href: 'https://wa.me/93700000000' },
-                { icon: 'email', label: 'Email', value: 'info@qadamdigital.com', href: 'mailto:info@qadamdigital.com' },
-                { icon: 'location_on', label: 'Location', value: 'Kabul, Afghanistan', href: null },
+                { icon: 'chat', label: t('common.whatsapp'), value: '+93 700 000 000', href: 'https://wa.me/93700000000' },
+                { icon: 'email', label: t('common.email'), value: 'info@qadamdigital.com', href: 'mailto:info@qadamdigital.com' },
+                { icon: 'location_on', label: t('contact.office'), value: t('contact.location'), href: null },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
@@ -98,41 +108,46 @@ export default function Contact() {
           {/* Form */}
           <div className="lg:col-span-2">
             <div className="card p-8">
-              <h2 className="font-heading font-bold text-navy text-2xl mb-6">Send Us a Message</h2>
+              <h2 className="font-heading font-bold text-navy text-2xl mb-6">{t('contact.send_message')}</h2>
               {success ? (
                 <div className="flex flex-col items-center gap-4 py-12 text-center">
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
                     <span className="material-symbols-outlined text-4xl text-primary">check_circle</span>
                   </div>
-                  <h3 className="font-heading font-bold text-navy text-xl">Message Sent!</h3>
-                  <p className="text-text-muted">We'll get back to you within 24 hours.</p>
-                  <button onClick={() => setSuccess(false)} className="text-primary hover:underline text-sm font-medium">Send another message</button>
+                  <h3 className="font-heading font-bold text-navy text-xl">{t('contact.msg_sent_title')}</h3>
+                  <p className="text-text-muted">{t('contact.msg_sent_desc')}</p>
+                  <button onClick={() => setSuccess(false)} className="text-primary hover:underline text-sm font-medium">{t('contact.send_another')}</button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {[
-                      { name: 'fullName', label: `${t('contact.name')} *`, type: 'text', placeholder: 'Your full name', required: true },
-                      { name: 'email', label: `${t('contact.email')} *`, type: 'email', placeholder: 'your@email.com', required: true },
-                      { name: 'phone', label: t('contact.phone'), type: 'tel', placeholder: '+93 700 000 000', required: false },
-                      { name: 'country', label: t('contact.country'), type: 'text', placeholder: 'Your country', required: false },
-                    ].map((f) => (
-                      <div key={f.name}>
-                        <label className="block text-xs font-semibold tracking-widest uppercase text-text-muted mb-2">{f.label}</label>
-                        <input type={f.type} name={f.name} value={form[f.name]} onChange={handleChange} required={f.required} placeholder={f.placeholder} className="input-field" />
-                      </div>
-                    ))}
+                    <div>
+                      <label className="block text-xs font-semibold tracking-widest uppercase text-text-muted mb-2">{t('contact.name')} *</label>
+                      <input type="text" name="fullName" value={form.fullName} onChange={handleChange} required placeholder={t('contact.your_name')} className="input-field" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold tracking-widest uppercase text-text-muted mb-2">{t('contact.email')} *</label>
+                      <input type="email" name="email" value={form.email} onChange={handleChange} required placeholder={t('contact.your_email')} className="input-field" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold tracking-widest uppercase text-text-muted mb-2">{t('contact.phone')}</label>
+                      <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder={t('contact.your_phone')} className="input-field" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold tracking-widest uppercase text-text-muted mb-2">{t('contact.country')}</label>
+                      <input type="text" name="country" value={form.country} onChange={handleChange} placeholder={t('contact.your_country')} className="input-field" />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold tracking-widest uppercase text-text-muted mb-2">{t('contact.service')}</label>
                     <select name="service" value={form.service} onChange={handleChange} className="input-field">
-                      <option value="">Select a service...</option>
-                      {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
+                      <option value="">{t('contact.select_service')}</option>
+                      {SERVICE_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold tracking-widest uppercase text-text-muted mb-2">{t('contact.message')} *</label>
-                    <textarea name="message" value={form.message} onChange={handleChange} required rows={5} placeholder="Tell us how we can help you..." className="input-field resize-none" />
+                    <textarea name="message" value={form.message} onChange={handleChange} required rows={5} placeholder={t('contact.your_message')} className="input-field resize-none" />
                   </div>
                   {error && (
                     <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-4 py-3">
@@ -143,7 +158,7 @@ export default function Contact() {
                   <button type="submit" disabled={loading}
                     className="w-full bg-primary text-white font-semibold py-3.5 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60">
                     {loading
-                      ? <><span className="material-symbols-outlined animate-spin text-xl">progress_activity</span> Sending...</>
+                      ? <><span className="material-symbols-outlined animate-spin text-xl">progress_activity</span> {t('contact.sending')}</>
                       : <><span className="material-symbols-outlined">send</span> {t('contact.submit')}</>
                     }
                   </button>

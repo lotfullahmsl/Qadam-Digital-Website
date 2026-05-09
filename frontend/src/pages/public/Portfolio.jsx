@@ -2,18 +2,26 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import PortfolioCard from '../../components/cards/PortfolioCard'
 
-const CATEGORIES = ['All', 'Website', 'Database', 'Marketing', 'Design']
-const MOCK_PROJECTS = [
-  { _id: '1', title: 'Clinic Management System', description: 'Full-featured clinic management with patient records, appointments, and billing.', category: 'Database', technologies: ['React', 'Flask', 'MongoDB'] },
-  { _id: '2', title: 'School Management Platform', description: 'Comprehensive school management for student records, grades, and parent communication.', category: 'Database', technologies: ['React', 'Node.js', 'PostgreSQL'] },
-  { _id: '3', title: 'E-Commerce Website', description: 'Modern e-commerce platform with product management, cart, and payment integration.', category: 'Website', technologies: ['React', 'Tailwind', 'Stripe'] },
-  { _id: '4', title: 'Corporate Business Website', description: 'Professional corporate website with CMS, blog, and contact management.', category: 'Website', technologies: ['React', 'Flask', 'MongoDB'] },
-  { _id: '5', title: 'Social Media Campaign', description: 'Facebook and Instagram campaign that grew brand followers by 300%.', category: 'Marketing', technologies: ['Facebook Ads', 'Instagram', 'Analytics'] },
-  { _id: '6', title: 'Restaurant Inventory System', description: 'Inventory management for a restaurant chain with real-time stock tracking.', category: 'Database', technologies: ['React', 'Flask', 'MongoDB'] },
-]
-
 export default function Portfolio() {
   const { t } = useTranslation()
+
+  const CATEGORIES = [
+    { key: 'All', label: t('portfolio.all') },
+    { key: 'Website', label: t('portfolio.categories.website') },
+    { key: 'Database', label: t('portfolio.categories.database') },
+    { key: 'Marketing', label: t('portfolio.categories.marketing') },
+    { key: 'Design', label: t('portfolio.categories.design') },
+  ]
+
+  const MOCK_PROJECTS = [
+    { _id: '1', title: t('portfolio.projects.clinic_title'), description: t('portfolio.projects.clinic_desc'), category: 'Database', technologies: ['React', 'Flask', 'MongoDB'] },
+    { _id: '2', title: t('portfolio.projects.school_title'), description: t('portfolio.projects.school_desc'), category: 'Database', technologies: ['React', 'Node.js', 'PostgreSQL'] },
+    { _id: '3', title: t('portfolio.projects.ecommerce_title'), description: t('portfolio.projects.ecommerce_desc'), category: 'Website', technologies: ['React', 'Tailwind', 'Stripe'] },
+    { _id: '4', title: t('portfolio.projects.corporate_title'), description: t('portfolio.projects.corporate_desc'), category: 'Website', technologies: ['React', 'Flask', 'MongoDB'] },
+    { _id: '5', title: t('portfolio.projects.smm_title'), description: t('portfolio.projects.smm_desc'), category: 'Marketing', technologies: ['Facebook Ads', 'Instagram', 'Analytics'] },
+    { _id: '6', title: t('portfolio.projects.inventory_title'), description: t('portfolio.projects.inventory_desc'), category: 'Database', technologies: ['React', 'Flask', 'MongoDB'] },
+  ]
+
   const [activeCategory, setActiveCategory] = useState('All')
   const filtered = activeCategory === 'All' ? MOCK_PROJECTS : MOCK_PROJECTS.filter((p) => p.category === activeCategory)
 
@@ -33,11 +41,11 @@ export default function Portfolio() {
       <section className="px-6 py-6 bg-white border-b border-border shadow-sm">
         <div className="max-w-screen-xl mx-auto flex flex-wrap gap-2 justify-center">
           {CATEGORIES.map((cat) => (
-            <button key={cat} onClick={() => setActiveCategory(cat)}
+            <button key={cat.key} onClick={() => setActiveCategory(cat.key)}
               className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide uppercase transition-all duration-200 ${
-                activeCategory === cat ? 'bg-primary text-white shadow-btn' : 'border border-border text-text-secondary hover:border-primary hover:text-primary bg-white'
+                activeCategory === cat.key ? 'bg-primary text-white shadow-btn' : 'border border-border text-text-secondary hover:border-primary hover:text-primary bg-white'
               }`}>
-              {cat === 'All' ? t('portfolio.all') : cat}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -60,9 +68,10 @@ export default function Portfolio() {
 
       <section className="py-16 px-6 bg-primary">
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
-          <h2 className="font-heading font-bold text-white text-3xl">Want a Similar Project?</h2>
-          <p className="text-white/80 text-lg max-w-xl mx-auto">Let's discuss your requirements and build something amazing together.</p>
-          <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg">
+          <h2 className="font-heading font-bold text-white text-3xl">{t('portfolio.cta_title')}</h2>
+          <p className="text-white/80 text-lg max-w-xl mx-auto">{t('portfolio.cta_subtitle')}</p>
+          <a href="https://wa.me/93700000000" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg">
             <span className="material-symbols-outlined text-base">chat</span>
             {t('portfolio.start_project')}
           </a>
