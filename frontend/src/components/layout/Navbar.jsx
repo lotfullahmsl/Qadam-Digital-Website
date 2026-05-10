@@ -7,6 +7,8 @@ import { ROUTES } from '../../constants/routes'
 
 const LANGUAGES = [
   { code: 'en', label: 'EN' },
+  { code: 'ps', label: 'PS' },
+  { code: 'fa', label: 'DA' },
 ]
 
 export default function Navbar() {
