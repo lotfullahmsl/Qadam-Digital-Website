@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { ROUTES } from '../../constants/routes'
@@ -36,11 +36,32 @@ export default function AdminLayout({ children }) {
   const location = useLocation()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [notifOpen, setNotifOpen] = useState(false)
+  const notifRef = useRef(null)
 
   const handleLogout = () => {
     logout()
     navigate(ROUTES.LOGIN)
   }
+
+  // Close notification panel when clicking outside
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) setNotifOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  const NOTIFICATIONS = [
+    { icon: 'inbox', color: 'bg-blue-100 text-blue-600', title: 'New contact request', desc: 'Ahmad Karimi sent a message', time: '2 min ago', unread: true },
+    { icon: 'school', color: 'bg-green-100 text-green-600', title: 'New scholarship application', desc: 'Sara Mohammadi applied for Chevening', time: '15 min ago', unread: true },
+    { icon: 'sell', color: 'bg-purple-100 text-purple-600', title: 'Subscription request', desc: 'Bilal Yousafzai requested ChatGPT Plus', time: '1 hour ago', unread: true },
+    { icon: 'web', color: 'bg-orange-100 text-orange-600', title: 'Website project request', desc: 'New e-commerce project inquiry', time: '3 hours ago', unread: false },
+    { icon: 'campaign', color: 'bg-pink-100 text-pink-600', title: 'Social media request', desc: 'Instagram management inquiry', time: 'Yesterday', unread: false },
+  ]
+
+  const unreadCount = NOTIFICATIONS.filter(n => n.unread).length
 
   const currentPage = ALL_NAV_ITEMS.find((n) => n.to === location.pathname)
 
@@ -125,10 +146,75 @@ export default function AdminLayout({ children }) {
             <span className="font-semibold text-navy">{currentPage?.label || 'Dashboard'}</span>
           </div>
           <div className="ml-auto flex items-center gap-3">
-            <button className="relative p-2 text-gray-500 hover:text-primary transition-colors rounded-lg hover:bg-gray-100">
-              <span className="material-symbols-outlined">notifications</span>
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            {/* Notification Bell */}
+            <div className="relative" ref={notifRef}>
+              <button
+                onClick={() => setNotifOpen(!notifOpen)}
+                className="relative p-2 text-gray-500 hover:text-primary transition-colors rounded-lg hover:bg-gray-100"
+              >
+                <span className="material-symbols-outlined">notifications</span>
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-[9px] font-bold">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown */}
+              {notifOpen && (
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
+                  {/* Header */}
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-heading font-bold text-navy text-sm">Notifications</h3>
+                      {unreadCount > 0 && (
+                        <span className="bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{unreadCount}</span>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setNotifOpen(false)}
+                      className="text-gray-400 hover:text-navy transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-base">close</span>
+                    </button>
+                  </div>
+
+                  {/* Notification List */}
+                  <div className="max-h-80 overflow-y-auto divide-y divide-gray-50">
+                    {NOTIFICATIONS.map((notif, i) => (
+                      <div
+                        key={i}
+                        className={`flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer ${notif.unread ? 'bg-blue-50/40' : ''}`}
+                      >
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${notif.color}`}>
+                          <span className="material-symbols-outlined text-base">{notif.icon}</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className={`text-sm font-semibold text-navy leading-snug ${notif.unread ? '' : 'font-medium'}`}>
+                              {notif.title}
+                            </p>
+                            {notif.unread && <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5"></span>}
+                          </div>
+                          <p className="text-xs text-gray-500 mt-0.5 truncate">{notif.desc}</p>
+                          <p className="text-xs text-gray-400 mt-1">{notif.time}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Footer */}
+                  <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
+                    <button
+                      onClick={() => { navigate(ROUTES.ADMIN_REQUESTS); setNotifOpen(false) }}
+                      className="w-full text-center text-xs font-semibold text-primary hover:text-primary-dark transition-colors"
+                    >
+                      View all requests →
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <span className="text-white text-sm font-bold">{(admin?.email || 'A')[0].toUpperCase()}</span>
