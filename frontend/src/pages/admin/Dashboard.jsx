@@ -60,7 +60,7 @@ export default function Dashboard() {
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-navy to-primary-dark rounded-2xl p-6 text-white flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-bold mb-1">Welcome back, {admin?.name || 'Admin'} 👋</h1>
+          <h1 className="font-heading text-2xl font-bold mb-1 text-white">Welcome back, {admin?.name || 'Admin'} 👋</h1>
           <p className="text-white/70 text-sm">{today}</p>
         </div>
         <div className="hidden md:flex items-center gap-3">
