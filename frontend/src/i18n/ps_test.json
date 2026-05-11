@@ -1,0 +1,20 @@
+{
+  "brand": {
+    "name": "قدم ډيجيٹل",
+    "tagline_short": "زده کړه او ډيجيٹل خدمتونه"
+  },
+  "nav": {
+    "scholarships": "سکالرشپونه",
+    "services": "خدمتونه",
+    "solutions": "ډيجيٹل حلونه",
+    "subscriptions": "ګړونونه",
+    "about": "زموړ په اړه",
+    "blog": "بلاګ",
+    "portfolio": "پورٹفوليو",
+    "pricing": "نرخونه",
+    "contact": "اړيکه",
+    "whatsapp": "واٹساپ اړيکه",
+    "sign_in": "ننوتل",
+    "sign_up": "ثبت نام"
+  }
+}

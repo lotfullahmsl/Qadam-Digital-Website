@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-text-primary font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-text-primary;
+  }
+}
+
+@layer components {
+  /* ── Cards ── */
+  .card {
+    @apply bg-surface rounded-xl border border-border shadow-card transition-all duration-300;
+  }
+  .card:hover {
+    @apply shadow-card-hover border-primary/40 -translate-y-0.5;
+  }
+
+  /* ── Glass panel (used on dark hero sections) ── */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.75rem;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200 text-sm tracking-wide;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-primary text-primary font-semibold px-6 py-3 rounded-lg hover:bg-primary hover:text-white transition-all duration-200 text-sm tracking-wide;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 text-primary font-semibold px-6 py-3 rounded-lg hover:bg-primary-pale transition-all duration-200 text-sm tracking-wide;
+  }
+
+  /* ── Section backgrounds ── */
+  .section-light {
+    @apply bg-background;
+  }
+  .section-pale {
+    @apply bg-primary-pale;
+  }
+  .section-dark {
+    @apply bg-navy text-text-on-dark;
+  }
+
+  /* ── Hero gradient ── */
+  .hero-bg {
+    background: linear-gradient(135deg, #062030 0%, #0A5C7A 50%, #00AAFF 100%);
+  }
+
+  /* ── Input fields ── */
+  .input-field {
+    @apply w-full bg-white border border-border rounded-lg px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200;
+  }
+
+  /* ── Badge ── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase border border-primary/20;
+  }
+
+  /* ── Divider ── */
+  .section-divider {
+    @apply border-t border-border;
+  }
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  user-select: none;
+}
+
+/* RTL — Pashto & Dari */
+html[dir="rtl"] body,
+html[dir="rtl"] *:not(.material-symbols-outlined) {
+  font-family: 'Noto Naskh Arabic', 'Segoe UI', Tahoma, Arial, sans-serif !important;
+  line-height: 1.9 !important;
+  letter-spacing: 0 !important;
+}
+html[dir="rtl"] { text-align: right; }

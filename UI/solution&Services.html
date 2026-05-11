@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Services &amp; Solutions - QADAM Digital</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Montserrat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#e2e2e2",
+                        "surface-container-lowest": "#0c0f0f",
+                        "primary-fixed-dim": "#e9c349",
+                        "on-secondary-fixed-variant": "#39475f",
+                        "secondary": "#b9c7e4",
+                        "tertiary-fixed": "#d8e2ff",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#37393a",
+                        "surface-container": "#1e2020",
+                        "surface": "#121414",
+                        "outline": "#99907c",
+                        "surface-tint": "#e9c349",
+                        "tertiary": "#becef5",
+                        "on-primary-fixed": "#241a00",
+                        "tertiary-fixed-dim": "#b6c6ed",
+                        "on-secondary-fixed": "#0d1c32",
+                        "on-primary-fixed-variant": "#574500",
+                        "error-container": "#93000a",
+                        "background": "#121414",
+                        "inverse-primary": "#735c00",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#4d4635",
+                        "primary": "#f2ca50",
+                        "on-tertiary-container": "#354565",
+                        "surface-container-low": "#1a1c1c",
+                        "inverse-on-surface": "#2f3131",
+                        "on-tertiary-fixed": "#091b39",
+                        "surface-container-high": "#282a2b",
+                        "on-tertiary-fixed-variant": "#374767",
+                        "on-secondary": "#233148",
+                        "on-surface-variant": "#d0c5af",
+                        "on-surface": "#e2e2e2",
+                        "on-tertiary": "#20304f",
+                        "primary-fixed": "#ffe088",
+                        "on-primary-container": "#554300",
+                        "primary-container": "#d4af37",
+                        "on-secondary-container": "#abb9d6",
+                        "surface-container-highest": "#333535",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#d6e3ff",
+                        "on-primary": "#3c2f00",
+                        "surface-dim": "#121414",
+                        "secondary-container": "#3c4962",
+                        "secondary-fixed-dim": "#b9c7e4",
+                        "tertiary-container": "#a3b3d8",
+                        "on-background": "#e2e2e2",
+                        "surface-variant": "#333535"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "2rem",
+                        "section": "8rem",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "xl": "4rem",
+                        "md": "1rem",
+                        "sm": "0.5rem",
+                        "xs": "0.25rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "h1": ["Montserrat"],
+                        "h3": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "h2": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "body-md": ["1rem", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "h1": ["4.5rem", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "h3": ["2rem", { "lineHeight": "1.3", "letterSpacing": "0em", "fontWeight": "600" }],
+                        "body-lg": ["1.125rem", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-caps": ["0.75rem", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "h2": ["3rem", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased selection:bg-primary/30 selection:text-primary">
+<!-- TopNavBar Component -->
+<nav class="bg-surface/10 dark:bg-surface/10 backdrop-blur-xl sticky top-0 w-full z-50 border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-lg py-md max-w-screen-xl mx-auto">
+<!-- Brand -->
+<a class="font-h3 text-h3 font-bold text-primary tracking-tight" href="#">QADAM Digital</a>
+<!-- Navigation Links (Desktop) -->
+<ul class="hidden md:flex items-center gap-lg font-label-caps text-label-caps">
+<li>
+<a class="text-on-surface-variant hover:text-primary transition-colors hover:bg-white/5 transition-all duration-300 px-sm py-xs rounded" href="#">Scholarships</a>
+</li>
+<li>
+<a class="text-primary border-b-2 border-primary pb-1 hover:bg-white/5 transition-all duration-300 px-sm rounded-t scale-95 transition-transform" href="#">Digital Solutions</a>
+</li>
+<li>
+<a class="text-on-surface-variant hover:text-primary transition-colors hover:bg-white/5 transition-all duration-300 px-sm py-xs rounded" href="#">Subscriptions</a>
+</li>
+<li>
+<a class="text-on-surface-variant hover:text-primary transition-colors hover:bg-white/5 transition-all duration-300 px-sm py-xs rounded" href="#">About Us</a>
+</li>
+</ul>
+<!-- Actions -->
+<div class="flex items-center gap-md">
+<button class="hidden lg:flex items-center gap-sm font-label-caps text-label-caps text-on-surface border border-outline-variant rounded-full px-md py-sm hover:border-primary hover:text-primary transition-colors">
+                    EN/DA/PA
+                </button>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-md py-sm rounded-full shadow-[0_0_15px_rgba(242,202,80,0.4)] hover:shadow-[0_0_25px_rgba(242,202,80,0.6)] transition-shadow">
+                    Contact WhatsApp
+                </button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full">
+<!-- Header Section -->
+<section class="pt-section pb-xl px-lg max-w-screen-xl mx-auto relative z-10">
+<div class="max-w-3xl">
+<h1 class="font-h1 text-h1 text-on-surface mb-md">Next-Gen <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-fixed-dim">Digital Solutions</span></h1>
+<div class="h-1 w-32 bg-gradient-to-r from-primary to-transparent rounded-full mb-lg"></div>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Elevate your educational journey and operational efficiency with our premium suite of technical and consultative services. Designed for excellence.</p>
+</div>
+</section>
+<!-- Comprehensive Directory Grid (Bento Style) -->
+<section class="px-lg pb-section max-w-screen-xl mx-auto relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1: Scholarship Guidance -->
+<div class="group relative bg-surface-container/30 backdrop-blur-[20px] border border-outline-variant/30 rounded-xl p-lg overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-surface-container/50">
+<div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-lg border border-primary/20 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">school</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-sm text-[1.5rem]">Scholarship Guidance</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-lg">Comprehensive consultancy for securing prestigious international scholarships and academic placements.</p>
+<a class="inline-flex items-center font-label-caps text-label-caps text-primary tracking-wider group/link" href="#">
+                            LEARN MORE
+                            <span class="material-symbols-outlined ml-xs text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 2: CV Writing -->
+<div class="group relative bg-surface-container/30 backdrop-blur-[20px] border border-outline-variant/30 rounded-xl p-lg overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-surface-container/50">
+<div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-lg border border-primary/20 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">description</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-sm text-[1.5rem]">CV Writing</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-lg">Professional, ATS-optimized curriculum vitae crafting tailored to highlight your unique academic and professional trajectory.</p>
+<a class="inline-flex items-center font-label-caps text-label-caps text-primary tracking-wider group/link" href="#">
+                            LEARN MORE
+                            <span class="material-symbols-outlined ml-xs text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 3: Translation Services -->
+<div class="group relative bg-surface-container/30 backdrop-blur-[20px] border border-outline-variant/30 rounded-xl p-lg overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-surface-container/50">
+<div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-lg border border-primary/20 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">translate</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-sm text-[1.5rem]">Translation Services</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-lg">Certified multilingual translation of critical academic documents, personal statements, and professional portfolios.</p>
+<a class="inline-flex items-center font-label-caps text-label-caps text-primary tracking-wider group/link" href="#">
+                            LEARN MORE
+                            <span class="material-symbols-outlined ml-xs text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 4: Web Development (Spans 2 cols on tablet, 1 on desktop) -->
+<div class="group relative bg-surface-container/30 backdrop-blur-[20px] border border-outline-variant/30 rounded-xl p-lg overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-surface-container/50 md:col-span-2 lg:col-span-1">
+<div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-lg border border-primary/20 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">code</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-sm text-[1.5rem]">Web Development</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-lg">Bespoke, high-performance web applications designed with modern frameworks to establish your digital presence.</p>
+<a class="inline-flex items-center font-label-caps text-label-caps text-primary tracking-wider group/link" href="#">
+                            LEARN MORE
+                            <span class="material-symbols-outlined ml-xs text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 5: Database Development -->
+<div class="group relative bg-surface-container/30 backdrop-blur-[20px] border border-outline-variant/30 rounded-xl p-lg overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-surface-container/50">
+<div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-lg border border-primary/20 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">database</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-sm text-[1.5rem]">Database Development</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-lg">Secure, scalable, and optimized database architectures tailored to handle complex organizational data workflows.</p>
+<a class="inline-flex items-center font-label-caps text-label-caps text-primary tracking-wider group/link" href="#">
+                            LEARN MORE
+                            <span class="material-symbols-outlined ml-xs text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 6: AI Tool Subscriptions -->
+<div class="group relative bg-surface-container/30 backdrop-blur-[20px] border border-outline-variant/30 rounded-xl p-lg overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-surface-container/50">
+<div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col h-full">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-lg border border-primary/20 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">smart_toy</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-sm text-[1.5rem]">AI Tool Subscriptions</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-lg">Curated access to elite artificial intelligence platforms designed to accelerate research, writing, and productivity.</p>
+<a class="inline-flex items-center font-label-caps text-label-caps text-primary tracking-wider group/link" href="#">
+                            LEARN MORE
+                            <span class="material-symbols-outlined ml-xs text-lg transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 7: SMM (Spans full width or remaining space) -->
+<div class="group relative bg-surface-container/30 backdrop-blur-[20px] border border-outline-variant/30 rounded-xl p-lg overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-surface-container/50 md:col-span-2 lg:col-span-3 flex flex-col md:flex-row items-center gap-lg">
+<div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 w-16 h-16 rounded-full bg-primary/10 flex-shrink-0 flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl">campaign</span>
+</div>
+<div class="relative z-10 flex-grow text-center md:text-left">
+<h3 class="font-h3 text-h3 text-on-surface mb-sm text-[1.5rem]">Social Media Management (SMM)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">Strategic digital marketing solutions to amplify your brand's voice across global platforms, ensuring maximum engagement and visibility in target markets.</p>
+</div>
+<div class="relative z-10 flex-shrink-0">
+<a class="inline-flex items-center justify-center font-label-caps text-label-caps text-surface-container-lowest bg-primary px-lg py-md rounded-full shadow-[0_0_15px_rgba(242,202,80,0.4)] hover:shadow-[0_0_25px_rgba(242,202,80,0.6)] transition-all" href="#">
+                            EXPLORE SMM
+                        </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Dashboard Mockups Section -->
+<section class="py-section border-t border-white/5 bg-gradient-to-b from-surface/0 to-surface-container-lowest/50 relative z-10">
+<div class="max-w-screen-xl mx-auto px-lg">
+<div class="text-center mb-xl">
+<h2 class="font-h2 text-h2 text-on-surface mb-md">Enterprise Infrastructure</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Proprietary management systems engineered for educational institutions and healthcare facilities, featuring intuitive dark-mode interfaces and powerful analytics.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-xl">
+<!-- Clinic Management -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl overflow-hidden shadow-2xl relative group">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+<div class="h-64 sm:h-80 w-full bg-surface-container-high relative overflow-hidden border-b border-outline-variant/30">
+<!-- Image Placeholder -->
+<img alt="Clinic Management Dashboard UI" class="w-full h-full object-cover object-top opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:opacity-100 transition-all duration-700" data-alt="A highly detailed, professional UI dashboard mockup for a modern clinic management system displayed on a sleek monitor. The interface utilizes a sophisticated dark mode aesthetic with deep navy backgrounds and crisp, minimalist typography. Key data points, interactive graphs, and patient scheduling modules are highlighted with subtle, radiant gold accents and glowing states, reflecting a premium, technology-forward 'Digital Prestige' style. The lighting is soft and cinematic, emphasizing the crisp edges and glassmorphism elements of the software interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcVV5HRsibQzPFWDndgoDJphkHv6Bnb91KthAwe56ne-FWmPACBs5NS1QZoW8h6pneyz2psG5xCtXEJwzMATX6efRViy2RnESz9WlJto3F6eE9VTqx8xw8YDa5eFhEo3IH9CiqZ7Gt9UqxODpsvuZAH5p65YoPoVxp6oRy1zRTnLc-BKVf9Idh0S2yvaIgye3W0xsUEaAgrE8T5GBEBRBY4XtdoRou0j5IDUMrJl7bRHPCYcztu1GBzufddi5K6x3gHYET2qttBxI"/>
+<!-- Overlay UI elements to simulate mockup -->
+<div class="absolute top-4 left-4 right-4 flex gap-2 opacity-50">
+<div class="w-3 h-3 rounded-full bg-outline-variant/50"></div>
+<div class="w-3 h-3 rounded-full bg-outline-variant/50"></div>
+<div class="w-3 h-3 rounded-full bg-outline-variant/50"></div>
+</div>
+</div>
+<div class="p-lg">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-primary">local_hospital</span>
+<h3 class="font-h3 text-h3 text-on-surface text-[1.25rem]">Clinic Management System</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Streamline patient records, appointment scheduling, and billing with our secure, compliant, and elegantly designed healthcare management platform.</p>
+</div>
+</div>
+<!-- School Management -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl overflow-hidden shadow-2xl relative group">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+<div class="h-64 sm:h-80 w-full bg-surface-container-high relative overflow-hidden border-b border-outline-variant/30">
+<!-- Image Placeholder -->
+<img alt="School Management Dashboard UI" class="w-full h-full object-cover object-top opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:opacity-100 transition-all duration-700" data-alt="A sleek, high-fidelity UI mockup of a comprehensive school management dashboard presented on a dark digital canvas. The layout is organized using elegant bento-grid principles, featuring semi-transparent glassmorphism panels against a deep, dark background. Student metrics, financial charts, and academic calendars are illuminated by subtle gold gradients and thin, glowing stroke lines. The overall mood conveys authoritative administration paired with cutting-edge digital transformation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTH9tqQZ3sEpoRnWpMKi3ekvF-qPOK0y8IuX8gdluU-usoxoqggvAfsoy0ypnTHiDF2uTjGtSLr9UwAFi7_oT4pnCMBijxTL82AT8NwmKjDPOzxka9YQS_ZtWq3sQRKyF9LX9v-uO3lcazIkK-tZjnx0wpSHSCDQC7_s--PwJWyr1OBFm7Aqk8z3aShwRQcEhbXgcXX5L-YR_hgcMpKm5ZgetJ7XKArZbDB0ASZgLmWtJG-sN0v3KhSfe6KP4kcbc5t3xhF2xd9DY"/>
+<!-- Overlay UI elements to simulate mockup -->
+<div class="absolute top-4 left-4 right-4 flex gap-2 opacity-50">
+<div class="w-3 h-3 rounded-full bg-outline-variant/50"></div>
+<div class="w-3 h-3 rounded-full bg-outline-variant/50"></div>
+<div class="w-3 h-3 rounded-full bg-outline-variant/50"></div>
+</div>
+</div>
+<div class="p-lg">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+<h3 class="font-h3 text-h3 text-on-surface text-[1.25rem]">School Management System</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">An integrated ecosystem for educational institutions managing admissions, academic performance tracking, and parent-teacher communications.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest w-full py-xl border-t border-outline-variant/30 flat no shadows relative z-20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-lg max-w-screen-xl mx-auto">
+<!-- Brand Column -->
+<div class="col-span-1 md:col-span-1 flex flex-col gap-sm">
+<span class="font-h3 text-h3 text-primary">QADAM Digital</span>
+<p class="font-body-md text-body-md text-on-surface-variant mt-md">© 2024 QADAM Digital. All rights reserved.</p>
+</div>
+<!-- Links Columns -->
+<div class="col-span-1 md:col-span-3 flex flex-wrap gap-lg justify-start md:justify-end">
+<nav class="flex flex-col gap-md">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors Transition-all duration-200 ease-in-out" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors Transition-all duration-200 ease-in-out" href="#">Terms of Service</a>
+</nav>
+<nav class="flex flex-col gap-md">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors Transition-all duration-200 ease-in-out" href="#">FAQ</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors Transition-all duration-200 ease-in-out" href="#">Careers</a>
+</nav>
+<nav class="flex flex-col gap-md">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors Transition-all duration-200 ease-in-out" href="#">Multilingual Support</a>
+</nav>
+</div>
+</div>
+</footer>
+</body></html>
