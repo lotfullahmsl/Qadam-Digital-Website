@@ -1,0 +1,9 @@
+backend/.env
+backend/venv/
+backend/.venv/
+backend/uploads/*
+!backend/uploads/.gitkeep
+__pycache__/
+*.py[cod]
+.pytest_cache/
+BACKEND_IMPLEMENTATION_PHASES.md
