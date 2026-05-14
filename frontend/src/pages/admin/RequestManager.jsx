@@ -1,19 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { serviceRequestService } from '../../services/serviceRequestService'
 
-const INITIAL_DATA = [
-  { id: 1, type: 'Contact', name: 'Ahmad Karimi', email: 'ahmad.karimi@gmail.com', phone: '+93 700 123 456', subject: 'General Inquiry about Scholarships', message: 'I would like to know more about scholarship opportunities for Afghan students in Europe.', date: '2026-05-08', status: 'New' },
-  { id: 2, type: 'Scholarship App', name: 'Sara Mohammadi', email: 'sara.m@yahoo.com', phone: '+98 912 345 678', subject: 'Chevening Scholarship 2026', message: 'I am applying for the Chevening Scholarship and need guidance on the personal statement.', university: 'University of Oxford', degree: 'MS', country: 'UK', ielts: '7.5', date: '2026-05-07', status: 'In Review' },
-  { id: 3, type: 'Subscription', name: 'Reza Ahmadi', email: 'reza.ahmadi@outlook.com', phone: '+98 935 678 901', subject: 'AI Pro Plan', plan: 'AI Pro', billingPeriod: 'Monthly', paymentMethod: 'Credit Card', message: 'I want to subscribe to the AI Pro plan for my research work.', date: '2026-05-07', status: 'Contacted' },
-  { id: 4, type: 'Website Project', name: 'Maryam Hosseini', email: 'maryam.h@gmail.com', phone: '+98 901 234 567', subject: 'E-commerce Website', projectType: 'E-commerce', budget: '$1000-$2000', timeline: '2 months', message: 'I need a full e-commerce website for my clothing business with payment integration.', date: '2026-05-06', status: 'In Progress' },
-  { id: 5, type: 'Contact', name: 'Ali Moradi', email: 'ali.moradi@gmail.com', phone: '+93 799 876 543', subject: 'CV Translation Service', message: 'I need my CV translated from Dari to English for a job application in Germany.', date: '2026-05-05', status: 'Completed' },
-  { id: 6, type: 'Database Project', name: 'Fatima Rahimi', email: 'fatima.r@gmail.com', phone: '+93 700 555 444', subject: 'Inventory Management System', dbType: 'PostgreSQL', projectSize: 'Medium', timeline: '3 months', message: 'We need a complete inventory management system for our warehouse with barcode scanning.', date: '2026-05-04', status: 'New' },
-  { id: 7, type: 'Social Media', name: 'Hassan Nazari', email: 'hassan.n@gmail.com', phone: '+98 912 111 222', subject: 'Instagram & Facebook Management', platforms: 'Instagram, Facebook', postsPerMonth: '20', budget: '$300/mo', message: 'I want to grow my restaurant business on social media. Need content creation and management.', date: '2026-05-03', status: 'In Review' },
-  { id: 8, type: 'Scholarship App', name: 'Zahra Ahmadi', email: 'zahra.a@gmail.com', phone: '+98 935 999 888', subject: 'DAAD Scholarship Germany', university: 'TU Munich', degree: 'PhD', country: 'Germany', ielts: '6.5', message: 'I need help with my DAAD scholarship application. My research area is Computer Science.', date: '2026-05-02', status: 'Contacted' },
-  { id: 9, type: 'Website Project', name: 'Omid Karimi', email: 'omid.k@outlook.com', phone: '+93 700 777 666', subject: 'Portfolio Website', projectType: 'Portfolio', budget: '$300-$500', timeline: '3 weeks', message: 'I am a photographer and need a beautiful portfolio website to showcase my work.', date: '2026-05-01', status: 'Completed' },
-  { id: 10, type: 'Subscription', name: 'Neda Hosseini', email: 'neda.h@gmail.com', phone: '+98 901 444 333', subject: 'AI Starter Plan', plan: 'AI Starter', billingPeriod: 'Monthly', paymentMethod: 'Bank Transfer', message: 'I want to try the AI Starter plan for my translation work.', date: '2026-04-30', status: 'Rejected' },
+const TABS = [
+  { key: 'All', label: 'All' },
+  { key: 'contact', label: 'Contact' },
+  { key: 'scholarship-applications', label: 'Scholarship App' },
+  { key: 'subscription', label: 'Subscription' },
+  { key: 'website-projects', label: 'Website Project' },
+  { key: 'database-projects', label: 'Database Project' },
+  { key: 'social-media', label: 'Social Media' },
 ]
-
-const TABS = ['All', 'Contact', 'Scholarship App', 'Subscription', 'Website Project', 'Database Project', 'Social Media']
 const STATUS_OPTIONS = ['New', 'In Review', 'Contacted', 'In Progress', 'Completed', 'Rejected']
 
 const statusColors = {
@@ -39,16 +35,54 @@ const StatusBadge = ({ status }) => (
 )
 
 export default function RequestManager() {
-  const [items, setItems] = useState(INITIAL_DATA)
+  const [items, setItems] = useState([])
   const [activeTab, setActiveTab] = useState('All')
   const [selectedRequest, setSelectedRequest] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const filtered = activeTab === 'All' ? items : items.filter((i) => i.type === activeTab)
-  const getCount = (tab) => tab === 'All' ? items.length : items.filter((i) => i.type === tab).length
+  const loadItems = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      if (activeTab === 'All') {
+        const types = TABS.filter((tab) => tab.key !== 'All')
+        const responses = await Promise.all(types.map((tab) => serviceRequestService.getAllRequests(tab.key, { limit: 100 })))
+        setItems(responses.flatMap((response) => response.data.items || []))
+      } else {
+        const { data } = await serviceRequestService.getAllRequests(activeTab, { limit: 100 })
+        setItems(data.items || [])
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to load requests.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const updateStatus = (id, status) => {
-    setItems(items.map((i) => (i.id === id ? { ...i, status } : i)))
-    if (selectedRequest?.id === id) setSelectedRequest({ ...selectedRequest, status })
+  useEffect(() => {
+    loadItems()
+  }, [activeTab])
+
+  const filtered = items
+  const getCount = (tab) => tab.key === activeTab || activeTab === 'All' ? items.filter((i) => tab.key === 'All' || i.type === tab.label).length : ''
+
+  const requestTypeForItem = (item) => {
+    return TABS.find((tab) => tab.label === item.type)?.key || activeTab
+  }
+
+  const updateStatus = async (item, status) => {
+    const requestType = requestTypeForItem(item)
+    const { data } = await serviceRequestService.updateRequestStatus(requestType, item._id, status)
+    setItems(items.map((i) => (i._id === item._id ? data.request : i)))
+    if (selectedRequest?._id === item._id) setSelectedRequest(data.request)
+  }
+
+  const deleteSelected = async () => {
+    const requestType = requestTypeForItem(selectedRequest)
+    await serviceRequestService.deleteRequest(requestType, selectedRequest._id)
+    setSelectedRequest(null)
+    await loadItems()
   }
 
   return (
@@ -65,10 +99,10 @@ export default function RequestManager() {
 
       <div className="flex gap-2 mb-5 flex-wrap">
         {TABS.map((tab) => (
-          <button key={tab} onClick={() => setActiveTab(tab)}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${activeTab === tab ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'}`}>
-            {tab}
-            <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${activeTab === tab ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'}`}>{getCount(tab)}</span>
+          <button key={tab.key} onClick={() => setActiveTab(tab.key)}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all ${activeTab === tab.key ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'}`}>
+            {tab.label}
+            <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${activeTab === tab.key ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500'}`}>{getCount(tab)}</span>
           </button>
         ))}
       </div>
@@ -84,19 +118,21 @@ export default function RequestManager() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {filtered.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => setSelectedRequest(item)}>
+              {loading && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400">Loading requests...</td></tr>}
+              {error && <tr><td colSpan={6} className="px-5 py-12 text-center text-red-500">{error}</td></tr>}
+              {!loading && !error && filtered.map((item) => (
+                <tr key={item._id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => setSelectedRequest(item)}>
                   <td className="px-5 py-3.5"><span className={`text-xs px-2 py-1 rounded-lg font-semibold ${typeColors[item.type] || 'bg-gray-100 text-gray-600'}`}>{item.type}</span></td>
                   <td className="px-5 py-3.5"><p className="font-medium text-navy">{item.name}</p><p className="text-xs text-gray-400">{item.email}</p></td>
                   <td className="px-5 py-3.5 text-gray-600 max-w-xs truncate">{item.subject}</td>
-                  <td className="px-5 py-3.5 text-gray-400 text-xs">{item.date}</td>
+                  <td className="px-5 py-3.5 text-gray-400 text-xs">{item.date || item.createdAt?.slice(0, 10)}</td>
                   <td className="px-5 py-3.5"><StatusBadge status={item.status} /></td>
                   <td className="px-5 py-3.5" onClick={(e) => e.stopPropagation()}>
                     <button onClick={() => setSelectedRequest(item)} className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">open_in_new</span></button>
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400"><span className="material-symbols-outlined text-4xl block mb-2">inbox</span>No requests found</td></tr>}
+              {!loading && !error && filtered.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400"><span className="material-symbols-outlined text-4xl block mb-2">inbox</span>No requests found</td></tr>}
             </tbody>
           </table>
         </div>
@@ -117,7 +153,7 @@ export default function RequestManager() {
                 <div><p className="text-xs font-semibold text-gray-500 mb-1">Current Status</p><StatusBadge status={selectedRequest.status} /></div>
                 <div className="flex-1 max-w-xs">
                   <p className="text-xs font-semibold text-gray-500 mb-1">Update Status</p>
-                  <select value={selectedRequest.status} onChange={(e) => updateStatus(selectedRequest.id, e.target.value)}
+                  <select value={selectedRequest.status} onChange={(e) => updateStatus(selectedRequest, e.target.value)}
                     className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm text-navy focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 bg-white">
                     {STATUS_OPTIONS.map((s) => <option key={s}>{s}</option>)}
                   </select>
@@ -131,7 +167,7 @@ export default function RequestManager() {
                     { label: 'Full Name', value: selectedRequest.name },
                     { label: 'Email', value: selectedRequest.email },
                     { label: 'Phone', value: selectedRequest.phone },
-                    { label: 'Date Submitted', value: selectedRequest.date },
+                    { label: 'Date Submitted', value: selectedRequest.date || selectedRequest.createdAt?.slice(0, 10) },
                   ].filter((f) => f.value).map((f) => (
                     <div key={f.label} className="bg-gray-50 rounded-xl p-3">
                       <p className="text-xs text-gray-400 mb-0.5">{f.label}</p>
@@ -160,7 +196,8 @@ export default function RequestManager() {
                     { label: 'Budget', value: selectedRequest.budget },
                     { label: 'Timeline', value: selectedRequest.timeline },
                     { label: 'Database Type', value: selectedRequest.dbType },
-                    { label: 'Platforms', value: selectedRequest.platforms },
+                    { label: 'Platforms', value: Array.isArray(selectedRequest.platforms) ? selectedRequest.platforms.join(', ') : selectedRequest.platforms },
+                    { label: 'Service', value: selectedRequest.service },
                   ].filter((f) => f.value).map((f) => (
                     <div key={f.label} className="bg-gray-50 rounded-xl p-3">
                       <p className="text-xs text-gray-400 mb-0.5">{f.label}</p>
@@ -180,6 +217,7 @@ export default function RequestManager() {
                 <a href={`mailto:${selectedRequest.email}`} className="flex-1 flex items-center justify-center gap-2 border border-gray-200 text-gray-600 font-semibold py-2.5 rounded-xl hover:border-primary hover:text-primary transition-all text-sm">
                   <span className="material-symbols-outlined text-base">mail</span> Reply via Email
                 </a>
+                <button onClick={deleteSelected} className="flex-1 border border-red-200 text-red-500 font-semibold py-2.5 rounded-xl hover:bg-red-50 transition-all text-sm">Delete</button>
                 <button onClick={() => setSelectedRequest(null)} className="flex-1 bg-primary text-white font-semibold py-2.5 rounded-xl hover:bg-primary-dark transition-all text-sm" style={{ boxShadow: '0 4px 14px rgba(0,170,255,0.3)' }}>Close</button>
               </div>
             </div>

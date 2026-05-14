@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import PortfolioCard from '../../components/cards/PortfolioCard'
+import { portfolioService } from '../../services/portfolioService'
 
 export default function Portfolio() {
   const { t } = useTranslation()
@@ -13,17 +14,28 @@ export default function Portfolio() {
     { key: 'Design', label: t('portfolio.categories.design') },
   ]
 
-  const MOCK_PROJECTS = [
-    { _id: '1', title: t('portfolio.projects.clinic_title'), description: t('portfolio.projects.clinic_desc'), category: 'Database', technologies: ['React', 'Flask', 'MongoDB'] },
-    { _id: '2', title: t('portfolio.projects.school_title'), description: t('portfolio.projects.school_desc'), category: 'Database', technologies: ['React', 'Node.js', 'PostgreSQL'] },
-    { _id: '3', title: t('portfolio.projects.ecommerce_title'), description: t('portfolio.projects.ecommerce_desc'), category: 'Website', technologies: ['React', 'Tailwind', 'Stripe'] },
-    { _id: '4', title: t('portfolio.projects.corporate_title'), description: t('portfolio.projects.corporate_desc'), category: 'Website', technologies: ['React', 'Flask', 'MongoDB'] },
-    { _id: '5', title: t('portfolio.projects.smm_title'), description: t('portfolio.projects.smm_desc'), category: 'Marketing', technologies: ['Facebook Ads', 'Instagram', 'Analytics'] },
-    { _id: '6', title: t('portfolio.projects.inventory_title'), description: t('portfolio.projects.inventory_desc'), category: 'Database', technologies: ['React', 'Flask', 'MongoDB'] },
-  ]
-
   const [activeCategory, setActiveCategory] = useState('All')
-  const filtered = activeCategory === 'All' ? MOCK_PROJECTS : MOCK_PROJECTS.filter((p) => p.category === activeCategory)
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let ignore = false
+
+    async function loadProjects() {
+      setLoading(true)
+      try {
+        const { data } = await portfolioService.getAll({ category: activeCategory === 'All' ? '' : activeCategory })
+        if (!ignore) setProjects(data.items || [])
+      } catch {
+        if (!ignore) setProjects([])
+      } finally {
+        if (!ignore) setLoading(false)
+      }
+    }
+
+    loadProjects()
+    return () => { ignore = true }
+  }, [activeCategory])
 
   return (
     <div className="flex flex-col">
@@ -53,14 +65,16 @@ export default function Portfolio() {
 
       <section className="py-16 px-6 bg-background">
         <div className="max-w-screen-xl mx-auto">
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-20 text-text-muted">Loading portfolio projects...</div>
+          ) : projects.length === 0 ? (
             <div className="text-center py-20 text-text-muted">
               <span className="material-symbols-outlined text-5xl mb-4 block text-primary-light">search_off</span>
               <p>{t('portfolio.no_results')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((project) => <PortfolioCard key={project._id} project={project} />)}
+              {projects.map((project) => <PortfolioCard key={project._id} project={project} />)}
             </div>
           )}
         </div>

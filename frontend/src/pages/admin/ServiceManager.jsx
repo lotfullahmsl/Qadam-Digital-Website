@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import adminContentService from '../../services/adminContentService'
 
 const INITIAL_DATA = [
   { id: 1, title: 'Scholarship Consulting', icon: 'school', category: 'Education', description: 'Expert guidance for scholarship applications, personal statements, and interview preparation.', features: 'Profile assessment\nScholarship matching\nApplication review\nInterview coaching', ctaLink: '/scholarships', status: 'Active' },
@@ -28,16 +29,54 @@ export default function ServiceManager() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [deleteId, setDeleteId] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const openModal = (item = null) => { setEditItem(item); setForm(item ? { ...item } : EMPTY_FORM); setShowModal(true) }
+  const loadItems = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const { data } = await adminContentService.getAll('services', { limit: 100 })
+      setItems(data.items || [])
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to load services.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadItems()
+  }, [])
+
+  const openModal = (item = null) => {
+    setEditItem(item)
+    setForm(item ? { ...item, ctaLink: item.ctaLink || item.to || '', features: Array.isArray(item.features) ? item.features.join('\n') : item.features || '' } : EMPTY_FORM)
+    setShowModal(true)
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (editItem) setItems(items.map((i) => (i.id === editItem.id ? { ...form, id: editItem.id } : i)))
-    else setItems([...items, { ...form, id: Date.now() }])
-    setShowModal(false)
+    const save = async () => {
+      try {
+        if (editItem) await adminContentService.update('services', editItem._id, form)
+        else await adminContentService.create('services', form)
+        setShowModal(false)
+        await loadItems()
+      } catch (err) {
+        alert(err.response?.data?.message || 'Unable to save service.')
+      }
+    }
+    save()
   }
-  const handleDelete = (id) => { setItems(items.filter((i) => i.id !== id)); setDeleteId(null) }
-  const toggleStatus = (id) => setItems(items.map((i) => i.id === id ? { ...i, status: i.status === 'Active' ? 'Inactive' : 'Active' } : i))
+  const handleDelete = async (id) => {
+    await adminContentService.delete('services', id)
+    setDeleteId(null)
+    await loadItems()
+  }
+  const toggleStatus = async (item) => {
+    await adminContentService.updateStatus('services', item._id, item.status === 'Active' ? 'Inactive' : 'Active')
+    await loadItems()
+  }
 
   return (
     <div>
@@ -52,12 +91,14 @@ export default function ServiceManager() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {items.map((item) => (
-          <div key={item.id} className={`bg-white rounded-2xl border shadow-sm p-5 hover:shadow-md transition-shadow group relative ${item.status === 'Inactive' ? 'border-gray-100 opacity-60' : 'border-gray-100'}`}>
+        {loading && <div className="col-span-full py-12 text-center text-gray-400">Loading services...</div>}
+        {error && <div className="col-span-full py-12 text-center text-red-500">{error}</div>}
+        {!loading && !error && items.map((item) => (
+          <div key={item._id} className={`bg-white rounded-2xl border shadow-sm p-5 hover:shadow-md transition-shadow group relative ${item.status === 'Inactive' ? 'border-gray-100 opacity-60' : 'border-gray-100'}`}>
             <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onClick={() => toggleStatus(item.id)} className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 hover:text-primary hover:bg-blue-50 transition-colors"><span className="material-symbols-outlined text-sm">{item.status === 'Active' ? 'visibility_off' : 'visibility'}</span></button>
+              <button onClick={() => toggleStatus(item)} className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 hover:text-primary hover:bg-blue-50 transition-colors"><span className="material-symbols-outlined text-sm">{item.status === 'Active' ? 'visibility_off' : 'visibility'}</span></button>
               <button onClick={() => openModal(item)} className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 hover:text-primary hover:bg-blue-50 transition-colors"><span className="material-symbols-outlined text-sm">edit</span></button>
-              <button onClick={() => setDeleteId(item.id)} className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 hover:text-red-500 hover:bg-red-50 transition-colors"><span className="material-symbols-outlined text-sm">delete</span></button>
+              <button onClick={() => setDeleteId(item._id)} className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 hover:text-red-500 hover:bg-red-50 transition-colors"><span className="material-symbols-outlined text-sm">delete</span></button>
             </div>
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
               <span className="material-symbols-outlined text-primary text-2xl">{item.icon}</span>
@@ -67,7 +108,7 @@ export default function ServiceManager() {
             <p className="text-xs text-gray-500 mt-2 line-clamp-2">{item.description}</p>
             <div className="mt-3 pt-3 border-t border-gray-50 flex items-center justify-between">
               <span className={`text-xs font-semibold ${item.status === 'Active' ? 'text-green-600' : 'text-gray-400'}`}>● {item.status}</span>
-              <span className="text-xs text-primary">{item.ctaLink}</span>
+              <span className="text-xs text-primary">{item.ctaLink || item.to}</span>
             </div>
           </div>
         ))}

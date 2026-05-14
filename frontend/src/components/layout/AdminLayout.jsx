@@ -9,6 +9,7 @@ const NAV_SECTIONS = [
     items: [
       { label: 'Dashboard', icon: 'dashboard', to: ROUTES.ADMIN_DASHBOARD },
       { label: 'Scholarships', icon: 'school', to: ROUTES.ADMIN_SCHOLARSHIPS },
+      { label: 'Blogs', icon: 'article', to: ROUTES.ADMIN_BLOGS },
       { label: 'Portfolio', icon: 'work', to: ROUTES.ADMIN_PORTFOLIO },
       { label: 'Services', icon: 'build', to: ROUTES.ADMIN_SERVICES },
     ],

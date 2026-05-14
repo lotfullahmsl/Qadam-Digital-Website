@@ -10,6 +10,10 @@ export const serviceRequestService = {
   submitSocialMedia: (data) => apiClient.post('/social-media-requests', data),
 
   // Admin
+  getSummary: () => apiClient.get('/admin/requests'),
   getAllRequests: (type, params = {}) => apiClient.get(`/admin/requests/${type}`, { params }),
+  getRequest: (type, id) => apiClient.get(`/admin/requests/${type}/${id}`),
   updateRequestStatus: (type, id, status) => apiClient.patch(`/admin/requests/${type}/${id}`, { status }),
+  updateRequest: (type, id, data) => apiClient.patch(`/admin/requests/${type}/${id}`, data),
+  deleteRequest: (type, id) => apiClient.delete(`/admin/requests/${type}/${id}`),
 }

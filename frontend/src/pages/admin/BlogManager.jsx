@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import adminContentService from '../../services/adminContentService'
 
 const INITIAL_DATA = [
   { id: 1, title: 'Top 10 Scholarships for Afghan Students 2026', slug: 'top-10-scholarships-afghan-students-2026', category: 'Scholarships', author: 'Admin', date: '2026-01-15', status: 'Published', excerpt: 'Discover the best scholarship opportunities available for Afghan students in 2026.', content: '', featuredImage: '', seoTitle: 'Top 10 Scholarships for Afghan Students 2026', seoDescription: 'Best scholarships for Afghan students' },
@@ -27,6 +28,25 @@ export default function BlogManager() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [deleteId, setDeleteId] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const loadItems = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const { data } = await adminContentService.getAll('blogs', { limit: 100 })
+      setItems(data.items || [])
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to load blog posts.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadItems()
+  }, [])
 
   const filtered = items.filter((item) => {
     const matchSearch = item.title.toLowerCase().includes(search.toLowerCase()) || item.author.toLowerCase().includes(search.toLowerCase())
@@ -35,16 +55,32 @@ export default function BlogManager() {
     return matchSearch && matchCat && matchStatus
   })
 
-  const openModal = (item = null) => { setEditItem(item); setForm(item ? { ...item } : EMPTY_FORM); setShowModal(true) }
+  const openModal = (item = null) => { setEditItem(item); setForm(item ? { ...item, date: item.date || item.createdAt, featuredImage: item.featuredImage || item.image || '' } : EMPTY_FORM); setShowModal(true) }
   const handleTitleChange = (val) => setForm((f) => ({ ...f, title: val, slug: toSlug(val), seoTitle: val }))
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (editItem) setItems(items.map((i) => (i.id === editItem.id ? { ...form, id: editItem.id } : i)))
-    else setItems([...items, { ...form, id: Date.now(), date: new Date().toISOString().split('T')[0] }])
-    setShowModal(false)
+    const save = async () => {
+      const payload = { ...form, image: form.featuredImage, createdAt: form.date || form.createdAt || new Date().toISOString().split('T')[0] }
+      try {
+        if (editItem) await adminContentService.update('blogs', editItem._id, payload)
+        else await adminContentService.create('blogs', payload)
+        setShowModal(false)
+        await loadItems()
+      } catch (err) {
+        alert(err.response?.data?.message || 'Unable to save blog post.')
+      }
+    }
+    save()
   }
-  const handleDelete = (id) => { setItems(items.filter((i) => i.id !== id)); setDeleteId(null) }
-  const toggleStatus = (id) => setItems(items.map((i) => i.id === id ? { ...i, status: i.status === 'Published' ? 'Draft' : 'Published' } : i))
+  const handleDelete = async (id) => {
+    await adminContentService.delete('blogs', id)
+    setDeleteId(null)
+    await loadItems()
+  }
+  const toggleStatus = async (item) => {
+    await adminContentService.updateStatus('blogs', item._id, item.status === 'Published' ? 'Draft' : 'Published')
+    await loadItems()
+  }
 
   return (
     <div>
@@ -78,23 +114,25 @@ export default function BlogManager() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {filtered.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+              {loading && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400">Loading posts...</td></tr>}
+              {error && <tr><td colSpan={6} className="px-5 py-12 text-center text-red-500">{error}</td></tr>}
+              {!loading && !error && filtered.map((item) => (
+                <tr key={item._id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-5 py-3.5"><p className="font-medium text-navy">{item.title}</p><p className="text-xs text-gray-400 mt-0.5">/{item.slug}</p></td>
                   <td className="px-5 py-3.5"><span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg font-medium">{item.category}</span></td>
                   <td className="px-5 py-3.5 text-gray-600">{item.author}</td>
-                  <td className="px-5 py-3.5 text-gray-400 text-xs">{item.date}</td>
+                  <td className="px-5 py-3.5 text-gray-400 text-xs">{item.date || item.createdAt}</td>
                   <td className="px-5 py-3.5"><StatusBadge status={item.status} /></td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-1">
-                      <button onClick={() => toggleStatus(item.id)} className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">{item.status === 'Published' ? 'visibility_off' : 'visibility'}</span></button>
+                      <button onClick={() => toggleStatus(item)} className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">{item.status === 'Published' ? 'visibility_off' : 'visibility'}</span></button>
                       <button onClick={() => openModal(item)} className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">edit</span></button>
-                      <button onClick={() => setDeleteId(item.id)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">delete</span></button>
+                      <button onClick={() => setDeleteId(item._id)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">delete</span></button>
                     </div>
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400"><span className="material-symbols-outlined text-4xl block mb-2">article</span>No posts found</td></tr>}
+              {!loading && !error && filtered.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400"><span className="material-symbols-outlined text-4xl block mb-2">article</span>No posts found</td></tr>}
             </tbody>
           </table>
         </div>

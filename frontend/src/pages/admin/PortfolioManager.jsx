@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import adminContentService from '../../services/adminContentService'
 
 const INITIAL_DATA = [
   { id: 1, title: 'E-Commerce Platform', category: 'Website', description: 'Full-featured online store with payment integration, inventory management, and admin dashboard.', technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'], clientType: 'Retail Business', imageUrl: '', status: 'Published' },
@@ -27,23 +28,54 @@ export default function PortfolioManager() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [deleteId, setDeleteId] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const loadItems = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const { data } = await adminContentService.getAll('portfolio-projects', { limit: 100 })
+      setItems(data.items || [])
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to load portfolio projects.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadItems()
+  }, [])
 
   const filtered = activeCategory === 'All' ? items : items.filter((i) => i.category === activeCategory)
 
   const openModal = (item = null) => {
     setEditItem(item)
-    setForm(item ? { ...item, technologies: Array.isArray(item.technologies) ? item.technologies.join(', ') : item.technologies } : EMPTY_FORM)
+    setForm(item ? { ...item, imageUrl: item.imageUrl || item.image || '', technologies: Array.isArray(item.technologies) ? item.technologies.join(', ') : item.technologies } : EMPTY_FORM)
     setShowModal(true)
   }
   const handleSubmit = (e) => {
     e.preventDefault()
     const techArray = form.technologies.split(',').map((t) => t.trim()).filter(Boolean)
-    const data = { ...form, technologies: techArray }
-    if (editItem) setItems(items.map((i) => (i.id === editItem.id ? { ...data, id: editItem.id } : i)))
-    else setItems([...items, { ...data, id: Date.now() }])
-    setShowModal(false)
+    const data = { ...form, image: form.imageUrl, technologies: techArray }
+    const save = async () => {
+      try {
+        if (editItem) await adminContentService.update('portfolio-projects', editItem._id, data)
+        else await adminContentService.create('portfolio-projects', data)
+        setShowModal(false)
+        await loadItems()
+      } catch (err) {
+        alert(err.response?.data?.message || 'Unable to save project.')
+      }
+    }
+    save()
   }
-  const handleDelete = (id) => { setItems(items.filter((i) => i.id !== id)); setDeleteId(null) }
+  const handleDelete = async (id) => {
+    await adminContentService.delete('portfolio-projects', id)
+    setDeleteId(null)
+    await loadItems()
+  }
 
   return (
     <div>
@@ -67,17 +99,19 @@ export default function PortfolioManager() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filtered.map((item) => (
-          <div key={item.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+        {loading && <div className="col-span-3 py-16 text-center text-gray-400">Loading projects...</div>}
+        {error && <div className="col-span-3 py-16 text-center text-red-500">{error}</div>}
+        {!loading && !error && filtered.map((item) => (
+          <div key={item._id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
             <div className="h-44 bg-gradient-to-br from-primary-pale to-primary-light flex items-center justify-center relative">
-              {item.imageUrl ? (
-                <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+              {(item.imageUrl || item.image) ? (
+                <img src={item.imageUrl || item.image} alt={item.title} className="w-full h-full object-cover" />
               ) : (
                 <span className="material-symbols-outlined text-5xl text-primary/40">image</span>
               )}
               <div className="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => openModal(item)} className="w-8 h-8 bg-white rounded-lg shadow flex items-center justify-center text-gray-600 hover:text-primary transition-colors"><span className="material-symbols-outlined text-base">edit</span></button>
-                <button onClick={() => setDeleteId(item.id)} className="w-8 h-8 bg-white rounded-lg shadow flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors"><span className="material-symbols-outlined text-base">delete</span></button>
+                <button onClick={() => setDeleteId(item._id)} className="w-8 h-8 bg-white rounded-lg shadow flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors"><span className="material-symbols-outlined text-base">delete</span></button>
               </div>
             </div>
             <div className="p-4">
@@ -95,7 +129,7 @@ export default function PortfolioManager() {
             </div>
           </div>
         ))}
-        {filtered.length === 0 && <div className="col-span-3 py-16 text-center text-gray-400"><span className="material-symbols-outlined text-5xl block mb-2">work_off</span>No projects in this category</div>}
+        {!loading && !error && filtered.length === 0 && <div className="col-span-3 py-16 text-center text-gray-400"><span className="material-symbols-outlined text-5xl block mb-2">work_off</span>No projects in this category</div>}
       </div>
 
       {showModal && (

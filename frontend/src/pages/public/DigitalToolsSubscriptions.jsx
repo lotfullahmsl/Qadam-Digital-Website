@@ -1,5 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import RequestForm from '../../components/common/RequestForm'
+import { serviceRequestService } from '../../services/serviceRequestService'
 
 export default function DigitalToolsSubscriptions() {
   const { t } = useTranslation()
@@ -127,6 +129,22 @@ export default function DigitalToolsSubscriptions() {
               ))}
             </ul>
           </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-6 bg-primary-pale border-t border-border">
+        <div className="max-w-3xl mx-auto">
+          <RequestForm
+            title="Request a Digital Subscription"
+            description="Tell us which tool or subscription you need and our team will contact you."
+            submitLabel="Submit Subscription Request"
+            extraFields={[
+              { name: 'plan', label: 'Plan', placeholder: 'Select subscription', type: 'select', required: true, options: SUBSCRIPTIONS.map((item) => item.name) },
+              { name: 'billingPeriod', label: 'Billing Period', placeholder: 'Billing period', type: 'select', options: ['Monthly', 'Yearly', 'One-time'] },
+              { name: 'paymentMethod', label: 'Payment Method', placeholder: 'Preferred payment method' },
+            ]}
+            onSubmit={serviceRequestService.submitSubscription}
+          />
         </div>
       </section>
     </div>

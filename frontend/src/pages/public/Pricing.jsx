@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { pricingService } from '../../services/pricingService'
 
 export default function Pricing() {
   const { t } = useTranslation()
@@ -48,7 +49,29 @@ export default function Pricing() {
   }
 
   const [activeCategory, setActiveCategory] = useState('ai')
-  const plans = PLANS[activeCategory] || []
+  const [apiPlans, setApiPlans] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let ignore = false
+
+    async function loadPlans() {
+      setLoading(true)
+      try {
+        const { data } = await pricingService.getAll({ category: activeCategory })
+        if (!ignore) setApiPlans(data.items || [])
+      } catch {
+        if (!ignore) setApiPlans([])
+      } finally {
+        if (!ignore) setLoading(false)
+      }
+    }
+
+    loadPlans()
+    return () => { ignore = true }
+  }, [activeCategory])
+
+  const plans = apiPlans.length ? apiPlans : PLANS[activeCategory] || []
 
   return (
     <div className="flex flex-col">
@@ -83,8 +106,11 @@ export default function Pricing() {
       {/* Plans */}
       <section className="py-16 px-6 bg-background">
         <div className="max-w-screen-xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {plans.map((plan, i) => (
+          {loading ? (
+            <div className="text-center py-12 text-text-muted">Loading pricing packages...</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {plans.map((plan, i) => (
               <div key={i} className={`relative flex flex-col rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${
                 plan.popular
                   ? 'bg-primary text-white shadow-[0_8px_32px_rgba(0,170,255,0.35)] border-2 border-primary'
@@ -120,8 +146,9 @@ export default function Pricing() {
                   {t('pricing.get_started')}
                 </a>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

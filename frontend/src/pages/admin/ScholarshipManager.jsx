@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import adminContentService from '../../services/adminContentService'
 
 const INITIAL_DATA = [
   { id: 1, title: 'Chevening Scholarship 2026', country: 'UK', university: 'Various UK Universities', degree: 'MS', deadline: '2026-11-05', fundingType: 'Fully Funded', status: 'Published', description: 'UK government scholarship for future leaders.', eligibility: 'Bachelor degree, 2 years work experience', benefits: 'Tuition, living allowance, flights', image: 'https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?w=800&q=80' },
@@ -26,8 +27,27 @@ export default function ScholarshipManager() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [deleteId, setDeleteId] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const countries = ['All', ...new Set(INITIAL_DATA.map((i) => i.country))]
+  const loadItems = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const { data } = await adminContentService.getAll('scholarships', { limit: 100 })
+      setItems(data.items || [])
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to load scholarships.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadItems()
+  }, [])
+
+  const countries = ['All', ...new Set(items.map((i) => i.country).filter(Boolean))]
   const filtered = items.filter((item) => {
     const matchSearch = item.title.toLowerCase().includes(search.toLowerCase()) || item.university.toLowerCase().includes(search.toLowerCase())
     const matchStatus = statusFilter === 'All' || item.status === statusFilter
@@ -38,12 +58,27 @@ export default function ScholarshipManager() {
   const openModal = (item = null) => { setEditItem(item); setForm(item ? { ...item } : EMPTY_FORM); setShowModal(true) }
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (editItem) setItems(items.map((i) => (i.id === editItem.id ? { ...form, id: editItem.id } : i)))
-    else setItems([...items, { ...form, id: Date.now() }])
-    setShowModal(false)
+    const save = async () => {
+      try {
+        if (editItem) await adminContentService.update('scholarships', editItem._id, form)
+        else await adminContentService.create('scholarships', form)
+        setShowModal(false)
+        await loadItems()
+      } catch (err) {
+        alert(err.response?.data?.message || 'Unable to save scholarship.')
+      }
+    }
+    save()
   }
-  const handleDelete = (id) => { setItems(items.filter((i) => i.id !== id)); setDeleteId(null) }
-  const toggleStatus = (id) => setItems(items.map((i) => i.id === id ? { ...i, status: i.status === 'Published' ? 'Draft' : 'Published' } : i))
+  const handleDelete = async (id) => {
+    await adminContentService.delete('scholarships', id)
+    setDeleteId(null)
+    await loadItems()
+  }
+  const toggleStatus = async (item) => {
+    await adminContentService.updateStatus('scholarships', item._id, item.status === 'Published' ? 'Draft' : 'Published')
+    await loadItems()
+  }
 
   return (
     <div>
@@ -81,8 +116,10 @@ export default function ScholarshipManager() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {filtered.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+              {loading && <tr><td colSpan={7} className="px-5 py-12 text-center text-gray-400">Loading scholarships...</td></tr>}
+              {error && <tr><td colSpan={7} className="px-5 py-12 text-center text-red-500">{error}</td></tr>}
+              {!loading && !error && filtered.map((item) => (
+                <tr key={item._id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
                       {/* Thumbnail */}
@@ -110,14 +147,14 @@ export default function ScholarshipManager() {
                   <td className="px-5 py-3.5"><StatusBadge status={item.status} /></td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-1">
-                      <button onClick={() => toggleStatus(item.id)} title="Toggle" className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">{item.status === 'Published' ? 'visibility_off' : 'visibility'}</span></button>
+                      <button onClick={() => toggleStatus(item)} title="Toggle" className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">{item.status === 'Published' ? 'visibility_off' : 'visibility'}</span></button>
                       <button onClick={() => openModal(item)} className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">edit</span></button>
-                      <button onClick={() => setDeleteId(item.id)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">delete</span></button>
+                      <button onClick={() => setDeleteId(item._id)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">delete</span></button>
                     </div>
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && <tr><td colSpan={7} className="px-5 py-12 text-center text-gray-400"><span className="material-symbols-outlined text-4xl block mb-2">search_off</span>No scholarships found</td></tr>}
+              {!loading && !error && filtered.length === 0 && <tr><td colSpan={7} className="px-5 py-12 text-center text-gray-400"><span className="material-symbols-outlined text-4xl block mb-2">search_off</span>No scholarships found</td></tr>}
             </tbody>
           </table>
         </div>

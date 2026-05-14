@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
+import RequestForm from '../../components/common/RequestForm'
+import { serviceRequestService } from '../../services/serviceRequestService'
 
 export default function CvTranslationServices() {
   const { t } = useTranslation()
@@ -106,6 +108,21 @@ export default function CvTranslationServices() {
       </section>
 
       {/* CTA */}
+      <section className="py-16 px-6 bg-background border-t border-border">
+        <div className="max-w-3xl mx-auto">
+          <RequestForm
+            title="Request CV or Translation Service"
+            description="Send your request and our team will contact you about documents, pricing, and delivery."
+            submitLabel="Submit Service Request"
+            extraFields={[
+              { name: 'service', label: 'Service', placeholder: 'Select service', type: 'select', options: ['CV Writing', 'Resume', 'Motivation Letter', 'SOP', 'Document Translation', 'Proofreading'] },
+              { name: 'country', label: 'Country', placeholder: 'Country' },
+            ]}
+            onSubmit={(data) => serviceRequestService.submitContact({ ...data, subject: data.service || 'CV / Translation Service' })}
+          />
+        </div>
+      </section>
+
       <section className="py-16 px-6 bg-primary">
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
           <h2 className="font-heading font-bold text-white text-3xl">{t('cv_page.cta_title')}</h2>

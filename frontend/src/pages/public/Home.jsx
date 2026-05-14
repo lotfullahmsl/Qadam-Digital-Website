@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
 import ServiceCard from '../../components/cards/ServiceCard'
 import AdBanner from '../../components/common/AdBanner'
+import { serviceContentService } from '../../services/serviceContentService'
+import { testimonialService } from '../../services/testimonialService'
 
 const TESTIMONIALS = [
   { name: 'Ahmad Karimi', country: 'Afghanistan', text: 'QADAM Digital helped me secure a fully funded scholarship to Germany. Their guidance was exceptional throughout the entire process.', avatar: 'AK' },
@@ -13,6 +15,8 @@ const TESTIMONIALS = [
 
 export default function Home() {
   const { t } = useTranslation()
+  const [apiServices, setApiServices] = useState([])
+  const [testimonials, setTestimonials] = useState(TESTIMONIALS)
 
   const STATS = [
     { icon: 'school', value: '500+', label: t('hero.stat_scholarships') },
@@ -29,6 +33,33 @@ export default function Home() {
     { icon: 'translate', title: t('home.service_items.translation_title'), description: t('home.service_items.translation_desc'), to: ROUTES.CV_TRANSLATION },
     { icon: 'campaign', title: t('home.service_items.smm_title'), description: t('home.service_items.smm_desc'), to: ROUTES.SOCIAL_MEDIA },
   ]
+
+  useEffect(() => {
+    let ignore = false
+
+    async function loadHomeContent() {
+      try {
+        const [servicesResponse, testimonialsResponse] = await Promise.all([
+          serviceContentService.getAll(),
+          testimonialService.getAll(),
+        ])
+        if (!ignore) {
+          setApiServices(servicesResponse.data.items || [])
+          setTestimonials(testimonialsResponse.data.items?.length ? testimonialsResponse.data.items : TESTIMONIALS)
+        }
+      } catch {
+        if (!ignore) {
+          setApiServices([])
+          setTestimonials(TESTIMONIALS)
+        }
+      }
+    }
+
+    loadHomeContent()
+    return () => { ignore = true }
+  }, [])
+
+  const displayServices = apiServices.length ? apiServices.slice(0, 6) : SERVICES
 
   const WHY_US = [
     { icon: 'verified', title: t('home.why_items.trusted_title'), desc: t('home.why_items.trusted_desc') },
@@ -102,7 +133,7 @@ export default function Home() {
             <p className="text-text-muted text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SERVICES.map((s) => <ServiceCard key={s.title} {...s} />)}
+            {displayServices.map((s) => <ServiceCard key={s._id || s.title} {...s} to={s.to || s.ctaLink} />)}
           </div>
         </div>
       </section>
@@ -163,7 +194,7 @@ export default function Home() {
             <h2 className="font-heading font-bold text-white text-4xl mb-3">{t('home.testimonials_title')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((item) => (
+            {testimonials.map((item) => (
               <div key={item.name} className="bg-white/10 border border-white/15 rounded-xl p-6 flex flex-col gap-4">
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (

@@ -1,5 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import RequestForm from '../../components/common/RequestForm'
+import { serviceRequestService } from '../../services/serviceRequestService'
 
 export default function SocialMediaMarketing() {
   const { t } = useTranslation()
@@ -109,6 +111,22 @@ export default function SocialMediaMarketing() {
       </section>
 
       {/* CTA */}
+      <section className="py-16 px-6 bg-background border-t border-border">
+        <div className="max-w-3xl mx-auto">
+          <RequestForm
+            title="Request Social Media Marketing"
+            description="Tell us about your business and the platforms you want to grow."
+            submitLabel="Submit Social Media Request"
+            extraFields={[
+              { name: 'platforms', label: 'Platforms', placeholder: 'Platforms', type: 'select', options: ['Facebook', 'Instagram', 'TikTok', 'YouTube', 'Multiple Platforms'] },
+              { name: 'postsPerMonth', label: 'Posts Per Month', placeholder: 'Posts per month' },
+              { name: 'budget', label: 'Budget', placeholder: 'Monthly budget' },
+            ]}
+            onSubmit={serviceRequestService.submitSocialMedia}
+          />
+        </div>
+      </section>
+
       <section className="py-16 px-6 bg-primary">
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
           <h2 className="font-heading font-bold text-white text-3xl">{t('smm_page.cta_title')}</h2>

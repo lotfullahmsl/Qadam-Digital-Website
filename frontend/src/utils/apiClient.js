@@ -7,7 +7,7 @@ const apiClient = axios.create({
 
 // Attach JWT token to every request if available
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('admin_token')
+  const token = localStorage.getItem('admin_token') || localStorage.getItem('user_token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -18,7 +18,8 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const isAdminRequest = error.config?.url?.includes('/admin') || error.config?.url?.includes('/auth/me')
+    if (error.response?.status === 401 && isAdminRequest) {
       localStorage.removeItem('admin_token')
       localStorage.removeItem('admin_data')
       window.location.href = '/admin/login'

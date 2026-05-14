@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
+import RequestForm from '../../components/common/RequestForm'
+import { serviceRequestService } from '../../services/serviceRequestService'
 
 export default function WebsiteDatabaseSolutions() {
   const { t } = useTranslation()
@@ -109,6 +111,33 @@ export default function WebsiteDatabaseSolutions() {
       </section>
 
       {/* CTA */}
+      <section className="py-16 px-6 bg-background border-t border-border">
+        <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <RequestForm
+            title="Request a Website Project"
+            description="Share your website idea, budget, and timeline."
+            submitLabel="Submit Website Request"
+            extraFields={[
+              { name: 'projectType', label: 'Project Type', placeholder: 'Project type', type: 'select', options: ['Business Website', 'E-commerce', 'Portfolio', 'Education Website', 'Custom Web App'] },
+              { name: 'budget', label: 'Budget', placeholder: 'Estimated budget' },
+              { name: 'timeline', label: 'Timeline', placeholder: 'Expected timeline' },
+            ]}
+            onSubmit={serviceRequestService.submitWebsiteProject}
+          />
+          <RequestForm
+            title="Request a Database System"
+            description="Tell us about the system or database your business needs."
+            submitLabel="Submit Database Request"
+            extraFields={[
+              { name: 'dbType', label: 'Database Type', placeholder: 'Database type', type: 'select', options: ['Clinic System', 'School System', 'Inventory System', 'Custom Database'] },
+              { name: 'projectSize', label: 'Project Size', placeholder: 'Project size', type: 'select', options: ['Small', 'Medium', 'Large'] },
+              { name: 'timeline', label: 'Timeline', placeholder: 'Expected timeline' },
+            ]}
+            onSubmit={serviceRequestService.submitDatabaseProject}
+          />
+        </div>
+      </section>
+
       <section className="py-16 px-6 bg-primary">
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
           <h2 className="font-heading font-bold text-white text-3xl">{t('solutions.cta_title')}</h2>

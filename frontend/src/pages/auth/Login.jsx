@@ -1,26 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { authService } from '../../services/authService'
 import { ROUTES } from '../../constants/routes'
-
-// ─── MOCK AUTH ───────────────────────────────────────────────
-// No backend yet — any email + any password (min 1 char) logs in.
-// Replace this block with a real API call when backend is ready.
-const mockAdminLogin = (email, password) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (email && password) {
-        resolve({
-          token: 'mock-admin-token-' + Date.now(),
-          admin: { email, name: 'Admin', role: 'admin' },
-        })
-      } else {
-        reject(new Error('Please enter email and password.'))
-      }
-    }, 600)
-  })
-}
-// ─────────────────────────────────────────────────────────────
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
@@ -37,11 +19,11 @@ export default function Login() {
     setLoading(true)
     setError('')
     try {
-      const data = await mockAdminLogin(form.email, form.password)
+      const { data } = await authService.login(form)
       login(data.token, data.admin)
       navigate(ROUTES.ADMIN_DASHBOARD)
     } catch (err) {
-      setError(err.message || 'Invalid credentials. Please try again.')
+      setError(err.response?.data?.message || 'Invalid credentials. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -80,14 +62,6 @@ export default function Login() {
               <p className="text-sm text-gray-500 mt-1">Access the QADAM Digital management panel</p>
             </div>
 
-            {/* Dev notice */}
-            <div className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-              <span className="material-symbols-outlined text-amber-500 text-base flex-shrink-0 mt-0.5">info</span>
-              <p className="text-xs text-amber-700 leading-relaxed">
-                <span className="font-semibold">Development mode:</span> Enter any email and password to access the admin panel. Backend authentication will be enabled when the API is connected.
-              </p>
-            </div>
-
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email */}
               <div>
@@ -96,7 +70,7 @@ export default function Login() {
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xl">email</span>
                   <input
                     type="email" name="email" value={form.email} onChange={handleChange}
-                    required placeholder="admin@qadamdigital.com"
+                    required placeholder="admin@gmail.com"
                     className="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-3 text-sm text-navy placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
                     autoComplete="email"
                   />
@@ -110,7 +84,7 @@ export default function Login() {
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xl">lock</span>
                   <input
                     type={showPassword ? 'text' : 'password'} name="password" value={form.password} onChange={handleChange}
-                    required placeholder="Enter any password"
+                    required placeholder="Enter your password"
                     className="w-full border border-gray-200 rounded-xl pl-11 pr-11 py-3 text-sm text-navy placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
                     autoComplete="current-password"
                   />

@@ -1,16 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ScholarshipCard from '../../components/cards/ScholarshipCard'
 import AdBanner from '../../components/common/AdBanner'
-
-const MOCK_SCHOLARSHIPS = [
-  { _id: '1', title: 'DAAD Scholarship Germany', country: 'Germany', university: 'Various German Universities', degree: 'MS/PhD', deadline: 'Oct 2026', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80' },
-  { _id: '2', title: 'Chevening Scholarship UK', country: 'United Kingdom', university: 'UK Universities', degree: 'MS', deadline: 'Nov 2026', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?w=800&q=80' },
-  { _id: '3', title: 'Erasmus Mundus', country: 'Europe', university: 'Multiple EU Universities', degree: 'MS', deadline: 'Jan 2027', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80' },
-  { _id: '4', title: 'Turkish Government Scholarship', country: 'Turkey', university: 'Turkish Universities', degree: 'BS/MS/PhD', deadline: 'Feb 2027', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=80' },
-  { _id: '5', title: 'Chinese Government Scholarship', country: 'China', university: 'Chinese Universities', degree: 'BS/MS/PhD', deadline: 'Mar 2027', fundingType: 'Fully Funded', image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800&q=80' },
-  { _id: '6', title: 'HEC Need Based Scholarship', country: 'Pakistan', university: 'Pakistani Universities', degree: 'BS', deadline: 'Dec 2026', fundingType: 'Partial', image: '' },
-]
+import { scholarshipService } from '../../services/scholarshipService'
 
 const COUNTRIES = ['All', 'Germany', 'United Kingdom', 'Europe', 'Turkey', 'China', 'Pakistan', 'USA', 'Australia']
 const DEGREES = ['All', 'BS', 'MS', 'PhD']
@@ -20,20 +12,35 @@ export default function Scholarships() {
   const [search, setSearch] = useState('')
   const [country, setCountry] = useState('All')
   const [degree, setDegree] = useState('All')
+  const [scholarships, setScholarships] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const DEGREES_DISPLAY = [
-    { value: 'All', label: t('scholarships.all_degrees') },
-    { value: 'BS', label: t('scholarships.degree_bs') },
-    { value: 'MS', label: t('scholarships.degree_ms') },
-    { value: 'PhD', label: t('scholarships.degree_phd') },
-  ]
+  useEffect(() => {
+    let ignore = false
 
-  const filtered = MOCK_SCHOLARSHIPS.filter((s) => {
-    const matchSearch = s.title.toLowerCase().includes(search.toLowerCase()) || s.university.toLowerCase().includes(search.toLowerCase())
-    const matchCountry = country === 'All' || s.country === country
-    const matchDegree = degree === 'All' || s.degree.includes(degree)
-    return matchSearch && matchCountry && matchDegree
-  })
+    async function loadScholarships() {
+      setLoading(true)
+      setError('')
+      try {
+        const params = {
+          search,
+          country: country === 'All' ? '' : country,
+          degree: degree === 'All' ? '' : degree,
+          limit: 50,
+        }
+        const { data } = await scholarshipService.getAll(params)
+        if (!ignore) setScholarships(data.items || [])
+      } catch (err) {
+        if (!ignore) setError(err.response?.data?.message || 'Unable to load scholarships.')
+      } finally {
+        if (!ignore) setLoading(false)
+      }
+    }
+
+    loadScholarships()
+    return () => { ignore = true }
+  }, [search, country, degree])
 
   return (
     <div className="flex flex-col">
@@ -78,16 +85,20 @@ export default function Scholarships() {
       {/* Results */}
       <section className="py-8 px-6 max-w-screen-xl mx-auto w-full">
         <p className="text-sm text-text-muted mb-6">
-          {t('scholarships.showing')} <span className="text-primary font-semibold">{filtered.length}</span> {t('scholarships.results')}
+          {t('scholarships.showing')} <span className="text-primary font-semibold">{scholarships.length}</span> {t('scholarships.results')}
         </p>
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-20 text-text-muted">Loading scholarships...</div>
+        ) : error ? (
+          <div className="text-center py-20 text-red-500">{error}</div>
+        ) : scholarships.length === 0 ? (
           <div className="text-center py-20 text-text-muted">
             <span className="material-symbols-outlined text-5xl mb-4 block text-primary-light">search_off</span>
             <p>{t('scholarships.no_results')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((s) => <ScholarshipCard key={s._id} scholarship={s} />)}
+            {scholarships.map((s) => <ScholarshipCard key={s._id} scholarship={s} />)}
           </div>
         )}
       </section>

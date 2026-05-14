@@ -1,84 +1,55 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
 import AdBanner from '../../components/common/AdBanner'
+import { scholarshipService } from '../../services/scholarshipService'
+import RequestForm from '../../components/common/RequestForm'
+import { serviceRequestService } from '../../services/serviceRequestService'
 
-// Scholarship data — titles/names stay in English as they are proper nouns
-// but all UI labels, section headings, and buttons are translated
-const MOCK = {
-  '1': {
-    title: 'DAAD Scholarship Germany',
-    country: 'Germany',
-    university: 'Various German Universities',
-    degree: 'MS/PhD',
-    deadline: 'October 2026',
-    fundingType: 'Fully Funded',
-    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80',
-    eligibility: {
-      en: ["Bachelor's degree with good GPA", 'English or German language proficiency', 'Under 32 years of age for most programs', 'Strong academic background'],
-      ps: ['د لیسانس سند د ښه نمرو سره', 'د انګلیسي یا آلماني ژبې مهارت', 'د ډیرو برنامو لپاره د ۳۲ کلونو لاندې عمر', 'قوي علمي شالید'],
-      fa: ['مدرک کارشناسی با معدل خوب', 'مهارت زبان انگلیسی یا آلمانی', 'سن زیر ۳۲ سال برای اکثر برنامه‌ها', 'سابقه تحصیلی قوی'],
-    },
-    documents: {
-      en: ['Academic transcripts', 'Motivation letter', 'CV/Resume', 'Language certificate', 'Recommendation letters (2)', 'Passport copy'],
-      ps: ['د زده کړې نمرې', 'د هڅونې لیک', 'CV/رزومه', 'د ژبې سند', 'د سپارښتنې لیکونه (۲)', 'د پاسپورټ کاپي'],
-      fa: ['ریزنمرات تحصیلی', 'نامه انگیزشی', 'رزومه/CV', 'گواهی زبان', 'نامه‌های توصیه (۲)', 'کپی پاسپورت'],
-    },
-    benefits: {
-      en: ['Full tuition coverage', 'Monthly stipend (~€934)', 'Health insurance', 'Travel allowance', 'Study & research allowance'],
-      ps: ['د ټولو لوستلو لګښتونو پوښښ', 'میاشتنۍ لګښت (~€۹۳۴)', 'روغتیایي بیمه', 'د سفر لګښت', 'د زده کړې او څیړنې لګښت'],
-      fa: ['پوشش کامل شهریه', 'کمک هزینه ماهانه (~€۹۳۴)', 'بیمه درمانی', 'هزینه سفر', 'هزینه تحصیل و پژوهش'],
-    },
-    steps: {
-      en: ['Choose your program on DAAD portal', 'Prepare all required documents', 'Submit online application', 'Wait for university nomination', 'DAAD final selection'],
-      ps: ['خپله برنامه د DAAD پورټل کې وټاکئ', 'ټول اړین اسناد چمتو کړئ', 'آنلاین غوښتنلیک وسپارئ', 'د پوهنتون نوماند کیدو ته انتظار وکړئ', 'د DAAD وروستۍ ټاکنه'],
-      fa: ['برنامه خود را در پورتال DAAD انتخاب کنید', 'تمام مدارک مورد نیاز را آماده کنید', 'درخواست آنلاین ارسال کنید', 'منتظر معرفی دانشگاه باشید', 'انتخاب نهایی DAAD'],
-    },
-    officialLink: 'https://www.daad.de',
-  },
-  '2': {
-    title: 'Chevening Scholarship UK',
-    country: 'United Kingdom',
-    university: 'UK Universities',
-    degree: 'MS',
-    deadline: 'November 2026',
-    fundingType: 'Fully Funded',
-    eligibility: {
-      en: ["Bachelor's degree (minimum 2:1)", 'At least 2 years of work experience', 'Return to home country after study', 'Strong leadership potential'],
-      ps: ['د لیسانس سند (لږترلږه ۲:۱)', 'لږترلږه ۲ کاله د کار تجربه', 'د زده کړې وروسته خپل هیواد ته ستنیدل', 'قوي مشري ظرفیت'],
-      fa: ['مدرک کارشناسی (حداقل ۲:۱)', 'حداقل ۲ سال سابقه کاری', 'بازگشت به کشور پس از تحصیل', 'پتانسیل رهبری قوی'],
-    },
-    documents: {
-      en: ['Academic transcripts', 'Personal statement', 'Two references', 'English language certificate', 'Passport copy'],
-      ps: ['د زده کړې نمرې', 'شخصي بیان', 'دوه سپارښتنې', 'د انګلیسي ژبې سند', 'د پاسپورټ کاپي'],
-      fa: ['ریزنمرات تحصیلی', 'بیانیه شخصی', 'دو معرف', 'گواهی زبان انگلیسی', 'کپی پاسپورت'],
-    },
-    benefits: {
-      en: ['Full tuition fees', 'Monthly living allowance', 'Return flights', 'Arrival allowance', 'Thesis grant'],
-      ps: ['بشپړ د زده کړې لګښتونه', 'میاشتنۍ د ژوند لګښت', 'د راتګ او تللو الوتکه', 'د رارسیدو لګښت', 'د تیزس ګرانټ'],
-      fa: ['شهریه کامل', 'کمک هزینه زندگی ماهانه', 'بلیط رفت و برگشت', 'کمک هزینه ورود', 'کمک هزینه پایان‌نامه'],
-    },
-    steps: {
-      en: ['Register on Chevening website', 'Complete online application', 'Submit references', 'Attend interview if shortlisted', 'Receive award notification'],
-      ps: ['د Chevening ویبسایټ کې ثبت نام کړئ', 'آنلاین غوښتنلیک بشپړ کړئ', 'سپارښتنې وسپارئ', 'که چیرې لنډ لیست شوئ مرکه ورکړئ', 'د جایزې خبرتیا ترلاسه کړئ'],
-      fa: ['در وب‌سایت Chevening ثبت‌نام کنید', 'درخواست آنلاین را تکمیل کنید', 'معرفی‌نامه‌ها را ارسال کنید', 'در صورت کوتاه‌لیست شدن در مصاحبه شرکت کنید', 'اطلاعیه جایزه را دریافت کنید'],
-    },
-    officialLink: 'https://www.chevening.org',
-  },
+const localizedList = (value, lang) => {
+  if (Array.isArray(value)) return value
+  if (typeof value === 'string') return value.split('\n').filter(Boolean)
+  return value?.[lang] || value?.en || []
 }
 
 export default function ScholarshipDetails() {
   const { id } = useParams()
   const { t, i18n } = useTranslation()
   const lang = i18n.language === 'ps' ? 'ps' : i18n.language === 'fa' ? 'fa' : 'en'
-  const scholarship = MOCK[id]
+  const [scholarship, setScholarship] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let ignore = false
+
+    async function loadScholarship() {
+      setLoading(true)
+      setError('')
+      try {
+        const { data } = await scholarshipService.getById(id)
+        if (!ignore) setScholarship(data.scholarship)
+      } catch (err) {
+        if (!ignore) setError(err.response?.data?.message || t('scholarships.not_found'))
+      } finally {
+        if (!ignore) setLoading(false)
+      }
+    }
+
+    loadScholarship()
+    return () => { ignore = true }
+  }, [id, t])
+
+  if (loading) {
+    return <div className="min-h-[60vh] flex items-center justify-center text-text-muted">Loading scholarship...</div>
+  }
 
   if (!scholarship) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-text-muted">
         <span className="material-symbols-outlined text-5xl text-primary-light">search_off</span>
-        <p>{t('scholarships.not_found')}</p>
+        <p>{error || t('scholarships.not_found')}</p>
         <Link to={ROUTES.SCHOLARSHIPS} className="text-primary hover:underline font-semibold">
           {t('scholarships.back')}
         </Link>
@@ -169,7 +140,7 @@ export default function ScholarshipDetails() {
                   {t('scholarships.benefits')}
                 </h2>
                 <ul className="space-y-2.5">
-                  {(scholarship.benefits[lang] || scholarship.benefits.en).map((b, i) => (
+                  {localizedList(scholarship.benefits, lang).map((b, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary">
                       <span className="material-symbols-outlined text-primary text-base mt-0.5 flex-shrink-0">check_circle</span>
                       {b}
@@ -185,7 +156,7 @@ export default function ScholarshipDetails() {
                   {t('scholarships.eligibility')}
                 </h2>
                 <ul className="space-y-2.5">
-                  {(scholarship.eligibility[lang] || scholarship.eligibility.en).map((e, i) => (
+                  {localizedList(scholarship.eligibility, lang).map((e, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary">
                       <span className="material-symbols-outlined text-primary text-base mt-0.5 flex-shrink-0">arrow_right</span>
                       {e}
@@ -201,7 +172,7 @@ export default function ScholarshipDetails() {
                   {t('scholarships.required_docs')}
                 </h2>
                 <ul className="space-y-2.5">
-                  {(scholarship.documents[lang] || scholarship.documents.en).map((d, i) => (
+                  {localizedList(scholarship.documents, lang).map((d, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary">
                       <span className="material-symbols-outlined text-primary text-base mt-0.5 flex-shrink-0">description</span>
                       {d}
@@ -217,7 +188,7 @@ export default function ScholarshipDetails() {
                   {t('scholarships.app_steps')}
                 </h2>
                 <ol className="space-y-3">
-                  {(scholarship.steps[lang] || scholarship.steps.en).map((step, i) => (
+                  {localizedList(scholarship.steps, lang).map((step, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-text-secondary">
                       <span className="w-7 h-7 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary text-xs font-bold flex-shrink-0 mt-0.5">
                         {i + 1}
@@ -227,6 +198,23 @@ export default function ScholarshipDetails() {
                   ))}
                 </ol>
               </div>
+
+              <RequestForm
+                title="Request Scholarship Application Support"
+                description="Send your details and our team will guide you for this scholarship."
+                submitLabel="Submit Scholarship Request"
+                extraFields={[
+                  { name: 'university', label: 'University', placeholder: scholarship.university },
+                  { name: 'country', label: 'Country', placeholder: scholarship.country },
+                  { name: 'degree', label: 'Degree', placeholder: scholarship.degree },
+                  { name: 'ielts', label: 'IELTS Score', placeholder: 'IELTS / language score if available' },
+                ]}
+                onSubmit={(data) => serviceRequestService.submitScholarshipApp({
+                  ...data,
+                  subject: scholarship.title,
+                  scholarshipId: scholarship._id,
+                })}
+              />
             </div>
 
             {/* Sidebar */}

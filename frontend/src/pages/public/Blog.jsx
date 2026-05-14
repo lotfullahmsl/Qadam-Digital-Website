@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import BlogCard from '../../components/cards/BlogCard'
 import AdBanner from '../../components/common/AdBanner'
+import { blogService } from '../../services/blogService'
 
 export default function Blog() {
   const { t } = useTranslation()
@@ -15,23 +16,35 @@ export default function Blog() {
     { key: 'Career', label: t('blog.categories.career') },
   ]
 
-  const MOCK_POSTS = [
-    { _id: '1', slug: 'top-scholarships-2026', title: t('blog.posts.p1_title'), excerpt: t('blog.posts.p1_excerpt'), category: 'Scholarships', categoryLabel: t('blog.categories.scholarships'), author: 'QADAM Team', createdAt: '2026-01-15' },
-    { _id: '2', slug: 'how-to-write-motivation-letter', title: t('blog.posts.p2_title'), excerpt: t('blog.posts.p2_excerpt'), category: 'Education', categoryLabel: t('blog.categories.education'), author: 'QADAM Team', createdAt: '2026-02-10' },
-    { _id: '3', slug: 'chatgpt-for-students', title: t('blog.posts.p3_title'), excerpt: t('blog.posts.p3_excerpt'), category: 'Digital Tools', categoryLabel: t('blog.categories.digital_tools'), author: 'QADAM Team', createdAt: '2026-03-05' },
-    { _id: '4', slug: 'daad-scholarship-guide', title: t('blog.posts.p4_title'), excerpt: t('blog.posts.p4_excerpt'), category: 'Scholarships', categoryLabel: t('blog.categories.scholarships'), author: 'QADAM Team', createdAt: '2026-03-20' },
-    { _id: '5', slug: 'web-development-career', title: t('blog.posts.p5_title'), excerpt: t('blog.posts.p5_excerpt'), category: 'Technology', categoryLabel: t('blog.categories.technology'), author: 'QADAM Team', createdAt: '2026-04-01' },
-    { _id: '6', slug: 'cv-tips-international', title: t('blog.posts.p6_title'), excerpt: t('blog.posts.p6_excerpt'), category: 'Career', categoryLabel: t('blog.categories.career'), author: 'QADAM Team', createdAt: '2026-04-15' },
-  ]
-
   const [activeCategory, setActiveCategory] = useState('All')
   const [search, setSearch] = useState('')
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const filtered = MOCK_POSTS.filter((p) => {
-    const matchCat = activeCategory === 'All' || p.category === activeCategory
-    const matchSearch = p.title.toLowerCase().includes(search.toLowerCase()) || p.excerpt.toLowerCase().includes(search.toLowerCase())
-    return matchCat && matchSearch
-  })
+  useEffect(() => {
+    let ignore = false
+
+    async function loadPosts() {
+      setLoading(true)
+      setError('')
+      try {
+        const { data } = await blogService.getAll({
+          search,
+          category: activeCategory === 'All' ? '' : activeCategory,
+          limit: 50,
+        })
+        if (!ignore) setPosts(data.items || [])
+      } catch (err) {
+        if (!ignore) setError(err.response?.data?.message || 'Unable to load blog posts.')
+      } finally {
+        if (!ignore) setLoading(false)
+      }
+    }
+
+    loadPosts()
+    return () => { ignore = true }
+  }, [activeCategory, search])
 
   return (
     <div className="flex flex-col">
@@ -70,15 +83,19 @@ export default function Blog() {
       </div>
 
       <section className="py-8 px-6 max-w-screen-xl mx-auto w-full">
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-20 text-text-muted">Loading blog posts...</div>
+        ) : error ? (
+          <div className="text-center py-20 text-red-500">{error}</div>
+        ) : posts.length === 0 ? (
           <div className="text-center py-20 text-text-muted">
             <span className="material-symbols-outlined text-5xl mb-4 block text-primary-light">search_off</span>
             <p>{t('blog.no_results')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((post) => (
-              <BlogCard key={post._id} post={{ ...post, category: post.categoryLabel }} />
+            {posts.map((post) => (
+              <BlogCard key={post._id} post={post} />
             ))}
           </div>
         )}

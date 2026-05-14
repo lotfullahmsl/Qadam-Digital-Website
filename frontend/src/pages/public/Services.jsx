@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
+import { serviceContentService } from '../../services/serviceContentService'
 
 export default function Services() {
   const { t } = useTranslation()
@@ -245,7 +246,46 @@ export default function Services() {
     },
   ]
 
-  const TOTAL_SERVICES = SERVICE_GROUPS.reduce((acc, g) => acc + g.services.length, 0)
+  const [apiServices, setApiServices] = useState([])
+
+  useEffect(() => {
+    let ignore = false
+
+    async function loadServices() {
+      try {
+        const { data } = await serviceContentService.getAll()
+        if (!ignore) setApiServices(data.items || [])
+      } catch {
+        if (!ignore) setApiServices([])
+      }
+    }
+
+    loadServices()
+    return () => { ignore = true }
+  }, [])
+
+  const apiGroups = Object.values(apiServices.reduce((groups, service) => {
+    const key = service.categoryKey || service.category || 'services'
+    if (!groups[key]) {
+      groups[key] = {
+        categoryKey: key,
+        category: service.category || key.replace(/_/g, ' '),
+        icon: service.icon || 'build',
+        color: 'bg-blue-50 text-blue-600',
+        services: [],
+      }
+    }
+    groups[key].services.push({
+      icon: service.icon || 'build',
+      title: service.title,
+      description: service.description,
+      to: service.to || service.ctaLink || ROUTES.CONTACT,
+      features: Array.isArray(service.features) ? service.features : [],
+    })
+    return groups
+  }, {}))
+
+  const displayGroups = apiGroups.length ? apiGroups : SERVICE_GROUPS
 
   return (
     <div className="flex flex-col">
@@ -267,7 +307,7 @@ export default function Services() {
 
           {/* Category pills */}
           <div className="flex flex-wrap gap-3 mt-8">
-            {SERVICE_GROUPS.map((group) => (
+            {displayGroups.map((group) => (
               <span key={group.categoryKey}
                 className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 px-4 py-2 rounded-full text-sm font-medium">
                 <span className="material-symbols-outlined text-primary text-base">{group.icon}</span>
@@ -279,7 +319,7 @@ export default function Services() {
       </section>
 
       {/* ── Service Groups ── */}
-      {SERVICE_GROUPS.map((group, gi) => (
+      {displayGroups.map((group, gi) => (
         <section
           key={group.categoryKey}
           className={`py-16 px-6 ${gi % 2 === 0 ? 'bg-background' : 'bg-primary-pale'}`}

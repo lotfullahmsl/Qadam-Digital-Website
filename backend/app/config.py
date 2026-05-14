@@ -20,10 +20,11 @@ class Config:
     MONGO_URI = os.getenv("MONGO_URI", "")
     MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "qadam_digital_website")
     MONGO_SERVER_SELECTION_TIMEOUT_MS = int(os.getenv("MONGO_SERVER_SELECTION_TIMEOUT_MS", "5000"))
+    PORT = int(os.getenv("PORT", "5001"))
 
     CORS_ORIGINS = _csv_env(
         "CORS_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
+        "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000",
     )
 
     UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", str(BASE_DIR / "uploads"))

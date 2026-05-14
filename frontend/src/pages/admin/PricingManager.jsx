@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import adminContentService from '../../services/adminContentService'
 
 const INITIAL_DATA = [
   { id: 1, name: 'AI Starter', category: 'AI Subscriptions', price: '29', period: '/mo', features: 'Access to 5 AI tools\n100 queries/day\nEmail support\nBasic analytics', popular: false, badge: '', status: 'Active' },
@@ -27,17 +28,56 @@ export default function PricingManager() {
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [deleteId, setDeleteId] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const loadItems = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const { data } = await adminContentService.getAll('pricing-packages', { limit: 100 })
+      setItems(data.items || [])
+    } catch (err) {
+      setError(err.response?.data?.message || 'Unable to load pricing packages.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadItems()
+  }, [])
 
   const filtered = activeCategory === 'All' ? items : items.filter((i) => i.category === activeCategory)
-  const openModal = (item = null) => { setEditItem(item); setForm(item ? { ...item } : EMPTY_FORM); setShowModal(true) }
+  const categories = ['All', ...new Set([...CATEGORIES, ...items.map((i) => i.category)].filter(Boolean))]
+  const openModal = (item = null) => {
+    setEditItem(item)
+    setForm(item ? { ...item, features: Array.isArray(item.features) ? item.features.join('\n') : item.features || '' } : EMPTY_FORM)
+    setShowModal(true)
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (editItem) setItems(items.map((i) => (i.id === editItem.id ? { ...form, id: editItem.id } : i)))
-    else setItems([...items, { ...form, id: Date.now() }])
-    setShowModal(false)
+    const save = async () => {
+      try {
+        if (editItem) await adminContentService.update('pricing-packages', editItem._id, form)
+        else await adminContentService.create('pricing-packages', form)
+        setShowModal(false)
+        await loadItems()
+      } catch (err) {
+        alert(err.response?.data?.message || 'Unable to save package.')
+      }
+    }
+    save()
   }
-  const handleDelete = (id) => { setItems(items.filter((i) => i.id !== id)); setDeleteId(null) }
-  const toggleStatus = (id) => setItems(items.map((i) => i.id === id ? { ...i, status: i.status === 'Active' ? 'Inactive' : 'Active' } : i))
+  const handleDelete = async (id) => {
+    await adminContentService.delete('pricing-packages', id)
+    setDeleteId(null)
+    await loadItems()
+  }
+  const toggleStatus = async (item) => {
+    await adminContentService.updateStatus('pricing-packages', item._id, item.status === 'Active' ? 'Inactive' : 'Active')
+    await loadItems()
+  }
 
   return (
     <div>
@@ -52,7 +92,7 @@ export default function PricingManager() {
       </div>
 
       <div className="flex gap-2 mb-5 flex-wrap">
-        {['All', ...CATEGORIES].map((cat) => (
+        {categories.map((cat) => (
           <button key={cat} onClick={() => setActiveCategory(cat)}
             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${activeCategory === cat ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'}`}>
             {cat}
@@ -71,8 +111,10 @@ export default function PricingManager() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {filtered.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+              {loading && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400">Loading packages...</td></tr>}
+              {error && <tr><td colSpan={6} className="px-5 py-12 text-center text-red-500">{error}</td></tr>}
+              {!loading && !error && filtered.map((item) => (
+                <tr key={item._id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-2">
                       <p className="font-medium text-navy">{item.name}</p>
@@ -85,14 +127,14 @@ export default function PricingManager() {
                   <td className="px-5 py-3.5"><StatusBadge status={item.status} /></td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-1">
-                      <button onClick={() => toggleStatus(item.id)} className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">{item.status === 'Active' ? 'toggle_on' : 'toggle_off'}</span></button>
+                      <button onClick={() => toggleStatus(item)} className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">{item.status === 'Active' ? 'toggle_on' : 'toggle_off'}</span></button>
                       <button onClick={() => openModal(item)} className="p-1.5 text-gray-400 hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">edit</span></button>
-                      <button onClick={() => setDeleteId(item.id)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">delete</span></button>
+                      <button onClick={() => setDeleteId(item._id)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><span className="material-symbols-outlined text-base">delete</span></button>
                     </div>
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400"><span className="material-symbols-outlined text-4xl block mb-2">sell</span>No packages in this category</td></tr>}
+              {!loading && !error && filtered.length === 0 && <tr><td colSpan={6} className="px-5 py-12 text-center text-gray-400"><span className="material-symbols-outlined text-4xl block mb-2">sell</span>No packages in this category</td></tr>}
             </tbody>
           </table>
         </div>
