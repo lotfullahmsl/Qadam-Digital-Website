@@ -3,9 +3,11 @@ import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
 import AdBanner from '../../components/common/AdBanner'
+import PageMeta from '../../components/common/PageMeta'
 import { scholarshipService } from '../../services/scholarshipService'
 import RequestForm from '../../components/common/RequestForm'
 import { serviceRequestService } from '../../services/serviceRequestService'
+import { seoService } from '../../services/seoService'
 
 const localizedList = (value, lang) => {
   if (Array.isArray(value)) return value
@@ -18,6 +20,7 @@ export default function ScholarshipDetails() {
   const { t, i18n } = useTranslation()
   const lang = i18n.language === 'ps' ? 'ps' : i18n.language === 'fa' ? 'fa' : 'en'
   const [scholarship, setScholarship] = useState(null)
+  const [seoMeta, setSeoMeta] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -41,6 +44,22 @@ export default function ScholarshipDetails() {
     return () => { ignore = true }
   }, [id, t])
 
+  useEffect(() => {
+    let ignore = false
+    if (!id) return undefined
+    seoService
+      .getPage(`scholarship/${id}`, { lang })
+      .then(({ data }) => {
+        if (!ignore) setSeoMeta(data.meta || null)
+      })
+      .catch(() => {
+        if (!ignore) setSeoMeta(null)
+      })
+    return () => {
+      ignore = true
+    }
+  }, [id, lang])
+
   if (loading) {
     return <div className="min-h-[60vh] flex items-center justify-center text-text-muted">Loading scholarship...</div>
   }
@@ -61,8 +80,17 @@ export default function ScholarshipDetails() {
     ? t('scholarships.fully_funded')
     : t('scholarships.partial')
 
+  const pageSeo =
+    seoMeta ||
+    {
+      title: scholarship.title,
+      description: typeof scholarship.description === 'string' ? scholarship.description : scholarship.description?.[lang] || '',
+      canonicalUrl: `/scholarships/${id}`,
+    }
+
   return (
     <div className="flex flex-col">
+      <PageMeta meta={pageSeo} />
       {/* Hero */}
       <section className="hero-bg py-16 px-6">
         <div className="max-w-screen-xl mx-auto">
@@ -203,6 +231,7 @@ export default function ScholarshipDetails() {
                 title="Request Scholarship Application Support"
                 description="Send your details and our team will guide you for this scholarship."
                 submitLabel="Submit Scholarship Request"
+                allowAttachment
                 extraFields={[
                   { name: 'university', label: 'University', placeholder: scholarship.university },
                   { name: 'country', label: 'Country', placeholder: scholarship.country },
@@ -219,7 +248,7 @@ export default function ScholarshipDetails() {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              <AdBanner className="min-h-[200px]" />
+              <AdBanner placement="Scholarships" className="min-h-[200px]" />
               <div className="card p-6 space-y-4">
                 <h3 className="font-heading font-bold text-navy text-lg">{t('scholarships.need_help_sidebar')}</h3>
                 <p className="text-sm text-text-muted">{t('scholarships.need_help_sidebar_desc')}</p>

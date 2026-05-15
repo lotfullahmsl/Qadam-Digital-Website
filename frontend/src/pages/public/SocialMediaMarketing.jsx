@@ -1,10 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import RequestForm from '../../components/common/RequestForm'
 import { serviceRequestService } from '../../services/serviceRequestService'
+import { pricingService } from '../../services/pricingService'
+import { cmsText } from '../../utils/cmsText'
 
 export default function SocialMediaMarketing() {
   const { t } = useTranslation()
+  const [packages, setPackages] = useState([])
+  const [packagesLoading, setPackagesLoading] = useState(true)
+
+  useEffect(() => {
+    let ignore = false
+    async function loadPackages() {
+      setPackagesLoading(true)
+      try {
+        const { data } = await pricingService.getAll({ category: 'smm' })
+        if (!ignore) setPackages(data.items || [])
+      } catch {
+        if (!ignore) setPackages([])
+      } finally {
+        if (!ignore) setPackagesLoading(false)
+      }
+    }
+    loadPackages()
+    return () => { ignore = true }
+  }, [])
 
   const SMM_SERVICES = [
     { icon: 'thumb_up', title: t('smm_page.services.fb_title'), desc: t('smm_page.services.fb_desc') },
@@ -13,27 +34,6 @@ export default function SocialMediaMarketing() {
     { icon: 'rocket_launch', title: t('smm_page.services.boost_title'), desc: t('smm_page.services.boost_desc') },
     { icon: 'group', title: t('smm_page.services.target_title'), desc: t('smm_page.services.target_desc') },
     { icon: 'campaign', title: t('smm_page.services.promo_title'), desc: t('smm_page.services.promo_desc') },
-  ]
-
-  const PACKAGES = [
-    {
-      nameKey: 'smm_page.packages.starter',
-      price: '50',
-      features: [t('smm_page.packages.starter_f1'), t('smm_page.packages.starter_f2'), t('smm_page.packages.starter_f3'), t('smm_page.packages.starter_f4')],
-      popular: false,
-    },
-    {
-      nameKey: 'smm_page.packages.growth',
-      price: '120',
-      popular: true,
-      features: [t('smm_page.packages.growth_f1'), t('smm_page.packages.growth_f2'), t('smm_page.packages.growth_f3'), t('smm_page.packages.growth_f4'), t('smm_page.packages.growth_f5')],
-    },
-    {
-      nameKey: 'smm_page.packages.premium',
-      price: '250',
-      features: [t('smm_page.packages.premium_f1'), t('smm_page.packages.premium_f2'), t('smm_page.packages.premium_f3'), t('smm_page.packages.premium_f4'), t('smm_page.packages.premium_f5')],
-      popular: false,
-    },
   ]
 
   return (
@@ -79,34 +79,40 @@ export default function SocialMediaMarketing() {
             <h2 className="font-heading font-bold text-navy text-3xl">{t('smm_page.packages_title')}</h2>
             <p className="text-text-muted text-lg">{t('smm_page.packages_subtitle')}</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {PACKAGES.map((pkg, i) => (
-              <div key={i} className={`relative flex flex-col rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${pkg.popular ? 'bg-primary text-white shadow-[0_8px_32px_rgba(0,170,255,0.35)] border-2 border-primary' : 'bg-white border border-border shadow-card hover:shadow-card-hover'}`}>
-                {pkg.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-navy text-white px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase">
-                    {t('smm_page.most_popular')}
+          {packagesLoading ? (
+            <div className="text-center py-12 text-text-muted">{t('smm_page.loading_packages')}</div>
+          ) : packages.length === 0 ? (
+            <div className="text-center py-12 text-text-muted max-w-xl mx-auto">{t('smm_page.empty_packages')}</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {packages.map((pkg) => (
+                <div key={pkg._id || cmsText(pkg.name)} className={`relative flex flex-col rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${pkg.popular ? 'bg-primary text-white shadow-[0_8px_32px_rgba(0,170,255,0.35)] border-2 border-primary' : 'bg-white border border-border shadow-card hover:shadow-card-hover'}`}>
+                  {pkg.popular && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-navy text-white px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase">
+                      {t('smm_page.most_popular')}
+                    </div>
+                  )}
+                  <h3 className={`font-heading font-semibold text-xl mb-2 ${pkg.popular ? 'text-white' : 'text-navy'}`}>{cmsText(pkg.name)}</h3>
+                  <div className="mb-5">
+                    <span className={`font-heading text-3xl font-bold ${pkg.popular ? 'text-white' : 'text-primary'}`}>${cmsText(pkg.price)}</span>
+                    <span className={`text-sm ${pkg.popular ? 'text-white/70' : 'text-text-muted'}`}>{cmsText(pkg.period) || t('smm_page.per_month')}</span>
                   </div>
-                )}
-                <h3 className={`font-heading font-semibold text-xl mb-2 ${pkg.popular ? 'text-white' : 'text-navy'}`}>{t(pkg.nameKey)}</h3>
-                <div className="mb-5">
-                  <span className={`font-heading text-3xl font-bold ${pkg.popular ? 'text-white' : 'text-primary'}`}>${pkg.price}</span>
-                  <span className={`text-sm ${pkg.popular ? 'text-white/70' : 'text-text-muted'}`}>{t('smm_page.per_month')}</span>
+                  <ul className="space-y-2.5 mb-6 flex-grow">
+                    {(Array.isArray(pkg.features) ? pkg.features : []).map((f, fi) => (
+                      <li key={fi} className={`flex items-start gap-2 text-sm ${pkg.popular ? 'text-white/90' : 'text-text-secondary'}`}>
+                        <span className={`material-symbols-outlined text-lg ${pkg.popular ? 'text-white' : 'text-primary'}`}>check</span>
+                        {cmsText(f)}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
+                    className={`w-full text-center py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase transition-all duration-200 ${pkg.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'bg-primary text-white hover:bg-primary-dark shadow-btn'}`}>
+                    {t('smm_page.get_started')}
+                  </a>
                 </div>
-                <ul className="space-y-2.5 mb-6 flex-grow">
-                  {pkg.features.map((f, fi) => (
-                    <li key={fi} className={`flex items-start gap-2 text-sm ${pkg.popular ? 'text-white/90' : 'text-text-secondary'}`}>
-                      <span className={`material-symbols-outlined text-lg ${pkg.popular ? 'text-white' : 'text-primary'}`}>check</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
-                  className={`w-full text-center py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase transition-all duration-200 ${pkg.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'bg-primary text-white hover:bg-primary-dark shadow-btn'}`}>
-                  {t('smm_page.get_started')}
-                </a>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

@@ -79,7 +79,7 @@ export default function Scholarships() {
 
       {/* Ad Banner */}
       <div className="px-6 pt-8 max-w-screen-xl mx-auto w-full">
-        <AdBanner />
+        <AdBanner placement="Scholarships" />
       </div>
 
       {/* Results */}

@@ -13,6 +13,8 @@ export const serviceRequestService = {
   getSummary: () => apiClient.get('/admin/requests'),
   getAllRequests: (type, params = {}) => apiClient.get(`/admin/requests/${type}`, { params }),
   getRequest: (type, id) => apiClient.get(`/admin/requests/${type}/${id}`),
+  getRequestNotes: (type, id) => apiClient.get(`/admin/requests/${type}/${id}/notes`),
+  addRequestNote: (type, id, body) => apiClient.post(`/admin/requests/${type}/${id}/notes`, { body }),
   updateRequestStatus: (type, id, status) => apiClient.patch(`/admin/requests/${type}/${id}`, { status }),
   updateRequest: (type, id, data) => apiClient.patch(`/admin/requests/${type}/${id}`, data),
   deleteRequest: (type, id) => apiClient.delete(`/admin/requests/${type}/${id}`),

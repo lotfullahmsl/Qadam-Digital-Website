@@ -6,6 +6,7 @@ from pymongo import ASCENDING, DESCENDING
 
 from app.extensions import get_mongo_db
 from app.services.content_service import parse_pagination, serialize_document, text_or_regex_query
+from app.services.notification_service import create_request_notification
 
 
 REQUEST_CONFIG = {
@@ -64,6 +65,9 @@ PUBLIC_PATH_TO_TYPE = {config["public_path"]: key for key, config in REQUEST_CON
 REQUEST_STATUSES = {"New", "In Review", "Contacted", "In Progress", "Completed", "Rejected"}
 
 
+REQUEST_NOTES_COLLECTION = "request_notes"
+
+
 def ensure_request_indexes():
     db = get_mongo_db()
     if db is None:
@@ -74,6 +78,10 @@ def ensure_request_indexes():
         collection.create_index([("status", ASCENDING), ("createdAt", DESCENDING)])
         collection.create_index([("email", ASCENDING)])
 
+    db[REQUEST_NOTES_COLLECTION].create_index(
+        [("requestType", ASCENDING), ("requestId", ASCENDING), ("createdAt", DESCENDING)]
+    )
+
 
 def get_request_config(request_type):
     return REQUEST_CONFIG.get(request_type)
@@ -83,8 +91,17 @@ def get_config_by_public_path(public_path):
     return get_request_config(PUBLIC_PATH_TO_TYPE.get(public_path))
 
 
+def is_honeypot_triggered(payload: dict) -> bool:
+    for key in ("_gotcha", "companyWebsite", "websiteUrl"):
+        if str(payload.get(key) or "").strip():
+            return True
+    return False
+
+
 def normalize_request_payload(config, payload):
     data = dict(payload or {})
+    for k in ("_gotcha", "companyWebsite", "websiteUrl"):
+        data.pop(k, None)
     full_name = data.get("fullName") or data.get("name") or ""
     subject = data.get("subject") or data.get("service") or data.get("plan") or config["type"]
 
@@ -113,7 +130,7 @@ def validate_request_payload(config, payload):
     return errors
 
 
-def create_request(config, payload):
+def create_request(config, payload, request_type_key: str | None = None):
     now = datetime.now(timezone.utc)
     document = {
         **payload,
@@ -124,7 +141,19 @@ def create_request(config, payload):
 
     result = get_mongo_db()[config["collection"]].insert_one(document)
     document["_id"] = result.inserted_id
-    return serialize_document(document)
+    ser = serialize_document(document)
+    if request_type_key:
+        who = ser.get("name") or ser.get("fullName") or "visitor"
+        title = f"New {config['type']}: {who}"
+        msg_lines = [ser.get("email") or "", ser.get("subject") or "", (ser.get("message") or "")[:500]]
+        create_request_notification(
+            request_type_key,
+            config["type"],
+            title,
+            "\n".join(line for line in msg_lines if line),
+            related_id=str(ser.get("_id")),
+        )
+    return ser
 
 
 def list_requests(config, args):
@@ -181,3 +210,39 @@ def delete_request(config, item_id):
 
     result = get_mongo_db()[config["collection"]].delete_one({"_id": object_id})
     return result.deleted_count == 1
+
+
+def add_request_note(request_type_key: str, item_id: str, body: str, admin_id: str) -> dict | None:
+    config = get_request_config(request_type_key)
+    if not config:
+        return None
+    if not get_request(config, item_id):
+        return None
+    text = str(body or "").strip()
+    if not text:
+        return None
+    now = datetime.now(timezone.utc)
+    doc = {
+        "requestType": request_type_key,
+        "requestId": item_id,
+        "body": text,
+        "createdBy": admin_id,
+        "createdAt": now,
+    }
+    ins = get_mongo_db()[REQUEST_NOTES_COLLECTION].insert_one(doc)
+    doc["_id"] = ins.inserted_id
+    return serialize_document(doc)
+
+
+def list_request_notes(request_type_key: str, item_id: str) -> list[dict]:
+    config = get_request_config(request_type_key)
+    if not config:
+        return []
+    if not get_request(config, item_id):
+        return []
+    cur = (
+        get_mongo_db()[REQUEST_NOTES_COLLECTION]
+        .find({"requestType": request_type_key, "requestId": item_id})
+        .sort("createdAt", ASCENDING)
+    )
+    return [serialize_document(x) for x in cur]

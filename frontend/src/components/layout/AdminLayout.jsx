@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { ROUTES } from '../../constants/routes'
+import { notificationService } from '../../services/notificationService'
 
 const NAV_SECTIONS = [
   {
@@ -38,12 +39,33 @@ export default function AdminLayout({ children }) {
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [notifOpen, setNotifOpen] = useState(false)
+  const [notifications, setNotifications] = useState([])
+  const [unreadCount, setUnreadCount] = useState(0)
   const notifRef = useRef(null)
+
+  const loadNotifications = async () => {
+    try {
+      const { data } = await notificationService.list({ limit: 40 })
+      setNotifications(data.items || [])
+      setUnreadCount(typeof data.unreadCount === 'number' ? data.unreadCount : (data.items || []).filter((n) => !n.read).length)
+    } catch {
+      setNotifications([])
+      setUnreadCount(0)
+    }
+  }
 
   const handleLogout = () => {
     logout()
     navigate(ROUTES.LOGIN)
   }
+
+  useEffect(() => {
+    loadNotifications()
+  }, [])
+
+  useEffect(() => {
+    if (notifOpen) loadNotifications()
+  }, [notifOpen])
 
   // Close notification panel when clicking outside
   useEffect(() => {
@@ -54,15 +76,29 @@ export default function AdminLayout({ children }) {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
-  const NOTIFICATIONS = [
-    { icon: 'inbox', color: 'bg-blue-100 text-blue-600', title: 'New contact request', desc: 'Ahmad Karimi sent a message', time: '2 min ago', unread: true },
-    { icon: 'school', color: 'bg-green-100 text-green-600', title: 'New scholarship application', desc: 'Sara Mohammadi applied for Chevening', time: '15 min ago', unread: true },
-    { icon: 'sell', color: 'bg-purple-100 text-purple-600', title: 'Subscription request', desc: 'Bilal Yousafzai requested ChatGPT Plus', time: '1 hour ago', unread: true },
-    { icon: 'web', color: 'bg-orange-100 text-orange-600', title: 'Website project request', desc: 'New e-commerce project inquiry', time: '3 hours ago', unread: false },
-    { icon: 'campaign', color: 'bg-pink-100 text-pink-600', title: 'Social media request', desc: 'Instagram management inquiry', time: 'Yesterday', unread: false },
-  ]
+  const handleNotificationSelect = async (n) => {
+    if (!n.read && n._id) {
+      try {
+        await notificationService.markRead(n._id)
+        setNotifications((prev) => prev.map((x) => (x._id === n._id ? { ...x, read: true } : x)))
+        setUnreadCount((c) => Math.max(0, c - 1))
+      } catch {
+        /* ignore */
+      }
+    }
+    const tab = n.requestType || 'contact'
+    navigate(`${ROUTES.ADMIN_REQUESTS}?tab=${encodeURIComponent(tab)}`)
+    setNotifOpen(false)
+  }
 
-  const unreadCount = NOTIFICATIONS.filter(n => n.unread).length
+  const formatNotifTime = (iso) => {
+    if (!iso) return ''
+    try {
+      return new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+    } catch {
+      return ''
+    }
+  }
 
   const currentPage = ALL_NAV_ITEMS.find((n) => n.to === location.pathname)
 
@@ -182,25 +218,30 @@ export default function AdminLayout({ children }) {
 
                   {/* Notification List */}
                   <div className="max-h-80 overflow-y-auto divide-y divide-gray-50">
-                    {NOTIFICATIONS.map((notif, i) => (
-                      <div
-                        key={i}
-                        className={`flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer ${notif.unread ? 'bg-blue-50/40' : ''}`}
+                    {notifications.length === 0 && (
+                      <div className="px-4 py-8 text-center text-gray-400 text-sm">No notifications yet</div>
+                    )}
+                    {notifications.map((notif) => (
+                      <button
+                        type="button"
+                        key={notif._id}
+                        onClick={() => handleNotificationSelect(notif)}
+                        className={`flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer w-full text-left ${notif.read ? '' : 'bg-blue-50/40'}`}
                       >
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${notif.color}`}>
-                          <span className="material-symbols-outlined text-base">{notif.icon}</span>
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${notif.read ? 'bg-gray-100 text-gray-600' : 'bg-primary/15 text-primary'}`}>
+                          <span className="material-symbols-outlined text-base">notifications</span>
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <p className={`text-sm font-semibold text-navy leading-snug ${notif.unread ? '' : 'font-medium'}`}>
+                            <p className={`text-sm font-semibold text-navy leading-snug ${notif.read ? 'font-medium' : ''}`}>
                               {notif.title}
                             </p>
-                            {notif.unread && <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5"></span>}
+                            {!notif.read && <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />}
                           </div>
-                          <p className="text-xs text-gray-500 mt-0.5 truncate">{notif.desc}</p>
-                          <p className="text-xs text-gray-400 mt-1">{notif.time}</p>
+                          <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{notif.summary}</p>
+                          <p className="text-xs text-gray-400 mt-1">{formatNotifTime(notif.createdAt)}</p>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
 

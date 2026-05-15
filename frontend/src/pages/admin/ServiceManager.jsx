@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import adminContentService from '../../services/adminContentService'
-
-const INITIAL_DATA = [
-  { id: 1, title: 'Scholarship Consulting', icon: 'school', category: 'Education', description: 'Expert guidance for scholarship applications, personal statements, and interview preparation.', features: 'Profile assessment\nScholarship matching\nApplication review\nInterview coaching', ctaLink: '/scholarships', status: 'Active' },
-  { id: 2, title: 'AI-Powered Tools', icon: 'smart_toy', category: 'Technology', description: 'Access cutting-edge AI tools for writing, research, translation, and productivity.', features: 'AI writing assistant\nDocument translation\nResearch tools\nContent generation', ctaLink: '/digital-tools', status: 'Active' },
-  { id: 3, title: 'Web Development', icon: 'web', category: 'Technology', description: 'Custom website and web application development using modern technologies.', features: 'Custom design\nResponsive development\nCMS integration\nSEO optimization', ctaLink: '/solutions', status: 'Active' },
-  { id: 4, title: 'Database Systems', icon: 'storage', category: 'Technology', description: 'Professional database design, development, and management solutions.', features: 'Database design\nData migration\nPerformance optimization\nBackup solutions', ctaLink: '/solutions', status: 'Active' },
-  { id: 5, title: 'Social Media Marketing', icon: 'campaign', category: 'Marketing', description: 'Comprehensive social media management and digital marketing campaigns.', features: 'Content creation\nPlatform management\nAd campaigns\nAnalytics reporting', ctaLink: '/social-media-marketing', status: 'Active' },
-  { id: 6, title: 'CV & Translation', icon: 'description', category: 'Education', description: 'Professional CV writing and document translation services in multiple languages.', features: 'CV design\nCover letter writing\nDocument translation\nProofreading', ctaLink: '/cv-translation', status: 'Active' },
-  { id: 7, title: 'Digital Advertising', icon: 'ads_click', category: 'Marketing', description: 'Google Ads, Facebook Ads, and other digital advertising campaign management.', features: 'Campaign setup\nAd copywriting\nBid management\nROI tracking', ctaLink: '/services', status: 'Inactive' },
-  { id: 8, title: 'Brand Identity Design', icon: 'palette', category: 'Design', description: 'Complete brand identity packages including logo, colors, typography, and guidelines.', features: 'Logo design\nColor palette\nTypography selection\nBrand guidelines', ctaLink: '/portfolio', status: 'Active' },
-]
+import { cmsText } from '../../utils/cmsText'
 
 const CATEGORIES = ['Education', 'Technology', 'Marketing', 'Design']
 const EMPTY_FORM = { title: '', icon: 'star', category: 'Technology', description: '', features: '', ctaLink: '', status: 'Active' }
@@ -24,7 +14,7 @@ const categoryColors = {
 }
 
 export default function ServiceManager() {
-  const [items, setItems] = useState(INITIAL_DATA)
+  const [items, setItems] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [editItem, setEditItem] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
@@ -103,9 +93,9 @@ export default function ServiceManager() {
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
               <span className="material-symbols-outlined text-primary text-2xl">{item.icon}</span>
             </div>
-            <h3 className="font-heading font-bold text-navy text-sm leading-snug mb-1">{item.title}</h3>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${categoryColors[item.category] || 'bg-gray-100 text-gray-600'}`}>{item.category}</span>
-            <p className="text-xs text-gray-500 mt-2 line-clamp-2">{item.description}</p>
+            <h3 className="font-heading font-bold text-navy text-sm leading-snug mb-1">{cmsText(item.title)}</h3>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${categoryColors[cmsText(item.category)] || 'bg-gray-100 text-gray-600'}`}>{cmsText(item.category)}</span>
+            <p className="text-xs text-gray-500 mt-2 line-clamp-2">{cmsText(item.description)}</p>
             <div className="mt-3 pt-3 border-t border-gray-50 flex items-center justify-between">
               <span className={`text-xs font-semibold ${item.status === 'Active' ? 'text-green-600' : 'text-gray-400'}`}>● {item.status}</span>
               <span className="text-xs text-primary">{item.ctaLink || item.to}</span>

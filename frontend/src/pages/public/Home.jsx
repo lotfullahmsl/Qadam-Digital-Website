@@ -4,34 +4,25 @@ import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
 import ServiceCard from '../../components/cards/ServiceCard'
 import AdBanner from '../../components/common/AdBanner'
+import PageMeta from '../../components/common/PageMeta'
 import { serviceContentService } from '../../services/serviceContentService'
+import { seoService } from '../../services/seoService'
 import { testimonialService } from '../../services/testimonialService'
-
-const TESTIMONIALS = [
-  { name: 'Ahmad Karimi', country: 'Afghanistan', text: 'QADAM Digital helped me secure a fully funded scholarship to Germany. Their guidance was exceptional throughout the entire process.', avatar: 'AK' },
-  { name: 'Sara Mohammadi', country: 'Afghanistan', text: 'The CV writing service was outstanding. I received interview calls from 3 top universities within a week of submitting.', avatar: 'SM' },
-  { name: 'Bilal Yousafzai', country: 'Afghanistan', text: 'Their web development team built our clinic management system perfectly. Very professional and delivered on time.', avatar: 'BY' },
-]
+import { cmsText } from '../../utils/cmsText'
 
 export default function Home() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [apiServices, setApiServices] = useState([])
-  const [testimonials, setTestimonials] = useState(TESTIMONIALS)
+  const [testimonials, setTestimonials] = useState([])
+  const [seoMeta, setSeoMeta] = useState(null)
+
+  const uiLang = i18n.language === 'ps' ? 'ps' : i18n.language === 'fa' ? 'fa' : 'en'
 
   const STATS = [
     { icon: 'school', value: '500+', label: t('hero.stat_scholarships') },
     { icon: 'code', value: '1,000+', label: t('hero.stat_websites') },
     { icon: 'people', value: '5,000+', label: t('hero.stat_students') },
     { icon: 'smart_toy', value: '24/7', label: t('hero.stat_support') },
-  ]
-
-  const SERVICES = [
-    { icon: 'menu_book', title: t('home.service_items.scholarship_title'), description: t('home.service_items.scholarship_desc'), to: ROUTES.SCHOLARSHIPS },
-    { icon: 'web', title: t('home.service_items.web_title'), description: t('home.service_items.web_desc'), to: ROUTES.WEBSITE_DATABASE },
-    { icon: 'smart_toy', title: t('home.service_items.ai_title'), description: t('home.service_items.ai_desc'), to: ROUTES.DIGITAL_TOOLS },
-    { icon: 'description', title: t('home.service_items.cv_title'), description: t('home.service_items.cv_desc'), to: ROUTES.CV_TRANSLATION },
-    { icon: 'translate', title: t('home.service_items.translation_title'), description: t('home.service_items.translation_desc'), to: ROUTES.CV_TRANSLATION },
-    { icon: 'campaign', title: t('home.service_items.smm_title'), description: t('home.service_items.smm_desc'), to: ROUTES.SOCIAL_MEDIA },
   ]
 
   useEffect(() => {
@@ -45,12 +36,12 @@ export default function Home() {
         ])
         if (!ignore) {
           setApiServices(servicesResponse.data.items || [])
-          setTestimonials(testimonialsResponse.data.items?.length ? testimonialsResponse.data.items : TESTIMONIALS)
+          setTestimonials(testimonialsResponse.data.items || [])
         }
       } catch {
         if (!ignore) {
           setApiServices([])
-          setTestimonials(TESTIMONIALS)
+          setTestimonials([])
         }
       }
     }
@@ -59,7 +50,22 @@ export default function Home() {
     return () => { ignore = true }
   }, [])
 
-  const displayServices = apiServices.length ? apiServices.slice(0, 6) : SERVICES
+  useEffect(() => {
+    let ignore = false
+    seoService
+      .getPage('home', { lang: uiLang })
+      .then(({ data }) => {
+        if (!ignore) setSeoMeta(data.meta || null)
+      })
+      .catch(() => {
+        if (!ignore) setSeoMeta(null)
+      })
+    return () => {
+      ignore = true
+    }
+  }, [uiLang])
+
+  const displayServices = apiServices.slice(0, 6)
 
   const WHY_US = [
     { icon: 'verified', title: t('home.why_items.trusted_title'), desc: t('home.why_items.trusted_desc') },
@@ -70,6 +76,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
+      <PageMeta meta={seoMeta} />
 
       {/* ── Hero ── */}
       <section className="hero-bg relative overflow-hidden">
@@ -133,14 +140,26 @@ export default function Home() {
             <p className="text-text-muted text-lg max-w-2xl mx-auto">{t('services.subtitle')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayServices.map((s) => <ServiceCard key={s._id || s.title} {...s} to={s.to || s.ctaLink} />)}
+            {displayServices.length === 0 ? (
+              <p className="col-span-full text-center text-text-muted py-8">{t('home.empty_services')}</p>
+            ) : (
+              displayServices.map((s) => (
+                <ServiceCard
+                  key={s._id}
+                  icon={s.icon || 'star'}
+                  title={cmsText(s.title)}
+                  description={cmsText(s.description)}
+                  to={s.to || s.ctaLink}
+                />
+              ))
+            )}
           </div>
         </div>
       </section>
 
       {/* ── Ad Banner ── */}
       <div className="px-6 pb-8 max-w-screen-xl mx-auto w-full">
-        <AdBanner />
+        <AdBanner placement="Home" />
       </div>
 
       {/* ── Scholarship CTA Banner ── */}
@@ -194,25 +213,29 @@ export default function Home() {
             <h2 className="font-heading font-bold text-white text-4xl mb-3">{t('home.testimonials_title')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((item) => (
-              <div key={item.name} className="bg-white/10 border border-white/15 rounded-xl p-6 flex flex-col gap-4">
+            {testimonials.length === 0 ? (
+              <p className="col-span-full text-center text-primary-light/70 py-8">{t('home.empty_testimonials')}</p>
+            ) : (
+              testimonials.map((item) => (
+              <div key={item._id || cmsText(item.name)} className="bg-white/10 border border-white/15 rounded-xl p-6 flex flex-col gap-4">
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
                     <span key={i} className="material-symbols-outlined text-primary text-base" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                   ))}
                 </div>
-                <p className="text-primary-light/90 text-sm leading-relaxed italic flex-grow">"{item.text}"</p>
+                <p className="text-primary-light/90 text-sm leading-relaxed italic flex-grow">"{cmsText(item.text)}"</p>
                 <div className="flex items-center gap-3 pt-2 border-t border-white/10">
                   <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                    {item.avatar}
+                    {item.avatar || cmsText(item.name).slice(0, 2).toUpperCase()}
                   </div>
                   <div>
-                    <p className="font-semibold text-white text-sm">{item.name}</p>
-                    <p className="text-xs text-primary-light/60">{item.country}</p>
+                    <p className="font-semibold text-white text-sm">{cmsText(item.name)}</p>
+                    <p className="text-xs text-primary-light/60">{cmsText(item.country)}</p>
                   </div>
                 </div>
               </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>

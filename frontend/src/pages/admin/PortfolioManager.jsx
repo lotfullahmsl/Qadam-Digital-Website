@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import AdminMediaUpload from '../../components/admin/AdminMediaUpload'
 import adminContentService from '../../services/adminContentService'
-
-const INITIAL_DATA = [
-  { id: 1, title: 'E-Commerce Platform', category: 'Website', description: 'Full-featured online store with payment integration, inventory management, and admin dashboard.', technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'], clientType: 'Retail Business', imageUrl: '', status: 'Published' },
-  { id: 2, title: 'University Database System', category: 'Database', description: 'Comprehensive student management system with enrollment, grades, and reporting modules.', technologies: ['PostgreSQL', 'Python', 'Django', 'Redis'], clientType: 'Educational Institution', imageUrl: '', status: 'Published' },
-  { id: 3, title: 'Social Media Marketing Campaign', category: 'Marketing', description: 'Multi-platform social media campaign that increased brand awareness by 300%.', technologies: ['Facebook Ads', 'Instagram', 'Canva', 'Analytics'], clientType: 'Startup', imageUrl: '', status: 'Published' },
-  { id: 4, title: 'Corporate Brand Identity', category: 'Design', description: 'Complete brand identity package including logo, color palette, typography, and brand guidelines.', technologies: ['Figma', 'Illustrator', 'Photoshop'], clientType: 'Corporate', imageUrl: '', status: 'Published' },
-  { id: 5, title: 'Restaurant Booking System', category: 'Website', description: 'Online reservation system with table management, SMS notifications, and customer portal.', technologies: ['Vue.js', 'Laravel', 'MySQL', 'Twilio'], clientType: 'Restaurant', imageUrl: '', status: 'Published' },
-  { id: 6, title: 'Inventory Management App', category: 'Database', description: 'Real-time inventory tracking with barcode scanning, alerts, and supplier management.', technologies: ['React Native', 'Firebase', 'Node.js'], clientType: 'Warehouse', imageUrl: '', status: 'Draft' },
-]
 
 const CATEGORIES = ['All', 'Website', 'Database', 'Marketing', 'Design']
 const EMPTY_FORM = { title: '', category: 'Website', description: '', technologies: '', clientType: '', imageUrl: '', status: 'Published' }
@@ -22,7 +14,7 @@ const categoryColors = {
 }
 
 export default function PortfolioManager() {
-  const [items, setItems] = useState(INITIAL_DATA)
+  const [items, setItems] = useState([])
   const [activeCategory, setActiveCategory] = useState('All')
   const [showModal, setShowModal] = useState(false)
   const [editItem, setEditItem] = useState(null)
@@ -146,7 +138,11 @@ export default function PortfolioManager() {
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Client Type</label><input className={inputClass} placeholder="e.g. Startup, Corporate" value={form.clientType} onChange={(e) => setForm({ ...form, clientType: e.target.value })} /></div>
                 <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Description</label><textarea rows={3} className={inputClass} placeholder="Project description..." value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
                 <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Technologies (comma-separated)</label><input className={inputClass} placeholder="React, Node.js, MongoDB" value={form.technologies} onChange={(e) => setForm({ ...form, technologies: e.target.value })} /></div>
-                <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Image URL</label><input className={inputClass} placeholder="https://..." value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} /></div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Project image</label>
+                  <AdminMediaUpload label="" value={form.imageUrl} onChange={(url) => setForm({ ...form, imageUrl: url })} accept="image/jpeg,image/png,image/webp" />
+                  <input className={`${inputClass} mt-3`} placeholder="Or paste image URL…" value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} />
+                </div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Status</label><select className={inputClass} value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}><option>Published</option><option>Draft</option></select></div>
               </div>
               <div className="flex gap-3 pt-2 border-t border-gray-100">

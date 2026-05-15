@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { serviceRequestService } from '../../services/serviceRequestService'
+import { uploadService } from '../../services/uploadService'
 
 const TABS = [
   { key: 'All', label: 'All' },
   { key: 'contact', label: 'Contact' },
   { key: 'scholarship-applications', label: 'Scholarship App' },
   { key: 'subscription', label: 'Subscription' },
+  { key: 'student-registrations', label: 'Student Registration' },
   { key: 'website-projects', label: 'Website Project' },
   { key: 'database-projects', label: 'Database Project' },
   { key: 'social-media', label: 'Social Media' },
@@ -25,6 +28,7 @@ const typeColors = {
   Contact: 'bg-gray-100 text-gray-700',
   'Scholarship App': 'bg-blue-100 text-blue-700',
   Subscription: 'bg-purple-100 text-purple-700',
+  'Student Registration': 'bg-teal-100 text-teal-700',
   'Website Project': 'bg-cyan-100 text-cyan-700',
   'Database Project': 'bg-indigo-100 text-indigo-700',
   'Social Media': 'bg-pink-100 text-pink-700',
@@ -35,11 +39,22 @@ const StatusBadge = ({ status }) => (
 )
 
 export default function RequestManager() {
+  const [searchParams] = useSearchParams()
   const [items, setItems] = useState([])
   const [activeTab, setActiveTab] = useState('All')
   const [selectedRequest, setSelectedRequest] = useState(null)
+  const [notes, setNotes] = useState([])
+  const [noteDraft, setNoteDraft] = useState('')
+  const [notesLoading, setNotesLoading] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (tab && TABS.some((t) => t.key === tab)) {
+      setActiveTab(tab)
+    }
+  }, [searchParams])
 
   const loadItems = async () => {
     setLoading(true)
@@ -60,16 +75,42 @@ export default function RequestManager() {
     }
   }
 
+  const requestTypeForItem = (item) => TABS.find((tab) => tab.label === item.type)?.key || activeTab
+
   useEffect(() => {
     loadItems()
   }, [activeTab])
 
+  useEffect(() => {
+    if (!selectedRequest) {
+      setNotes([])
+      setNoteDraft('')
+      return
+    }
+    const rt = requestTypeForItem(selectedRequest)
+    setNotesLoading(true)
+    serviceRequestService
+      .getRequestNotes(rt, selectedRequest._id)
+      .then((res) => setNotes(res.data.items || []))
+      .catch(() => setNotes([]))
+      .finally(() => setNotesLoading(false))
+  }, [selectedRequest])
+
+  const submitNote = async () => {
+    const text = noteDraft.trim()
+    if (!text || !selectedRequest) return
+    const rt = requestTypeForItem(selectedRequest)
+    try {
+      const { data } = await serviceRequestService.addRequestNote(rt, selectedRequest._id, text)
+      setNotes((prev) => [...prev, data.note])
+      setNoteDraft('')
+    } catch (err) {
+      window.alert(err.response?.data?.message || 'Could not save note.')
+    }
+  }
+
   const filtered = items
   const getCount = (tab) => tab.key === activeTab || activeTab === 'All' ? items.filter((i) => tab.key === 'All' || i.type === tab.label).length : ''
-
-  const requestTypeForItem = (item) => {
-    return TABS.find((tab) => tab.label === item.type)?.key || activeTab
-  }
 
   const updateStatus = async (item, status) => {
     const requestType = requestTypeForItem(item)
@@ -83,6 +124,23 @@ export default function RequestManager() {
     await serviceRequestService.deleteRequest(requestType, selectedRequest._id)
     setSelectedRequest(null)
     await loadItems()
+  }
+
+  const openAttachment = async () => {
+    const id = selectedRequest.attachmentFileId
+    const url = selectedRequest.attachmentUrl
+    if (!id && !url) return
+    try {
+      if (id) {
+        const blob = await uploadService.fetchAdminFileBlob(id)
+        const blobUrl = URL.createObjectURL(blob)
+        window.open(blobUrl, '_blank', 'noopener')
+      } else {
+        window.open(url, '_blank', 'noopener')
+      }
+    } catch (err) {
+      window.alert(err.response?.data?.message || 'Could not open attachment.')
+    }
   }
 
   return (
@@ -211,6 +269,47 @@ export default function RequestManager() {
                     <p className="text-sm text-navy leading-relaxed">{selectedRequest.message}</p>
                   </div>
                 )}
+                {(selectedRequest.attachmentFileId || selectedRequest.attachmentUrl) && (
+                  <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Attachment</p>
+                      <p className="text-sm text-navy">{selectedRequest.attachmentOriginalName || 'Uploaded file'}</p>
+                    </div>
+                    <button type="button" onClick={openAttachment} className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-4 py-2 rounded-xl text-sm hover:bg-primary-dark transition-colors">
+                      <span className="material-symbols-outlined text-base">open_in_new</span>
+                      Open file
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Admin notes</h3>
+                {notesLoading ? (
+                  <p className="text-sm text-gray-400">Loading notes…</p>
+                ) : (
+                  <ul className="space-y-2 mb-3 max-h-40 overflow-y-auto">
+                    {notes.length === 0 && <li className="text-sm text-gray-400">No notes yet.</li>}
+                    {notes.map((n) => (
+                      <li key={n._id} className="text-sm bg-gray-50 rounded-lg p-3 border border-gray-100">
+                        <p className="text-navy whitespace-pre-wrap">{n.body}</p>
+                        <p className="text-xs text-gray-400 mt-1">{n.createdAt?.replace('T', ' ').slice(0, 19)} · {n.createdBy || 'admin'}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="flex gap-2">
+                  <textarea
+                    value={noteDraft}
+                    onChange={(e) => setNoteDraft(e.target.value)}
+                    rows={2}
+                    placeholder="Add an internal note…"
+                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm text-navy focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  />
+                  <button type="button" onClick={submitNote} className="self-end px-4 py-2 bg-navy text-white text-sm font-semibold rounded-xl hover:bg-navy/90">
+                    Save
+                  </button>
+                </div>
               </div>
 
               <div className="flex gap-3 pt-2 border-t border-gray-100">

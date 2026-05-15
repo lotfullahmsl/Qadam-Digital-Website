@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { uploadService } from '../../services/uploadService'
 import adminContentService from '../../services/adminContentService'
+import { cmsText, cmsTextLower } from '../../utils/cmsText'
 
-const INITIAL_DATA = [
-  { id: 1, title: 'Chevening Scholarship 2026', country: 'UK', university: 'Various UK Universities', degree: 'MS', deadline: '2026-11-05', fundingType: 'Fully Funded', status: 'Published', description: 'UK government scholarship for future leaders.', eligibility: 'Bachelor degree, 2 years work experience', benefits: 'Tuition, living allowance, flights', image: 'https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?w=800&q=80' },
-  { id: 2, title: 'Fulbright Program', country: 'USA', university: 'Various US Universities', degree: 'MS', deadline: '2026-10-15', fundingType: 'Fully Funded', status: 'Published', description: 'US government flagship scholarship program.', eligibility: 'Bachelor degree, strong academic record', benefits: 'Full tuition, stipend, health insurance', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80' },
-  { id: 3, title: 'DAAD Scholarship', country: 'Germany', university: 'Various German Universities', degree: 'MS', deadline: '2026-12-01', fundingType: 'Fully Funded', status: 'Published', description: 'German Academic Exchange Service scholarship.', eligibility: 'Bachelor degree, German or English proficiency', benefits: 'Monthly stipend, travel allowance', image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80' },
-  { id: 4, title: 'Aga Khan Foundation', country: 'Multiple', university: 'Partner Universities', degree: 'MS', deadline: '2026-09-30', fundingType: 'Partial', status: 'Published', description: 'Scholarship for students from developing countries.', eligibility: 'Demonstrated financial need, academic excellence', benefits: 'Partial tuition, living costs', image: '' },
-  { id: 5, title: 'Turkish Government Scholarship', country: 'Turkey', university: 'Turkish Universities', degree: 'BS', deadline: '2027-02-20', fundingType: 'Fully Funded', status: 'Draft', description: 'Turkish government scholarship for international students.', eligibility: 'High school diploma, age under 21', benefits: 'Tuition, accommodation, monthly stipend', image: '' },
-  { id: 6, title: 'Australia Awards', country: 'Australia', university: 'Australian Universities', degree: 'MS', deadline: '2026-08-30', fundingType: 'Fully Funded', status: 'Published', description: 'Australian government development scholarship.', eligibility: 'Bachelor degree, work experience', benefits: 'Full tuition, living allowance, flights', image: '' },
-]
-
-const EMPTY_FORM = { title: '', country: '', university: '', degree: 'MS', deadline: '', fundingType: 'Fully Funded', description: '', eligibility: '', benefits: '', status: 'Draft', image: '' }
+const EMPTY_FORM = { title: '', country: '', university: '', degree: 'MS', deadline: '', fundingType: 'Fully Funded', description: '', eligibility: '', benefits: '', status: 'Draft', image: '', seoTitle: '', seoDescription: '', ogImage: '' }
 const inputClass = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-navy placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all bg-white'
 
 const StatusBadge = ({ status }) => {
@@ -19,7 +12,7 @@ const StatusBadge = ({ status }) => {
 }
 
 export default function ScholarshipManager() {
-  const [items, setItems] = useState(INITIAL_DATA)
+  const [items, setItems] = useState([])
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('All')
   const [countryFilter, setCountryFilter] = useState('All')
@@ -29,6 +22,7 @@ export default function ScholarshipManager() {
   const [deleteId, setDeleteId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [imageUploadPct, setImageUploadPct] = useState(null)
 
   const loadItems = async () => {
     setLoading(true)
@@ -47,11 +41,14 @@ export default function ScholarshipManager() {
     loadItems()
   }, [])
 
-  const countries = ['All', ...new Set(items.map((i) => i.country).filter(Boolean))]
+  const countries = ['All', ...new Set(items.map((i) => cmsText(i.country)).filter(Boolean))]
   const filtered = items.filter((item) => {
-    const matchSearch = item.title.toLowerCase().includes(search.toLowerCase()) || item.university.toLowerCase().includes(search.toLowerCase())
+    const q = search.toLowerCase()
+    const matchSearch =
+      cmsTextLower(item.title).includes(q) ||
+      cmsTextLower(item.university).includes(q)
     const matchStatus = statusFilter === 'All' || item.status === statusFilter
-    const matchCountry = countryFilter === 'All' || item.country === countryFilter
+    const matchCountry = countryFilter === 'All' || cmsText(item.country) === countryFilter
     return matchSearch && matchStatus && matchCountry
   })
 
@@ -125,7 +122,7 @@ export default function ScholarshipManager() {
                       {/* Thumbnail */}
                       <div className="w-14 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-primary-pale border border-border">
                         {item.image ? (
-                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                          <img src={item.image} alt={cmsText(item.title)} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <span className="material-symbols-outlined text-primary/30 text-xl">image</span>
@@ -133,12 +130,12 @@ export default function ScholarshipManager() {
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-navy">{item.title}</p>
-                        <p className="text-xs text-gray-400">{item.university}</p>
+                        <p className="font-medium text-navy">{cmsText(item.title)}</p>
+                        <p className="text-xs text-gray-400">{cmsText(item.university)}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-3.5 text-gray-600">{item.country}</td>
+                  <td className="px-5 py-3.5 text-gray-600">{cmsText(item.country)}</td>
                   <td className="px-5 py-3.5 text-gray-600">{item.degree}</td>
                   <td className="px-5 py-3.5 text-gray-600">{item.deadline}</td>
                   <td className="px-5 py-3.5">
@@ -202,29 +199,36 @@ export default function ScholarshipManager() {
                     {/* Upload controls */}
                     <div className="flex-1 space-y-3">
                       {/* File picker button */}
-                      <label className="flex items-center gap-2 bg-primary text-white font-semibold px-4 py-2.5 rounded-xl text-sm cursor-pointer hover:bg-primary-dark transition-all w-fit"
+                      <label className={`flex items-center gap-2 bg-primary text-white font-semibold px-4 py-2.5 rounded-xl text-sm cursor-pointer hover:bg-primary-dark transition-all w-fit ${imageUploadPct != null ? 'opacity-80 pointer-events-none' : ''}`}
                         style={{ boxShadow: '0 4px 14px rgba(0,170,255,0.3)' }}>
                         <span className="material-symbols-outlined text-base">upload</span>
-                        Upload from Device
+                        {imageUploadPct != null ? `Uploading ${imageUploadPct}%…` : 'Upload from Device'}
                         <input
                           type="file"
-                          accept="image/*"
+                          accept="image/jpeg,image/png,image/webp"
                           className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files[0]
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0]
+                            e.target.value = ''
                             if (!file) return
-                            if (file.size > 5 * 1024 * 1024) {
-                              alert('Image must be under 5MB')
+                            if (file.size > 10 * 1024 * 1024) {
+                              alert('Image must be under 10MB')
                               return
                             }
-                            const reader = new FileReader()
-                            reader.onload = (ev) => setForm({ ...form, image: ev.target.result })
-                            reader.readAsDataURL(file)
+                            setImageUploadPct(0)
+                            try {
+                              const { data } = await uploadService.upload(file, setImageUploadPct)
+                              if (data?.url) setForm((f) => ({ ...f, image: data.url }))
+                            } catch (err) {
+                              alert(err.response?.data?.message || 'Upload failed.')
+                            } finally {
+                              setImageUploadPct(null)
+                            }
                           }}
                         />
                       </label>
 
-                      <p className="text-xs text-gray-400">Supported: JPG, PNG, WEBP · Max 5MB</p>
+                      <p className="text-xs text-gray-400">Saves to server · JPG, PNG, WEBP · Max 10MB</p>
 
                       {/* OR paste URL */}
                       <div className="flex items-center gap-2">
@@ -248,6 +252,11 @@ export default function ScholarshipManager() {
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Funding Type</label><select className={inputClass} value={form.fundingType} onChange={(e) => setForm({ ...form, fundingType: e.target.value })}><option>Fully Funded</option><option>Partial</option><option>Tuition Only</option></select></div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Status</label><select className={inputClass} value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}><option>Draft</option><option>Published</option></select></div>
                 <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Description</label><textarea rows={3} className={inputClass} placeholder="Scholarship description..." value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
+                <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">SEO title</label><input className={inputClass} placeholder="Meta title" value={form.seoTitle || ''} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} /></div>
+                  <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">SEO image URL</label><input className={inputClass} placeholder="https://..." value={form.ogImage || ''} onChange={(e) => setForm({ ...form, ogImage: e.target.value })} /></div>
+                  <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">SEO description</label><textarea rows={2} className={inputClass} placeholder="Meta description" value={form.seoDescription || ''} onChange={(e) => setForm({ ...form, seoDescription: e.target.value })} /></div>
+                </div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Eligibility</label><textarea rows={3} className={inputClass} placeholder="Eligibility criteria..." value={form.eligibility} onChange={(e) => setForm({ ...form, eligibility: e.target.value })} /></div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Benefits</label><textarea rows={3} className={inputClass} placeholder="What's covered..." value={form.benefits} onChange={(e) => setForm({ ...form, benefits: e.target.value })} /></div>
               </div>

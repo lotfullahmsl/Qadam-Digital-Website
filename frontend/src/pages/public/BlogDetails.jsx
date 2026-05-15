@@ -3,7 +3,9 @@ import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
 import AdBanner from '../../components/common/AdBanner'
+import PageMeta from '../../components/common/PageMeta'
 import { blogService } from '../../services/blogService'
+import { seoService } from '../../services/seoService'
 
 const contentBlocks = (content) => {
   if (Array.isArray(content)) return content
@@ -13,10 +15,28 @@ const contentBlocks = (content) => {
 
 export default function BlogDetails() {
   const { slug } = useParams()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [post, setPost] = useState(null)
+  const [seoMeta, setSeoMeta] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+
+  const uiLang = i18n.language === 'ps' ? 'ps' : i18n.language === 'fa' ? 'fa' : 'en'
+
+  useEffect(() => {
+    let ignore = false
+    seoService
+      .getPage(`blog/${slug}`, { lang: uiLang })
+      .then(({ data }) => {
+        if (!ignore) setSeoMeta(data.meta || null)
+      })
+      .catch(() => {
+        if (!ignore) setSeoMeta(null)
+      })
+    return () => {
+      ignore = true
+    }
+  }, [slug, uiLang])
 
   useEffect(() => {
     let ignore = false
@@ -52,8 +72,19 @@ export default function BlogDetails() {
     )
   }
 
+  const pageSeo =
+    seoMeta ||
+    (post
+      ? {
+          title: post.title,
+          description: post.excerpt || '',
+          canonicalUrl: `/blog/${slug}`,
+        }
+      : null)
+
   return (
     <div className="flex flex-col">
+      <PageMeta meta={pageSeo} />
       {/* Hero */}
       <section className="hero-bg py-16 px-6">
         <div className="max-w-screen-xl mx-auto">
@@ -86,7 +117,7 @@ export default function BlogDetails() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Article */}
             <div className="lg:col-span-2">
-              <AdBanner className="mb-8" />
+              <AdBanner placement="Blog" className="mb-8" />
               <div className="card p-8 space-y-4">
                 {contentBlocks(post.content).map((block, i) => (
                   block.type === 'h'
@@ -94,7 +125,7 @@ export default function BlogDetails() {
                     : <p key={i} className="text-text-secondary leading-relaxed">{block.text}</p>
                 ))}
               </div>
-              <AdBanner className="mt-8" />
+              <AdBanner placement="Blog" className="mt-8" />
               <div className="mt-8 flex items-center gap-4">
                 <span className="text-sm text-text-muted">{t('blog_details.share')}:</span>
                 {['facebook', 'link'].map((s) => (
@@ -107,7 +138,7 @@ export default function BlogDetails() {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              <AdBanner className="min-h-[200px]" />
+              <AdBanner placement="Blog" className="min-h-[200px]" />
               <div className="card p-6 space-y-4">
                 <h3 className="font-heading font-bold text-navy text-lg">{t('blog_details.need_help')}</h3>
                 <p className="text-sm text-text-muted">{t('blog_details.need_help_desc')}</p>

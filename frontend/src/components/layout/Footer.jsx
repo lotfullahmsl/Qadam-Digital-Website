@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useLanguage } from '../../hooks/useLanguage'
 import { ROUTES } from '../../constants/routes'
-import { getContactInfo } from '../../utils/contactStore'
+import { useContactInfo } from '../../hooks/usePublicSettings'
 
 export default function Footer() {
   const { t } = useTranslation()
   const { language } = useLanguage()
-  const contact = getContactInfo()
+  const { contact } = useContactInfo()
 
   return (
     <footer className="bg-navy text-text-on-dark">
@@ -111,7 +111,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">location_on</span>
-              <span>Kabul, Afghanistan</span>
+              <span>{contact.location}</span>
             </li>
           </ul>
           <a

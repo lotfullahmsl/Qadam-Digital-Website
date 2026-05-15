@@ -2,261 +2,34 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ROUTES } from '../../constants/routes'
+import AdBanner from '../../components/common/AdBanner'
 import { serviceContentService } from '../../services/serviceContentService'
+import { cmsText } from '../../utils/cmsText'
+
+const GROUP_ACCENTS = {
+  education: 'bg-blue-50 text-blue-600',
+  technology: 'bg-purple-50 text-purple-600',
+  graphic_design: 'bg-pink-50 text-pink-600',
+  video: 'bg-orange-50 text-orange-600',
+}
 
 export default function Services() {
   const { t } = useTranslation()
-
-  const SERVICE_GROUPS = [
-    {
-      categoryKey: 'education',
-      category: t('services_page.groups.education'),
-      icon: 'school',
-      color: 'bg-blue-50 text-blue-600',
-      services: [
-        {
-          icon: 'school',
-          title: t('services_page.education.scholarship_title'),
-          description: t('services_page.education.scholarship_desc'),
-          to: ROUTES.SCHOLARSHIPS,
-          features: [
-            t('services_page.education.scholarship_f1'),
-            t('services_page.education.scholarship_f2'),
-            t('services_page.education.scholarship_f3'),
-            t('services_page.education.scholarship_f4'),
-          ],
-        },
-        {
-          icon: 'description',
-          title: t('services_page.education.cv_title'),
-          description: t('services_page.education.cv_desc'),
-          to: ROUTES.CV_TRANSLATION,
-          features: [
-            t('services_page.education.cv_f1'),
-            t('services_page.education.cv_f2'),
-            t('services_page.education.cv_f3'),
-            t('services_page.education.cv_f4'),
-          ],
-        },
-        {
-          icon: 'translate',
-          title: t('services_page.education.translation_title'),
-          description: t('services_page.education.translation_desc'),
-          to: ROUTES.CV_TRANSLATION,
-          features: [
-            t('services_page.education.translation_f1'),
-            t('services_page.education.translation_f2'),
-            t('services_page.education.translation_f3'),
-            t('services_page.education.translation_f4'),
-          ],
-        },
-        {
-          icon: 'psychology',
-          title: t('services_page.education.consulting_title'),
-          description: t('services_page.education.consulting_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.education.consulting_f1'),
-            t('services_page.education.consulting_f2'),
-            t('services_page.education.consulting_f3'),
-            t('services_page.education.consulting_f4'),
-          ],
-        },
-      ],
-    },
-    {
-      categoryKey: 'technology',
-      category: t('services_page.groups.technology'),
-      icon: 'code',
-      color: 'bg-purple-50 text-purple-600',
-      services: [
-        {
-          icon: 'web',
-          title: t('services_page.technology.web_title'),
-          description: t('services_page.technology.web_desc'),
-          to: ROUTES.WEBSITE_DATABASE,
-          features: [
-            t('services_page.technology.web_f1'),
-            t('services_page.technology.web_f2'),
-            t('services_page.technology.web_f3'),
-            t('services_page.technology.web_f4'),
-          ],
-        },
-        {
-          icon: 'database',
-          title: t('services_page.technology.db_title'),
-          description: t('services_page.technology.db_desc'),
-          to: ROUTES.WEBSITE_DATABASE,
-          features: [
-            t('services_page.technology.db_f1'),
-            t('services_page.technology.db_f2'),
-            t('services_page.technology.db_f3'),
-            t('services_page.technology.db_f4'),
-          ],
-        },
-        {
-          icon: 'smart_toy',
-          title: t('services_page.technology.ai_title'),
-          description: t('services_page.technology.ai_desc'),
-          to: ROUTES.DIGITAL_TOOLS,
-          features: [
-            t('services_page.technology.ai_f1'),
-            t('services_page.technology.ai_f2'),
-            t('services_page.technology.ai_f3'),
-            t('services_page.technology.ai_f4'),
-          ],
-        },
-        {
-          icon: 'campaign',
-          title: t('services_page.technology.smm_title'),
-          description: t('services_page.technology.smm_desc'),
-          to: ROUTES.SOCIAL_MEDIA,
-          features: [
-            t('services_page.technology.smm_f1'),
-            t('services_page.technology.smm_f2'),
-            t('services_page.technology.smm_f3'),
-            t('services_page.technology.smm_f4'),
-          ],
-        },
-      ],
-    },
-    {
-      categoryKey: 'graphic_design',
-      category: t('services_page.groups.graphic_design'),
-      icon: 'palette',
-      color: 'bg-pink-50 text-pink-600',
-      services: [
-        {
-          icon: 'palette',
-          title: t('services_page.graphic.logo_title'),
-          description: t('services_page.graphic.logo_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.graphic.logo_f1'),
-            t('services_page.graphic.logo_f2'),
-            t('services_page.graphic.logo_f3'),
-            t('services_page.graphic.logo_f4'),
-          ],
-        },
-        {
-          icon: 'print',
-          title: t('services_page.graphic.print_title'),
-          description: t('services_page.graphic.print_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.graphic.print_f1'),
-            t('services_page.graphic.print_f2'),
-            t('services_page.graphic.print_f3'),
-            t('services_page.graphic.print_f4'),
-          ],
-        },
-        {
-          icon: 'inventory_2',
-          title: t('services_page.graphic.packaging_title'),
-          description: t('services_page.graphic.packaging_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.graphic.packaging_f1'),
-            t('services_page.graphic.packaging_f2'),
-            t('services_page.graphic.packaging_f3'),
-            t('services_page.graphic.packaging_f4'),
-          ],
-        },
-        {
-          icon: 'photo_camera',
-          title: t('services_page.graphic.poster_title'),
-          description: t('services_page.graphic.poster_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.graphic.poster_f1'),
-            t('services_page.graphic.poster_f2'),
-            t('services_page.graphic.poster_f3'),
-            t('services_page.graphic.poster_f4'),
-          ],
-        },
-        {
-          icon: 'menu_book',
-          title: t('services_page.graphic.book_title'),
-          description: t('services_page.graphic.book_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.graphic.book_f1'),
-            t('services_page.graphic.book_f2'),
-            t('services_page.graphic.book_f3'),
-            t('services_page.graphic.book_f4'),
-          ],
-        },
-      ],
-    },
-    {
-      categoryKey: 'video',
-      category: t('services_page.groups.video'),
-      icon: 'movie',
-      color: 'bg-orange-50 text-orange-600',
-      services: [
-        {
-          icon: 'movie',
-          title: t('services_page.video.editing_title'),
-          description: t('services_page.video.editing_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.video.editing_f1'),
-            t('services_page.video.editing_f2'),
-            t('services_page.video.editing_f3'),
-            t('services_page.video.editing_f4'),
-          ],
-        },
-        {
-          icon: 'animation',
-          title: t('services_page.video.animation_title'),
-          description: t('services_page.video.animation_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.video.animation_f1'),
-            t('services_page.video.animation_f2'),
-            t('services_page.video.animation_f3'),
-            t('services_page.video.animation_f4'),
-          ],
-        },
-        {
-          icon: 'auto_awesome',
-          title: t('services_page.video.motion_title'),
-          description: t('services_page.video.motion_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.video.motion_f1'),
-            t('services_page.video.motion_f2'),
-            t('services_page.video.motion_f3'),
-            t('services_page.video.motion_f4'),
-          ],
-        },
-        {
-          icon: 'view_in_ar',
-          title: t('services_page.video.product_title'),
-          description: t('services_page.video.product_desc'),
-          to: ROUTES.CONTACT,
-          features: [
-            t('services_page.video.product_f1'),
-            t('services_page.video.product_f2'),
-            t('services_page.video.product_f3'),
-            t('services_page.video.product_f4'),
-          ],
-        },
-      ],
-    },
-  ]
-
   const [apiServices, setApiServices] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let ignore = false
 
     async function loadServices() {
+      setLoading(true)
       try {
         const { data } = await serviceContentService.getAll()
         if (!ignore) setApiServices(data.items || [])
       } catch {
         if (!ignore) setApiServices([])
+      } finally {
+        if (!ignore) setLoading(false)
       }
     }
 
@@ -264,28 +37,34 @@ export default function Services() {
     return () => { ignore = true }
   }, [])
 
-  const apiGroups = Object.values(apiServices.reduce((groups, service) => {
-    const key = service.categoryKey || service.category || 'services'
-    if (!groups[key]) {
-      groups[key] = {
-        categoryKey: key,
-        category: service.category || key.replace(/_/g, ' '),
-        icon: service.icon || 'build',
-        color: 'bg-blue-50 text-blue-600',
-        services: [],
+  const displayGroups = Object.values(
+    apiServices.reduce((groups, service) => {
+      const rawKey = service.categoryKey || cmsText(service.category)
+      const key =
+        typeof rawKey === 'string' && rawKey.trim()
+          ? rawKey.toLowerCase().replace(/\s+/g, '_')
+          : 'services'
+      if (!groups[key]) {
+        groups[key] = {
+          categoryKey: key,
+          category: cmsText(service.category, key.replace(/_/g, ' ')),
+          icon: service.icon || 'build',
+          color: GROUP_ACCENTS[key] || 'bg-blue-50 text-blue-600',
+          services: [],
+        }
       }
-    }
-    groups[key].services.push({
-      icon: service.icon || 'build',
-      title: service.title,
-      description: service.description,
-      to: service.to || service.ctaLink || ROUTES.CONTACT,
-      features: Array.isArray(service.features) ? service.features : [],
-    })
-    return groups
-  }, {}))
-
-  const displayGroups = apiGroups.length ? apiGroups : SERVICE_GROUPS
+      const feats = Array.isArray(service.features) ? service.features : []
+      groups[key].services.push({
+        _id: service._id,
+        icon: service.icon || 'build',
+        title: cmsText(service.title),
+        description: cmsText(service.description),
+        to: service.to || service.ctaLink || ROUTES.CONTACT,
+        features: feats.map((f) => cmsText(f)),
+      })
+      return groups
+    }, {}),
+  )
 
   return (
     <div className="flex flex-col">
@@ -305,27 +84,31 @@ export default function Services() {
             {t('services_page.hero_subtitle')}
           </p>
 
-          {/* Category pills */}
-          <div className="flex flex-wrap gap-3 mt-8">
-            {displayGroups.map((group) => (
-              <span key={group.categoryKey}
-                className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 px-4 py-2 rounded-full text-sm font-medium">
-                <span className="material-symbols-outlined text-primary text-base">{group.icon}</span>
-                {group.category}
-              </span>
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-white/70 mt-8">{t('services_page.loading')}</p>
+          ) : displayGroups.length === 0 ? (
+            <p className="text-white/80 mt-8 max-w-2xl">{t('services_page.empty')}</p>
+          ) : (
+            <div className="flex flex-wrap gap-3 mt-8">
+              {displayGroups.map((group) => (
+                <span key={group.categoryKey}
+                  className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 px-4 py-2 rounded-full text-sm font-medium">
+                  <span className="material-symbols-outlined text-primary text-base">{group.icon}</span>
+                  {group.category}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* ── Service Groups ── */}
-      {displayGroups.map((group, gi) => (
+      {!loading && displayGroups.map((group, gi) => (
         <section
           key={group.categoryKey}
           className={`py-16 px-6 ${gi % 2 === 0 ? 'bg-background' : 'bg-primary-pale'}`}
         >
           <div className="max-w-screen-xl mx-auto">
-            {/* Group header */}
             <div className="flex items-center gap-4 mb-10">
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 ${group.color}`}>
                 <span className="material-symbols-outlined text-2xl">{group.icon}</span>
@@ -339,10 +122,9 @@ export default function Services() {
               <div className="ml-auto hidden sm:block h-px flex-1 bg-border max-w-xs" />
             </div>
 
-            {/* Cards grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {group.services.map((service) => (
-                <div key={service.title} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col gap-4 group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                <div key={service._id || `${group.categoryKey}-${service.title}`} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col gap-4 group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${group.color}`}>
                     <span className="material-symbols-outlined text-xl">{service.icon}</span>
                   </div>
@@ -370,7 +152,10 @@ export default function Services() {
         </section>
       ))}
 
-      {/* ── CTA ── */}
+      <div className="px-6 pb-8 max-w-screen-xl mx-auto w-full">
+        <AdBanner placement="Services" />
+      </div>
+
       <section className="py-16 px-6 bg-primary">
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
           <h2 className="font-heading font-bold text-white text-3xl">{t('services_page.cta_title')}</h2>

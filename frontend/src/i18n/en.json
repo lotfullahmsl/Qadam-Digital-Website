@@ -117,6 +117,8 @@
     "why_subtitle": "Students and businesses across Afghanistan, Pakistan, and beyond rely on us.",
     "testimonials_badge": "Testimonials",
     "testimonials_title": "What Our Clients Say",
+    "empty_services": "No services to show yet. Publish services from the admin panel.",
+    "empty_testimonials": "No testimonials yet. Add them from the admin panel.",
     "cta_title": "Ready to Start Your Journey?",
     "cta_subtitle": "Contact us today and let's discuss how QADAM Digital can help you achieve your goals.",
     "contact_us": "Contact Us",
@@ -153,7 +155,7 @@
     "vision_text": "To become the most trusted digital services platform in the region — a bridge between local talent and global opportunities.",
     "values_title": "Our Core Values",
     "values_badge": "Our Values",
-    "team_title": "Our Team",
+    "team_heading": "The People Behind QADAM Digital",
     "stats_scholarships": "Scholarships",
     "stats_websites": "Websites Built",
     "stats_cvs": "CVs Written",
@@ -168,6 +170,29 @@
       "inclusivity_desc": "We serve students and businesses from all backgrounds across Afghanistan and Pakistan.",
       "innovation_title": "Innovation",
       "innovation_desc": "We embrace cutting-edge technology to deliver modern, future-ready solutions."
+    },
+    "values_subtitle": "The principles that guide everything we do.",
+    "work_title": "Projects We've Delivered",
+    "work_subtitle": "A showcase of our best work — from enterprise database systems to stunning websites and successful marketing campaigns.",
+    "team_subtitle": "Dedicated professionals committed to your success.",
+    "impact_title": "Our Impact in Numbers",
+    "no_projects_category": "No projects found in this category.",
+    "no_portfolio": "No portfolio projects yet. Publish items from the admin panel.",
+    "stat_numbers": {
+      "scholarships": "500+",
+      "websites": "1,000+",
+      "cvs": "2,000+",
+      "students": "5,000+"
+    },
+    "team": {
+      "education_name": "Education Team",
+      "education_role": "Scholarship & CV Consultants",
+      "tech_name": "Tech Division",
+      "tech_role": "Web & Database Developers",
+      "design_name": "Design Studio",
+      "design_role": "Graphic Design & Video Editing",
+      "marketing_name": "Marketing Team",
+      "marketing_role": "Social Media & Digital Marketing"
     },
     "cta_title": "Ready to Work With Us?",
     "cta_subtitle": "Whether you're a student seeking scholarships or a business needing digital solutions, we're here to help."
@@ -213,6 +238,8 @@
   "services_page": {
     "hero_title": "Next-Gen Digital Solutions",
     "hero_subtitle": "Elevate your educational journey and operational efficiency with our premium suite of technical and consultative services — all under one roof.",
+    "loading": "Loading services…",
+    "empty": "No services are published yet. Please check back later or contact us on WhatsApp.",
     "services_count": "services available",
     "cta_title": "Not Sure Which Service You Need?",
     "cta_subtitle": "Contact us on WhatsApp and our team will guide you to the perfect solution for your needs.",
@@ -341,6 +368,7 @@
     "custom_quote": "Need a Custom Quote?",
     "custom_text": "Have a unique project? Contact us and we'll provide a tailored quote just for you.",
     "request_quote": "Request Custom Quote",
+    "empty_packages": "No packages are available in this category yet. Contact us for a custom quote.",
     "per_month": "/mo",
     "shared": "Shared",
     "dedicated": "Dedicated",
@@ -573,6 +601,8 @@
     "request_sub": "Request Subscription",
     "most_popular": "Most Popular",
     "per_month": "/mo",
+    "loading_subs": "Loading subscriptions…",
+    "empty_subs": "No subscription packages are listed yet. Contact us for current offers and pricing.",
     "notes": {
       "n1": "Shared subscriptions are managed accounts — you get access without owning the account.",
       "n2": "Dedicated subscriptions are individual accounts registered in your name.",
@@ -631,6 +661,8 @@
     "most_popular": "Most Popular",
     "get_started": "Get Started",
     "per_month": "/mo",
+    "loading_packages": "Loading packages…",
+    "empty_packages": "No marketing packages are listed yet. Contact us for a custom plan.",
     "services": {
       "fb_title": "Facebook Ads Management",
       "fb_desc": "Targeted Facebook advertising campaigns to reach your ideal audience.",
@@ -668,6 +700,7 @@
   "portfolio": {
     "title": "Our Work & Projects",
     "subtitle": "A showcase of our best work — from enterprise systems to stunning websites.",
+    "loading": "Loading projects…",
     "all": "All",
     "no_results": "No projects found in this category.",
     "start_project": "Start Your Project",

@@ -5,6 +5,7 @@ from bson.errors import InvalidId
 from pymongo import ASCENDING, DESCENDING, TEXT
 
 from app.extensions import get_mongo_db
+from app.services.locale_content import localize_structure, normalize_lang
 
 
 PUBLIC_STATUSES = ["Published", "published", "Active", "active"]
@@ -60,25 +61,29 @@ def serialize_document(document):
     return {key: serialize_value(value) for key, value in document.items() if key != "passwordHash"}
 
 
-def find_public_by_id(collection_name, item_id):
+def find_public_by_id(collection_name, item_id, lang="en"):
     try:
         object_id = ObjectId(item_id)
     except InvalidId:
         return None
 
     document = get_mongo_db()[collection_name].find_one(public_filter({"_id": object_id}))
-    return serialize_document(document)
+    ser = serialize_document(document)
+    if not ser:
+        return None
+    return localize_structure(ser, normalize_lang(lang))
 
 
-def paginated_public_query(collection_name, query, args, default_limit=12):
+def paginated_public_query(collection_name, query, args, default_limit=12, lang="en"):
     db = get_mongo_db()
     page, limit, skip = parse_pagination(args, default_limit=default_limit)
     collection = db[collection_name]
     total = collection.count_documents(query)
     cursor = collection.find(query).sort([("order", ASCENDING), ("createdAt", DESCENDING)]).skip(skip).limit(limit)
-
+    lang_n = normalize_lang(lang)
+    items = [localize_structure(serialize_document(item), lang_n) for item in cursor]
     return {
-        "items": [serialize_document(item) for item in cursor],
+        "items": items,
         "pagination": {
             "page": page,
             "limit": limit,
@@ -93,4 +98,9 @@ def text_or_regex_query(search, fields):
         return {}
 
     pattern = {"$regex": search.strip(), "$options": "i"}
-    return {"$or": [{field: pattern} for field in fields]}
+    clauses = []
+    for field in fields:
+        clauses.append({field: pattern})
+        for suffix in ("en", "ps", "fa"):
+            clauses.append({f"{field}.{suffix}": pattern})
+    return {"$or": clauses}

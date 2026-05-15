@@ -79,7 +79,7 @@ export default function Blog() {
       </section>
 
       <div className="px-6 pt-8 max-w-screen-xl mx-auto w-full">
-        <AdBanner />
+        <AdBanner placement="Blog" />
       </div>
 
       <section className="py-8 px-6 max-w-screen-xl mx-auto w-full">

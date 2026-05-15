@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { serviceRequestService } from '../../services/serviceRequestService'
-import { getContactInfo } from '../../utils/contactStore'
+import { useContactInfo } from '../../hooks/usePublicSettings'
 
 export default function Contact() {
   const { t } = useTranslation()
-  const contact = getContactInfo()  // reads from localStorage, falls back to defaults
-  const [form, setForm] = useState({ fullName: '', email: '', phone: '', country: '', service: '', message: '' })
+  const { contact } = useContactInfo()
+  const [form, setForm] = useState({ fullName: '', email: '', phone: '', country: '', service: '', message: '', _gotcha: '' })
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -20,7 +20,7 @@ export default function Contact() {
     try {
       await serviceRequestService.submitContact(form)
       setSuccess(true)
-      setForm({ fullName: '', email: '', phone: '', country: '', service: '', message: '' })
+      setForm({ fullName: '', email: '', phone: '', country: '', service: '', message: '', _gotcha: '' })
     } catch {
       setError(t('contact.error_msg'))
     } finally {
@@ -164,6 +164,16 @@ export default function Contact() {
                     <label className="block text-xs font-semibold tracking-widest uppercase text-text-muted mb-2">{t('contact.message')} *</label>
                     <textarea name="message" value={form.message} onChange={handleChange} required rows={5} placeholder={t('contact.your_message')} className="input-field resize-none" />
                   </div>
+                  <input
+                    type="text"
+                    name="_gotcha"
+                    value={form._gotcha}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="absolute opacity-0 pointer-events-none h-0 w-0 overflow-hidden"
+                  />
                   {error && (
                     <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-4 py-3">
                       <span className="material-symbols-outlined text-base">error</span>

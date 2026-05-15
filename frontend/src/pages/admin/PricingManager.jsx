@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import adminContentService from '../../services/adminContentService'
 
-const INITIAL_DATA = [
-  { id: 1, name: 'AI Starter', category: 'AI Subscriptions', price: '29', period: '/mo', features: 'Access to 5 AI tools\n100 queries/day\nEmail support\nBasic analytics', popular: false, badge: '', status: 'Active' },
-  { id: 2, name: 'AI Pro', category: 'AI Subscriptions', price: '79', period: '/mo', features: 'Access to all AI tools\nUnlimited queries\nPriority support\nAdvanced analytics\nAPI access', popular: true, badge: 'Most Popular', status: 'Active' },
-  { id: 3, name: 'Scholarship Basic', category: 'Scholarship Services', price: '150', period: '', features: 'Profile review\n3 scholarship matches\nApplication checklist\nEmail guidance', popular: false, badge: '', status: 'Active' },
-  { id: 4, name: 'Scholarship Premium', category: 'Scholarship Services', price: '350', period: '', features: 'Full profile review\nUnlimited matches\nPersonal statement review\nInterview prep\nDedicated advisor', popular: true, badge: 'Best Value', status: 'Active' },
-  { id: 5, name: 'CV + Translation', category: 'CV & Translation', price: '80', period: '', features: 'Professional CV design\nCover letter\nTranslation to 2 languages\n3 revisions', popular: false, badge: '', status: 'Active' },
-  { id: 6, name: 'Starter Website', category: 'Web Development', price: '499', period: '', features: '5-page website\nResponsive design\nBasic SEO\n1 month support', popular: false, badge: '', status: 'Active' },
-  { id: 7, name: 'Business Website', category: 'Web Development', price: '1299', period: '', features: 'Up to 20 pages\nCustom design\nCMS integration\nSEO optimization\n3 months support', popular: true, badge: 'Popular', status: 'Active' },
-  { id: 8, name: 'Social Media Starter', category: 'Social Media', price: '199', period: '/mo', features: '2 platforms\n12 posts/month\nBasic analytics\nMonthly report', popular: false, badge: '', status: 'Inactive' },
+/** Must match public /pricing and /pricing-packages?category= values */
+const PRICING_CATEGORY_OPTIONS = [
+  { slug: 'ai', label: 'AI Subscriptions' },
+  { slug: 'scholarship', label: 'Scholarship Services' },
+  { slug: 'cv', label: 'CV & Translation' },
+  { slug: 'web', label: 'Web Development' },
+  { slug: 'database', label: 'Database Systems' },
+  { slug: 'smm', label: 'Social Media Marketing' },
 ]
 
-const CATEGORIES = ['AI Subscriptions', 'Scholarship Services', 'CV & Translation', 'Web Development', 'Database Systems', 'Social Media']
-const EMPTY_FORM = { name: '', category: 'AI Subscriptions', price: '', period: '/mo', features: '', popular: false, badge: '', status: 'Active' }
+function pricingCategoryLabel(slug) {
+  if (!slug) return ''
+  const found = PRICING_CATEGORY_OPTIONS.find((o) => o.slug === slug)
+  return found ? found.label : String(slug)
+}
+
+function normalizePricingCategory(value) {
+  if (!value) return 'ai'
+  if (PRICING_CATEGORY_OPTIONS.some((o) => o.slug === value)) return value
+  const byLabel = PRICING_CATEGORY_OPTIONS.find((o) => o.label === value)
+  return byLabel ? byLabel.slug : value
+}
+
+const EMPTY_FORM = { name: '', category: 'ai', price: '', period: '/mo', features: '', popular: false, badge: '', status: 'Active' }
 const inputClass = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-navy placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all bg-white'
 
 const StatusBadge = ({ status }) => {
@@ -22,7 +33,7 @@ const StatusBadge = ({ status }) => {
 }
 
 export default function PricingManager() {
-  const [items, setItems] = useState(INITIAL_DATA)
+  const [items, setItems] = useState([])
   const [activeCategory, setActiveCategory] = useState('All')
   const [showModal, setShowModal] = useState(false)
   const [editItem, setEditItem] = useState(null)
@@ -48,11 +59,20 @@ export default function PricingManager() {
     loadItems()
   }, [])
 
-  const filtered = activeCategory === 'All' ? items : items.filter((i) => i.category === activeCategory)
-  const categories = ['All', ...new Set([...CATEGORIES, ...items.map((i) => i.category)].filter(Boolean))]
+  const normalizedKeys = items.map((i) => normalizePricingCategory(i.category))
+  const filtered = activeCategory === 'All' ? items : items.filter((i) => normalizePricingCategory(i.category) === activeCategory)
+  const categories = ['All', ...new Set([...PRICING_CATEGORY_OPTIONS.map((o) => o.slug), ...normalizedKeys].filter(Boolean))]
   const openModal = (item = null) => {
     setEditItem(item)
-    setForm(item ? { ...item, features: Array.isArray(item.features) ? item.features.join('\n') : item.features || '' } : EMPTY_FORM)
+    setForm(
+      item
+        ? {
+            ...item,
+            category: normalizePricingCategory(item.category),
+            features: Array.isArray(item.features) ? item.features.join('\n') : item.features || '',
+          }
+        : EMPTY_FORM,
+    )
     setShowModal(true)
   }
   const handleSubmit = (e) => {
@@ -95,7 +115,7 @@ export default function PricingManager() {
         {categories.map((cat) => (
           <button key={cat} onClick={() => setActiveCategory(cat)}
             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${activeCategory === cat ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'}`}>
-            {cat}
+            {cat === 'All' ? 'All' : pricingCategoryLabel(cat)}
           </button>
         ))}
       </div>
@@ -121,7 +141,7 @@ export default function PricingManager() {
                       {item.popular && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold">{item.badge || 'Popular'}</span>}
                     </div>
                   </td>
-                  <td className="px-5 py-3.5"><span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg font-medium">{item.category}</span></td>
+                  <td className="px-5 py-3.5"><span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg font-medium">{pricingCategoryLabel(item.category)}</span></td>
                   <td className="px-5 py-3.5"><span className="font-bold text-navy">${item.price}</span><span className="text-gray-400 text-xs">{item.period}</span></td>
                   <td className="px-5 py-3.5">{item.popular ? <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span> : <span className="material-symbols-outlined text-gray-300 text-lg">remove_circle</span>}</td>
                   <td className="px-5 py-3.5"><StatusBadge status={item.status} /></td>
@@ -150,7 +170,7 @@ export default function PricingManager() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Package Name *</label><input required className={inputClass} placeholder="e.g. AI Pro" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-                <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Category</label><select className={inputClass} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>{CATEGORIES.map((c) => <option key={c}>{c}</option>)}</select></div>
+                <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Category</label><select className={inputClass} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>{PRICING_CATEGORY_OPTIONS.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}</select></div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Price ($)</label><input className={inputClass} placeholder="99" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} /></div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Period</label><select className={inputClass} value={form.period} onChange={(e) => setForm({ ...form, period: e.target.value })}><option value="/mo">/mo</option><option value="/yr">/yr</option><option value="">One-time</option></select></div>
                 <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Features (one per line)</label><textarea rows={5} className={inputClass} placeholder="Feature 1&#10;Feature 2&#10;Feature 3" value={form.features} onChange={(e) => setForm({ ...form, features: e.target.value })} /></div>

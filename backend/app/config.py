@@ -13,6 +13,7 @@ def _csv_env(name, default=""):
 
 
 class Config:
+    BASE_DIR = BASE_DIR
     FLASK_ENV = os.getenv("FLASK_ENV", "development")
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-before-production")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev-jwt-secret-change-before-production")
@@ -31,4 +32,11 @@ class Config:
     MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "10"))
     MAX_CONTENT_LENGTH = MAX_UPLOAD_MB * 1024 * 1024
 
+    # Optional: public origin for absolute file URLs (e.g. http://127.0.0.1:5001 for Vite + separate API host)
+    SERVER_PUBLIC_BASE_URL = os.getenv("SERVER_PUBLIC_BASE_URL", "").rstrip("/")
+
     JSON_SORT_KEYS = False
+    FRONTEND_PUBLIC_URL = os.getenv("FRONTEND_PUBLIC_URL", "").rstrip("/")
+    ROBOTS_ALLOW_ALL = (os.getenv("ROBOTS_ALLOW_ALL", "true") or "true").lower() in ("1", "true", "yes")
+    RATE_LIMITING_ENABLED = (os.getenv("RATE_LIMITING_ENABLED", "true") or "true").lower() in ("1", "true", "yes")
+    PROPAGATE_EXCEPTIONS = (os.getenv("PROPAGATE_EXCEPTIONS", "false") or "false").lower() in ("1", "true", "yes")

@@ -114,6 +114,7 @@ export default function CvTranslationServices() {
             title="Request CV or Translation Service"
             description="Send your request and our team will contact you about documents, pricing, and delivery."
             submitLabel="Submit Service Request"
+            allowAttachment
             extraFields={[
               { name: 'service', label: 'Service', placeholder: 'Select service', type: 'select', options: ['CV Writing', 'Resume', 'Motivation Letter', 'SOP', 'Document Translation', 'Proofreading'] },
               { name: 'country', label: 'Country', placeholder: 'Country' },

@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import AdminMediaUpload from '../../components/admin/AdminMediaUpload'
 import adminContentService from '../../services/adminContentService'
-
-const INITIAL_DATA = [
-  { id: 1, title: 'Top 10 Scholarships for Afghan Students 2026', slug: 'top-10-scholarships-afghan-students-2026', category: 'Scholarships', author: 'Admin', date: '2026-01-15', status: 'Published', excerpt: 'Discover the best scholarship opportunities available for Afghan students in 2026.', content: '', featuredImage: '', seoTitle: 'Top 10 Scholarships for Afghan Students 2026', seoDescription: 'Best scholarships for Afghan students' },
-  { id: 2, title: 'How to Write a Winning Personal Statement', slug: 'how-to-write-winning-personal-statement', category: 'Tips & Guides', author: 'Admin', date: '2026-01-12', status: 'Published', excerpt: 'A step-by-step guide to crafting a compelling personal statement for scholarship applications.', content: '', featuredImage: '', seoTitle: 'How to Write a Winning Personal Statement', seoDescription: 'Guide to personal statements' },
-  { id: 3, title: 'IELTS Preparation: Complete Guide for 2026', slug: 'ielts-preparation-complete-guide-2026', category: 'Language Tests', author: 'Admin', date: '2026-01-10', status: 'Draft', excerpt: 'Everything you need to know to prepare for the IELTS exam and achieve a high score.', content: '', featuredImage: '', seoTitle: 'IELTS Preparation Guide 2026', seoDescription: 'Complete IELTS preparation guide' },
-  { id: 4, title: 'Best Universities in Germany for International Students', slug: 'best-universities-germany-international-students', category: 'Universities', author: 'Admin', date: '2026-01-08', status: 'Published', excerpt: 'Explore top German universities that welcome international students.', content: '', featuredImage: '', seoTitle: 'Best German Universities for International Students', seoDescription: 'Top universities in Germany' },
-  { id: 5, title: 'Digital Marketing Trends to Watch in 2026', slug: 'digital-marketing-trends-2026', category: 'Digital Marketing', author: 'Admin', date: '2026-01-05', status: 'Published', excerpt: 'Stay ahead of the curve with these emerging digital marketing trends for 2026.', content: '', featuredImage: '', seoTitle: 'Digital Marketing Trends 2026', seoDescription: 'Top digital marketing trends' },
-]
+import { cmsText, cmsTextLower } from '../../utils/cmsText'
 
 const CATEGORIES = ['Scholarships', 'Tips & Guides', 'Language Tests', 'Universities', 'Digital Marketing', 'Technology', 'Career']
 const EMPTY_FORM = { title: '', slug: '', category: 'Scholarships', author: 'Admin', date: '', excerpt: '', content: '', featuredImage: '', seoTitle: '', seoDescription: '', status: 'Draft' }
@@ -20,7 +14,7 @@ const StatusBadge = ({ status }) => {
 }
 
 export default function BlogManager() {
-  const [items, setItems] = useState(INITIAL_DATA)
+  const [items, setItems] = useState([])
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('All')
   const [statusFilter, setStatusFilter] = useState('All')
@@ -49,8 +43,11 @@ export default function BlogManager() {
   }, [])
 
   const filtered = items.filter((item) => {
-    const matchSearch = item.title.toLowerCase().includes(search.toLowerCase()) || item.author.toLowerCase().includes(search.toLowerCase())
-    const matchCat = categoryFilter === 'All' || item.category === categoryFilter
+    const q = search.toLowerCase()
+    const matchSearch =
+      cmsTextLower(item.title).includes(q) ||
+      cmsTextLower(item.author).includes(q)
+    const matchCat = categoryFilter === 'All' || cmsText(item.category) === categoryFilter
     const matchStatus = statusFilter === 'All' || item.status === statusFilter
     return matchSearch && matchCat && matchStatus
   })
@@ -118,9 +115,9 @@ export default function BlogManager() {
               {error && <tr><td colSpan={6} className="px-5 py-12 text-center text-red-500">{error}</td></tr>}
               {!loading && !error && filtered.map((item) => (
                 <tr key={item._id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-5 py-3.5"><p className="font-medium text-navy">{item.title}</p><p className="text-xs text-gray-400 mt-0.5">/{item.slug}</p></td>
-                  <td className="px-5 py-3.5"><span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg font-medium">{item.category}</span></td>
-                  <td className="px-5 py-3.5 text-gray-600">{item.author}</td>
+                  <td className="px-5 py-3.5"><p className="font-medium text-navy">{cmsText(item.title)}</p><p className="text-xs text-gray-400 mt-0.5">/{item.slug}</p></td>
+                  <td className="px-5 py-3.5"><span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-lg font-medium">{cmsText(item.category)}</span></td>
+                  <td className="px-5 py-3.5 text-gray-600">{cmsText(item.author)}</td>
                   <td className="px-5 py-3.5 text-gray-400 text-xs">{item.date || item.createdAt}</td>
                   <td className="px-5 py-3.5"><StatusBadge status={item.status} /></td>
                   <td className="px-5 py-3.5">
@@ -153,7 +150,11 @@ export default function BlogManager() {
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Author</label><input className={inputClass} placeholder="Author name" value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} /></div>
                 <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Excerpt</label><textarea rows={2} className={inputClass} placeholder="Short description..." value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} /></div>
                 <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Content</label><textarea rows={8} className={inputClass} placeholder="Full article content..." value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} /></div>
-                <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">Featured Image URL</label><input className={inputClass} placeholder="https://..." value={form.featuredImage} onChange={(e) => setForm({ ...form, featuredImage: e.target.value })} /></div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Featured Image</label>
+                  <AdminMediaUpload label="" value={form.featuredImage} onChange={(url) => setForm({ ...form, featuredImage: url })} accept="image/jpeg,image/png,image/webp" />
+                  <input className={`${inputClass} mt-3`} placeholder="Or paste image URL…" value={form.featuredImage} onChange={(e) => setForm({ ...form, featuredImage: e.target.value })} />
+                </div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">SEO Title</label><input className={inputClass} placeholder="SEO title" value={form.seoTitle} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} /></div>
                 <div><label className="block text-xs font-semibold text-gray-600 mb-1.5">Status</label><select className={inputClass} value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}><option>Draft</option><option>Published</option></select></div>
                 <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-600 mb-1.5">SEO Description</label><textarea rows={2} className={inputClass} placeholder="Meta description..." value={form.seoDescription} onChange={(e) => setForm({ ...form, seoDescription: e.target.value })} /></div>

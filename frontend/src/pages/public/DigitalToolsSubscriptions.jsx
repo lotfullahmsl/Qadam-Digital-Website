@@ -1,19 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import RequestForm from '../../components/common/RequestForm'
 import { serviceRequestService } from '../../services/serviceRequestService'
+import { pricingService } from '../../services/pricingService'
+import { cmsText } from '../../utils/cmsText'
 
 export default function DigitalToolsSubscriptions() {
   const { t } = useTranslation()
+  const [packages, setPackages] = useState([])
+  const [packagesLoading, setPackagesLoading] = useState(true)
 
-  const SUBSCRIPTIONS = [
-    { name: 'ChatGPT Plus', price: '10', badge: t('digital_tools.tools.shared'), icon: 'smart_toy', popular: false, features: [t('digital_tools.tools.chatgpt_f1'), t('digital_tools.tools.chatgpt_f2'), t('digital_tools.tools.chatgpt_f3'), t('digital_tools.tools.chatgpt_f4')] },
-    { name: 'Gemini Advanced', price: '12', badge: t('digital_tools.tools.shared'), icon: 'psychology', popular: false, features: [t('digital_tools.tools.gemini_f1'), t('digital_tools.tools.gemini_f2'), t('digital_tools.tools.gemini_f3'), t('digital_tools.tools.gemini_f4')] },
-    { name: 'Coursera Plus', price: '45', badge: t('digital_tools.tools.dedicated'), icon: 'school', popular: true, features: [t('digital_tools.tools.coursera_f1'), t('digital_tools.tools.coursera_f2'), t('digital_tools.tools.coursera_f3'), t('digital_tools.tools.coursera_f4')] },
-    { name: 'Canva Pro', price: '8', badge: t('digital_tools.tools.team'), icon: 'palette', popular: false, features: [t('digital_tools.tools.canva_f1'), t('digital_tools.tools.canva_f2'), t('digital_tools.tools.canva_f3'), t('digital_tools.tools.canva_f4')] },
-    { name: 'Udemy', price: '15', badge: t('digital_tools.tools.per_course'), icon: 'play_circle', popular: false, features: [t('digital_tools.tools.udemy_f1'), t('digital_tools.tools.udemy_f2'), t('digital_tools.tools.udemy_f3'), t('digital_tools.tools.udemy_f4')] },
-  ]
+  useEffect(() => {
+    let ignore = false
+    async function loadPackages() {
+      setPackagesLoading(true)
+      try {
+        const { data } = await pricingService.getAll({ category: 'ai' })
+        if (!ignore) setPackages(data.items || [])
+      } catch {
+        if (!ignore) setPackages([])
+      } finally {
+        if (!ignore) setPackagesLoading(false)
+      }
+    }
+    loadPackages()
+    return () => { ignore = true }
+  }, [])
 
+  const planNames = packages.map((p) => cmsText(p.name)).filter(Boolean)
   const STEPS = [
     { step: '01', icon: 'chat', title: t('digital_tools.steps.s1_title'), desc: t('digital_tools.steps.s1_desc') },
     { step: '02', icon: 'payments', title: t('digital_tools.steps.s2_title'), desc: t('digital_tools.steps.s2_desc') },
@@ -50,44 +64,50 @@ export default function DigitalToolsSubscriptions() {
             <h2 className="font-heading font-bold text-navy text-3xl mb-2">{t('digital_tools.subs_title')}</h2>
             <p className="text-text-muted">{t('digital_tools.subs_subtitle')}</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-            {SUBSCRIPTIONS.map((sub, i) => (
-              <div key={i} className={`relative flex flex-col rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${sub.popular ? 'bg-primary text-white shadow-[0_8px_32px_rgba(0,170,255,0.35)] border-2 border-primary' : 'bg-white border border-border shadow-card hover:shadow-card-hover'}`}>
-                {sub.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-navy text-white px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase">
-                    {t('digital_tools.most_popular')}
-                  </div>
-                )}
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${sub.popular ? 'bg-white/20 border-white/30' : 'bg-primary/10 border-primary/20'}`}>
-                    <span className={`material-symbols-outlined text-2xl ${sub.popular ? 'text-white' : 'text-primary'}`}>{sub.icon}</span>
-                  </div>
-                  {sub.badge && (
-                    <span className={`text-xs font-semibold tracking-widest uppercase px-2 py-0.5 rounded ${sub.popular ? 'bg-white/20 text-white' : 'bg-primary-pale text-primary-dark'}`}>
-                      {sub.badge}
-                    </span>
+          {packagesLoading ? (
+            <div className="text-center py-12 text-text-muted">{t('digital_tools.loading_subs')}</div>
+          ) : packages.length === 0 ? (
+            <div className="text-center py-12 text-text-muted max-w-xl mx-auto">{t('digital_tools.empty_subs')}</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+              {packages.map((sub) => (
+                <div key={sub._id || cmsText(sub.name)} className={`relative flex flex-col rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${sub.popular ? 'bg-primary text-white shadow-[0_8px_32px_rgba(0,170,255,0.35)] border-2 border-primary' : 'bg-white border border-border shadow-card hover:shadow-card-hover'}`}>
+                  {sub.popular && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-navy text-white px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase">
+                      {t('digital_tools.most_popular')}
+                    </div>
                   )}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border ${sub.popular ? 'bg-white/20 border-white/30' : 'bg-primary/10 border-primary/20'}`}>
+                      <span className={`material-symbols-outlined text-2xl ${sub.popular ? 'text-white' : 'text-primary'}`}>{sub.icon || 'smart_toy'}</span>
+                    </div>
+                    {cmsText(sub.badge) ? (
+                      <span className={`text-xs font-semibold tracking-widest uppercase px-2 py-0.5 rounded ${sub.popular ? 'bg-white/20 text-white' : 'bg-primary-pale text-primary-dark'}`}>
+                        {cmsText(sub.badge)}
+                      </span>
+                    ) : null}
+                  </div>
+                  <h3 className={`font-heading font-semibold text-xl mb-1 ${sub.popular ? 'text-white' : 'text-navy'}`}>{cmsText(sub.name)}</h3>
+                  <div className="mb-4">
+                    <span className={`font-heading text-2xl font-bold ${sub.popular ? 'text-white' : 'text-primary'}`}>${cmsText(sub.price)}</span>
+                    <span className={`text-sm ${sub.popular ? 'text-white/70' : 'text-text-muted'}`}>{cmsText(sub.period) || t('digital_tools.per_month')}</span>
+                  </div>
+                  <ul className="space-y-2 mb-5 flex-grow">
+                    {(Array.isArray(sub.features) ? sub.features : []).map((f, fi) => (
+                      <li key={fi} className={`flex items-start gap-2 text-xs ${sub.popular ? 'text-white/90' : 'text-text-secondary'}`}>
+                        <span className={`material-symbols-outlined text-base ${sub.popular ? 'text-white' : 'text-primary'}`}>check</span>
+                        {cmsText(f)}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
+                    className={`w-full text-center py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-all duration-200 ${sub.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'border border-primary text-primary hover:bg-primary hover:text-white'}`}>
+                    {t('digital_tools.request_sub')}
+                  </a>
                 </div>
-                <h3 className={`font-heading font-semibold text-xl mb-1 ${sub.popular ? 'text-white' : 'text-navy'}`}>{sub.name}</h3>
-                <div className="mb-4">
-                  <span className={`font-heading text-2xl font-bold ${sub.popular ? 'text-white' : 'text-primary'}`}>${sub.price}</span>
-                  <span className={`text-sm ${sub.popular ? 'text-white/70' : 'text-text-muted'}`}>{t('digital_tools.per_month')}</span>
-                </div>
-                <ul className="space-y-2 mb-5 flex-grow">
-                  {sub.features.map((f, fi) => (
-                    <li key={fi} className={`flex items-start gap-2 text-xs ${sub.popular ? 'text-white/90' : 'text-text-secondary'}`}>
-                      <span className={`material-symbols-outlined text-base ${sub.popular ? 'text-white' : 'text-primary'}`}>check</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
-                  className={`w-full text-center py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-all duration-200 ${sub.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'border border-primary text-primary hover:bg-primary hover:text-white'}`}>
-                  {t('digital_tools.request_sub')}
-                </a>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -139,7 +159,7 @@ export default function DigitalToolsSubscriptions() {
             description="Tell us which tool or subscription you need and our team will contact you."
             submitLabel="Submit Subscription Request"
             extraFields={[
-              { name: 'plan', label: 'Plan', placeholder: 'Select subscription', type: 'select', required: true, options: SUBSCRIPTIONS.map((item) => item.name) },
+              { name: 'plan', label: 'Plan', placeholder: 'Select subscription', type: 'select', required: true, options: planNames.length ? planNames : ['General inquiry'] },
               { name: 'billingPeriod', label: 'Billing Period', placeholder: 'Billing period', type: 'select', options: ['Monthly', 'Yearly', 'One-time'] },
               { name: 'paymentMethod', label: 'Payment Method', placeholder: 'Preferred payment method' },
             ]}

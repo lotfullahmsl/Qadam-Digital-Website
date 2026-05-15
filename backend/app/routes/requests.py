@@ -1,13 +1,19 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import get_jwt_identity
 
+from app.extensions import limiter
 from app.services.request_service import (
+    PUBLIC_PATH_TO_TYPE,
     REQUEST_CONFIG,
     REQUEST_STATUSES,
+    add_request_note,
     create_request,
     delete_request,
     get_config_by_public_path,
     get_request,
     get_request_config,
+    is_honeypot_triggered,
+    list_request_notes,
     list_requests,
     normalize_request_payload,
     update_request,
@@ -20,17 +26,23 @@ requests_bp = Blueprint("requests", __name__)
 
 
 @requests_bp.post("/<public_path>")
+@limiter.limit("30 per minute")
 def submit_request(public_path):
     config = get_config_by_public_path(public_path)
     if not config:
         return jsonify({"message": "Request endpoint not found"}), 404
 
-    payload = normalize_request_payload(config, request.get_json(silent=True) or {})
+    raw = request.get_json(silent=True) or {}
+    if is_honeypot_triggered(raw):
+        return jsonify({"message": "Unable to submit request."}), 400
+
+    payload = normalize_request_payload(config, raw)
     errors = validate_request_payload(config, payload)
     if errors:
         return jsonify({"message": "Validation failed", "errors": errors}), 400
 
-    item = create_request(config, payload)
+    request_type_key = PUBLIC_PATH_TO_TYPE.get(public_path)
+    item = create_request(config, payload, request_type_key=request_type_key)
     return jsonify({"message": "Request submitted successfully", "request": item}), 201
 
 
@@ -69,6 +81,34 @@ def admin_get_request(request_type, item_id):
         return jsonify({"message": "Request not found"}), 404
 
     return jsonify({"request": item})
+
+
+@requests_bp.get("/admin/requests/<request_type>/<item_id>/notes")
+@admin_required
+def admin_list_request_notes(request_type, item_id):
+    config = get_request_config(request_type)
+    if not config:
+        return jsonify({"message": "Request type not found"}), 404
+
+    if not get_request(config, item_id):
+        return jsonify({"message": "Request not found"}), 404
+
+    return jsonify({"items": list_request_notes(request_type, item_id)})
+
+
+@requests_bp.post("/admin/requests/<request_type>/<item_id>/notes")
+@admin_required
+def admin_add_request_note(request_type, item_id):
+    config = get_request_config(request_type)
+    if not config:
+        return jsonify({"message": "Request type not found"}), 404
+
+    body = (request.get_json(silent=True) or {}).get("body")
+    note = add_request_note(request_type, item_id, body, get_jwt_identity())
+    if not note:
+        return jsonify({"message": "Unable to add note (empty or request not found)"}), 400
+
+    return jsonify({"note": note}), 201
 
 
 @requests_bp.patch("/admin/requests/<request_type>/<item_id>")

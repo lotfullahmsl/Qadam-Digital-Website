@@ -6,6 +6,7 @@ from pymongo import ASCENDING, DESCENDING
 
 from app.extensions import get_mongo_db
 from app.services.content_service import parse_pagination, serialize_document, text_or_regex_query
+from app.services.locale_content import is_i18n_dict, pick_i18n
 
 
 ALLOWED_STATUSES = {"Draft", "Published", "Archived", "Active", "Inactive"}
@@ -54,7 +55,12 @@ def normalize_resource_payload(resource, payload):
         if "to" in data and "ctaLink" not in data:
             data["ctaLink"] = data["to"]
         if "category" in data and "categoryKey" not in data:
-            data["categoryKey"] = str(data["category"]).strip().lower().replace(" ", "_")
+            cat = data["category"]
+            if isinstance(cat, dict) and is_i18n_dict(cat):
+                label = pick_i18n(cat, "en") or "general"
+            else:
+                label = str(cat).strip() or "general"
+            data["categoryKey"] = label.lower().replace(" ", "_")
         if "features" in data and isinstance(data["features"], str):
             data["features"] = [item.strip() for item in data["features"].splitlines() if item.strip()]
 
@@ -78,13 +84,29 @@ def normalize_resource_payload(resource, payload):
     return data
 
 
+def _required_non_empty(val) -> bool:
+    if val is None:
+        return False
+    if isinstance(val, dict):
+        if is_i18n_dict(val):
+            return any(str(val.get(k, "") or "").strip() for k in ("en", "ps", "fa"))
+        return any(str(v or "").strip() for v in val.values())
+    if isinstance(val, list):
+        return len(val) > 0
+    return bool(str(val).strip())
+
+
 def validate_resource_payload(config, payload, partial=False):
     errors = {}
 
     if not partial:
         for field in config["required"]:
-            if not str(payload.get(field, "")).strip():
+            if not _required_non_empty(payload.get(field)):
                 errors.setdefault(field, []).append("This field is required.")
+    else:
+        for field in config["required"]:
+            if field in payload and not _required_non_empty(payload.get(field)):
+                errors.setdefault(field, []).append("This field cannot be empty.")
 
     status = payload.get("status")
     if status and status not in ALLOWED_STATUSES:
