@@ -8,6 +8,34 @@ import { serviceRequestService } from '../../services/serviceRequestService'
 export default function WebsiteDatabaseSolutions() {
   const { t } = useTranslation()
 
+  const formShared = {
+    fullName: t('solutions.forms.shared.full_name'),
+    email: t('solutions.forms.shared.email'),
+    phone: t('solutions.forms.shared.phone'),
+    message: t('solutions.forms.shared.message'),
+    successTitle: t('solutions.forms.shared.success_title'),
+    successBody: t('solutions.forms.shared.success_body'),
+    submitAnother: t('solutions.forms.shared.submit_another'),
+    submitting: t('solutions.forms.shared.submitting'),
+    errorGeneric: t('solutions.forms.shared.error_generic'),
+    selectPrompt: t('solutions.forms.shared.select_prompt'),
+  }
+
+  const webTypesRaw = t('solutions.forms.web.project_types', { returnObjects: true })
+  const webProjectTypes = Array.isArray(webTypesRaw) && webTypesRaw.length
+    ? webTypesRaw
+    : ['Business Website', 'E-commerce', 'Portfolio', 'Education Website', 'Custom Web App']
+
+  const dbTypesRaw = t('solutions.forms.database.db_types', { returnObjects: true })
+  const dbTypes = Array.isArray(dbTypesRaw) && dbTypesRaw.length
+    ? dbTypesRaw
+    : ['Clinic System', 'School System', 'Inventory System', 'Custom Database']
+
+  const dbSizesRaw = t('solutions.forms.database.project_sizes', { returnObjects: true })
+  const dbSizes = Array.isArray(dbSizesRaw) && dbSizesRaw.length
+    ? dbSizesRaw
+    : ['Small', 'Medium', 'Large']
+
   const WEB_SERVICES = [
     { icon: 'business', title: t('solutions.web_services.business_title'), desc: t('solutions.web_services.business_desc') },
     { icon: 'shopping_cart', title: t('solutions.web_services.ecommerce_title'), desc: t('solutions.web_services.ecommerce_desc') },
@@ -114,24 +142,56 @@ export default function WebsiteDatabaseSolutions() {
       <section className="py-16 px-6 bg-background border-t border-border">
         <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
           <RequestForm
-            title="Request a Website Project"
-            description="Share your website idea, budget, and timeline."
-            submitLabel="Submit Website Request"
+            title={t('solutions.forms.web.title')}
+            description={t('solutions.forms.web.description')}
+            submitLabel={t('solutions.forms.web.submit')}
+            fieldTexts={formShared}
             extraFields={[
-              { name: 'projectType', label: 'Project Type', placeholder: 'Project type', type: 'select', options: ['Business Website', 'E-commerce', 'Portfolio', 'Education Website', 'Custom Web App'] },
-              { name: 'budget', label: 'Budget', placeholder: 'Estimated budget' },
-              { name: 'timeline', label: 'Timeline', placeholder: 'Expected timeline' },
+              {
+                name: 'projectType',
+                label: t('solutions.forms.web.project_type'),
+                placeholder: t('solutions.forms.web.project_type_placeholder'),
+                type: 'select',
+                options: webProjectTypes,
+              },
+              {
+                name: 'budget',
+                label: t('solutions.forms.web.budget'),
+                placeholder: t('solutions.forms.web.budget_placeholder'),
+              },
+              {
+                name: 'timeline',
+                label: t('solutions.forms.web.timeline'),
+                placeholder: t('solutions.forms.web.timeline_placeholder'),
+              },
             ]}
             onSubmit={serviceRequestService.submitWebsiteProject}
           />
           <RequestForm
-            title="Request a Database System"
-            description="Tell us about the system or database your business needs."
-            submitLabel="Submit Database Request"
+            title={t('solutions.forms.database.title')}
+            description={t('solutions.forms.database.description')}
+            submitLabel={t('solutions.forms.database.submit')}
+            fieldTexts={formShared}
             extraFields={[
-              { name: 'dbType', label: 'Database Type', placeholder: 'Database type', type: 'select', options: ['Clinic System', 'School System', 'Inventory System', 'Custom Database'] },
-              { name: 'projectSize', label: 'Project Size', placeholder: 'Project size', type: 'select', options: ['Small', 'Medium', 'Large'] },
-              { name: 'timeline', label: 'Timeline', placeholder: 'Expected timeline' },
+              {
+                name: 'dbType',
+                label: t('solutions.forms.database.db_type'),
+                placeholder: t('solutions.forms.database.db_type_placeholder'),
+                type: 'select',
+                options: dbTypes,
+              },
+              {
+                name: 'projectSize',
+                label: t('solutions.forms.database.project_size'),
+                placeholder: t('solutions.forms.database.project_size_placeholder'),
+                type: 'select',
+                options: dbSizes,
+              },
+              {
+                name: 'timeline',
+                label: t('solutions.forms.database.timeline'),
+                placeholder: t('solutions.forms.database.timeline_placeholder'),
+              },
             ]}
             onSubmit={serviceRequestService.submitDatabaseProject}
           />
@@ -143,7 +203,7 @@ export default function WebsiteDatabaseSolutions() {
           <h2 className="font-heading font-bold text-white text-3xl">{t('solutions.cta_title')}</h2>
           <p className="text-white/80 text-lg max-w-xl mx-auto">{t('solutions.cta_subtitle')}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/923039393437" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg">
               <span className="material-symbols-outlined text-base">chat</span>
               {t('solutions.discuss')}

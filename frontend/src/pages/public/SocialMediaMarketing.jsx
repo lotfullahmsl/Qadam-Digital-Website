@@ -6,7 +6,7 @@ import { pricingService } from '../../services/pricingService'
 import { cmsText } from '../../utils/cmsText'
 
 export default function SocialMediaMarketing() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [packages, setPackages] = useState([])
   const [packagesLoading, setPackagesLoading] = useState(true)
 
@@ -25,7 +25,7 @@ export default function SocialMediaMarketing() {
     }
     loadPackages()
     return () => { ignore = true }
-  }, [])
+  }, [i18n.language])
 
   const SMM_SERVICES = [
     { icon: 'thumb_up', title: t('smm_page.services.fb_title'), desc: t('smm_page.services.fb_desc') },
@@ -105,7 +105,7 @@ export default function SocialMediaMarketing() {
                       </li>
                     ))}
                   </ul>
-                  <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
+                  <a href="https://wa.me/923039393437" target="_blank" rel="noopener noreferrer"
                     className={`w-full text-center py-2.5 rounded-lg text-xs font-semibold tracking-widest uppercase transition-all duration-200 ${pkg.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'bg-primary text-white hover:bg-primary-dark shadow-btn'}`}>
                     {t('smm_page.get_started')}
                   </a>
@@ -137,7 +137,7 @@ export default function SocialMediaMarketing() {
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
           <h2 className="font-heading font-bold text-white text-3xl">{t('smm_page.cta_title')}</h2>
           <p className="text-white/80 text-lg max-w-xl mx-auto">{t('smm_page.cta_subtitle')}</p>
-          <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/923039393437" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3.5 rounded-lg hover:bg-primary-pale transition-all duration-200 shadow-lg">
             <span className="material-symbols-outlined text-base">chat</span>
             {t('smm_page.start_campaign')}

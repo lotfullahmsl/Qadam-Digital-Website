@@ -1,8 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from werkzeug.exceptions import HTTPException
 
 from app.config import Config
-from app.extensions import cors, init_mongo, jwt, limiter
+from app.utils.public_http_cache import is_browser_cacheable_public_path
+from app.extensions import cors, get_redis, init_mongo, init_redis, jwt, limiter
 from app.routes.admin_content import admin_content_bp
 from app.routes.ads_routes import ads_bp
 from app.routes.auth import auth_bp
@@ -20,9 +21,8 @@ from app.services.content_service import ensure_content_indexes
 from app.services.file_upload_service import ensure_upload_indexes, resolve_upload_dir
 from app.services.notification_service import ensure_notification_indexes
 from app.services.request_service import ensure_request_indexes
+from app.services.cache_service import ensure_http_cache_indexes
 from app.services.site_settings_service import ensure_default_site_settings, ensure_site_settings_indexes
-
-
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -34,8 +34,12 @@ def create_app(config_class=Config):
     )
     jwt.init_app(app)
     app.config["RATELIMIT_ENABLED"] = app.config.get("RATE_LIMITING_ENABLED", True)
-    limiter.init_app(app)
+    init_redis(app)
     init_mongo(app)
+    if get_redis() is None:
+        app.config["RATELIMIT_STORAGE_URI"] = "memory://"
+    limiter.init_app(app)
+    ensure_http_cache_indexes()
     ensure_auth_indexes()
     ensure_content_indexes()
     ensure_request_indexes()
@@ -59,6 +63,21 @@ def create_app(config_class=Config):
     app.register_blueprint(dashboard_bp, url_prefix="/api")
     app.register_blueprint(seo_bp, url_prefix="/api")
     app.register_blueprint(notifications_bp, url_prefix="/api")
+
+    @app.after_request
+    def _public_browser_cache_headers(response):
+        if request.method != "GET" or response.status_code != 200:
+            return response
+        path = request.path or ""
+        if not is_browser_cacheable_public_path(path):
+            return response
+        if path in ("/api/sitemap", "/api/robots"):
+            max_age = app.config.get("BROWSER_CACHE_STATIC_SEC", 600)
+        else:
+            max_age = app.config.get("BROWSER_CACHE_PUBLIC_SEC", 120)
+        swr = min(max_age * 2, 3600)
+        response.headers["Cache-Control"] = f"public, max-age={max_age}, stale-while-revalidate={swr}"
+        return response
 
     @app.errorhandler(429)
     def too_many_requests(_err):

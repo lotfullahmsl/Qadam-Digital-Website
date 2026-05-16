@@ -88,7 +88,7 @@ export default function Scholarships() {
           {t('scholarships.showing')} <span className="text-primary font-semibold">{scholarships.length}</span> {t('scholarships.results')}
         </p>
         {loading ? (
-          <div className="text-center py-20 text-text-muted">Loading scholarships...</div>
+          <div className="text-center py-20 text-text-muted">{t('common.loading')}</div>
         ) : error ? (
           <div className="text-center py-20 text-red-500">{error}</div>
         ) : scholarships.length === 0 ? (
@@ -108,7 +108,7 @@ export default function Scholarships() {
         <div className="max-w-screen-xl mx-auto text-center space-y-5">
           <h2 className="font-heading font-bold text-navy text-3xl">{t('scholarships.need_help')}</h2>
           <p className="text-text-muted text-lg max-w-xl mx-auto">{t('scholarships.help_text')}</p>
-          <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200">
+          <a href="https://wa.me/923039393437" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-8 py-3.5 rounded-lg shadow-btn hover:bg-primary-dark transition-all duration-200">
             <span className="material-symbols-outlined text-base">chat</span>
             {t('scholarships.apply_with_us')}
           </a>

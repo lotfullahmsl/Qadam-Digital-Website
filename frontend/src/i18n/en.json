@@ -15,7 +15,11 @@
     "contact": "Contact",
     "whatsapp": "Contact WhatsApp",
     "sign_in": "Sign In",
-    "sign_up": "Sign Up"
+    "sign_up": "Sign Up",
+    "language": "Language",
+    "lang_en": "English",
+    "lang_ps": "Pashto",
+    "lang_fa": "Dari"
   },
   "hero": {
     "badge": "Elevating Global Education",
@@ -93,7 +97,7 @@
     "select_service": "Select a service...",
     "your_name": "Your full name",
     "your_email": "your@email.com",
-    "your_phone": "+92 303 939 3438",
+    "your_phone": "+92 303 939 3437",
     "your_country": "Your country",
     "your_message": "Tell us how we can help you...",
     "services": {
@@ -247,7 +251,10 @@
       "education": "Education & Consulting",
       "technology": "Technology & Development",
       "graphic_design": "Graphic Design",
-      "video": "Video Editing & Animation"
+      "video": "Video Editing & Animation",
+      "marketing": "Marketing",
+      "design": "Design",
+      "services": "Services"
     },
     "education": {
       "scholarship_title": "Scholarship Guidance & Application",
@@ -544,6 +551,56 @@
       "clinic_desc": "Streamline patient records, appointment scheduling, and billing with our secure, compliant, and elegantly designed healthcare management platform.",
       "school_title": "School Management System",
       "school_desc": "An integrated ecosystem for educational institutions managing admissions, academic performance tracking, and parent-teacher communications."
+    },
+    "forms": {
+      "shared": {
+        "full_name": "Full name",
+        "email": "Email address",
+        "phone": "Phone / WhatsApp",
+        "message": "Tell us what you need…",
+        "success_title": "Request submitted",
+        "success_body": "We received your request and will contact you soon.",
+        "submit_another": "Submit another request",
+        "submitting": "Submitting…",
+        "error_generic": "Unable to submit request. Please try again.",
+        "select_prompt": "Select…"
+      },
+      "web": {
+        "title": "Request a Website Project",
+        "description": "Share your website idea, budget, and timeline.",
+        "submit": "Submit Website Request",
+        "project_type": "Project type",
+        "project_type_placeholder": "Project type",
+        "budget": "Estimated budget",
+        "budget_placeholder": "Estimated budget",
+        "timeline": "Expected timeline",
+        "timeline_placeholder": "Expected timeline",
+        "project_types": [
+          "Business Website",
+          "E-commerce",
+          "Portfolio",
+          "Education Website",
+          "Custom Web App"
+        ]
+      },
+      "database": {
+        "title": "Request a Database System",
+        "description": "Tell us about the system or database your business needs.",
+        "submit": "Submit Database Request",
+        "db_type": "Database type",
+        "db_type_placeholder": "Database type",
+        "project_size": "Project size",
+        "project_size_placeholder": "Project size",
+        "timeline": "Expected timeline",
+        "timeline_placeholder": "Expected timeline",
+        "db_types": [
+          "Clinic System",
+          "School System",
+          "Inventory System",
+          "Custom Database"
+        ],
+        "project_sizes": ["Small", "Medium", "Large"]
+      }
     }
   },
   "cv_page": {
@@ -763,7 +820,9 @@
     "sign_up": "Sign Up",
     "sign_out": "Sign Out",
     "welcome": "Welcome",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "advertisement": "Advertisement",
+    "ad_iframe_title": "Advertisement"
   },
   "about_page": {
     "intro": "A professional digital services platform focused on education, scholarship support, web development, database solutions, and digital services.",
@@ -794,7 +853,7 @@
     "error_msg": "Failed to send message. Please try WhatsApp instead.",
     "name_placeholder": "Your full name",
     "email_placeholder": "your@email.com",
-    "phone_placeholder": "+92 303 939 3438",
+    "phone_placeholder": "+92 303 939 3437",
     "country_placeholder": "Your country",
     "message_placeholder": "Tell us how we can help you...",
     "select_service": "Select a service...",
@@ -1015,50 +1074,6 @@
       "custom_desc": "Tailored database architecture for any business need."
     }
   },
-  "cv_page": {
-    "badge": "CV & Translation",
-    "title": "CV Writing & Translation Services",
-    "subtitle": "Professional CV writing, motivation letters, and certified document translation services to help you stand out globally.",
-    "cv_section_title": "CV & Document Writing",
-    "cv_section_subtitle": "Professional writing services for academic and professional success.",
-    "trans_section_title": "Translation Services",
-    "trans_section_subtitle": "Certified multilingual translation for all your important documents.",
-    "how_title": "How It Works",
-    "cta_title": "Ready to Get Started?",
-    "cta_subtitle": "Contact us today and let our experts craft the perfect CV or translate your documents professionally.",
-    "request_btn": "Request Service on WhatsApp",
-    "view_pricing": "View Pricing",
-    "cv_services": {
-      "cv_title": "Professional CV Writing",
-      "cv_desc": "ATS-optimized CVs tailored for international universities and employers.",
-      "resume_title": "Resume Writing",
-      "resume_desc": "Modern, clean resumes that stand out in competitive job markets.",
-      "motivation_title": "Motivation Letter",
-      "motivation_desc": "Compelling motivation letters that tell your unique story.",
-      "sop_title": "Statement of Purpose",
-      "sop_desc": "Powerful SOP writing for graduate school applications."
-    },
-    "trans_services": {
-      "academic_title": "Academic Documents",
-      "academic_desc": "Transcripts, degrees, and certificates translated accurately.",
-      "legal_title": "Legal Documents",
-      "legal_desc": "Certified translation of legal and official documents.",
-      "personal_title": "Personal Statements",
-      "personal_desc": "Translation of personal statements and essays.",
-      "multilingual_title": "Multilingual Support",
-      "multilingual_desc": "English, Pashto, Dari, and other languages supported."
-    },
-    "steps": {
-      "s1_title": "Contact Us",
-      "s1_desc": "Reach out via WhatsApp or our contact form.",
-      "s2_title": "Share Documents",
-      "s2_desc": "Upload your existing documents and requirements.",
-      "s3_title": "We Create",
-      "s3_desc": "Our experts craft your CV or translate your documents.",
-      "s4_title": "Delivery",
-      "s4_desc": "Receive your polished documents within the agreed timeline."
-    }
-  },
   "digital_page": {
     "badge": "Digital Tools",
     "title": "AI Tools & Subscriptions",
@@ -1108,51 +1123,54 @@
       "udemy_f4": "Downloadable Resources"
     }
   },
-  "smm_page": {
-    "badge": "Social Media Marketing",
-    "title": "Amplify Your Digital Presence",
-    "subtitle": "Strategic social media marketing solutions to grow your brand, reach your target audience, and drive real business results.",
-    "services_title": "Our SMM Services",
-    "services_subtitle": "Everything you need to dominate social media.",
-    "packages_title": "Marketing Packages",
-    "packages_subtitle": "Choose the package that fits your business goals.",
-    "most_popular": "Most Popular",
-    "get_started": "Get Started",
-    "cta_title": "Ready to Grow Your Brand?",
-    "cta_subtitle": "Contact us today and let's create a social media strategy that delivers real results for your business.",
-    "start_campaign": "Start Your Campaign",
-    "services": {
-      "fb_title": "Facebook Ads Management",
-      "fb_desc": "Targeted Facebook advertising campaigns to reach your ideal audience.",
-      "ig_title": "Instagram Ads",
-      "ig_desc": "Visually compelling Instagram campaigns that drive engagement and sales.",
-      "growth_title": "Social Media Growth",
-      "growth_desc": "Organic growth strategies to build a genuine, engaged following.",
-      "boost_title": "Post Boosting",
-      "boost_desc": "Amplify your best content to reach a wider targeted audience.",
-      "targeting_title": "Audience Targeting",
-      "targeting_desc": "Precision targeting based on demographics, interests, and behavior.",
-      "promo_title": "Content Promotion",
-      "promo_desc": "Strategic promotion of your content across multiple platforms."
-    },
-    "packages": {
-      "starter_name": "Starter",
-      "starter_f1": "2 platforms",
-      "starter_f2": "8 posts/month",
-      "starter_f3": "Basic analytics",
-      "starter_f4": "WhatsApp support",
-      "growth_name": "Growth",
-      "growth_f1": "3 platforms",
-      "growth_f2": "20 posts/month",
-      "growth_f3": "Ad campaign management",
-      "growth_f4": "Monthly report",
-      "growth_f5": "Priority support",
-      "premium_name": "Premium",
-      "premium_f1": "All platforms",
-      "premium_f2": "Unlimited posts",
-      "premium_f3": "Full ad management",
-      "premium_f4": "Weekly reports",
-      "premium_f5": "Dedicated manager"
-    }
+  "admin": {
+    "nav_content": "CONTENT",
+    "nav_commerce": "COMMERCE",
+    "nav_operations": "OPERATIONS",
+    "nav_dashboard": "Dashboard",
+    "nav_scholarships": "Scholarships",
+    "nav_blogs": "Blogs",
+    "nav_portfolio": "Portfolio",
+    "nav_services": "Services",
+    "nav_pricing": "Pricing",
+    "nav_ads": "Ads",
+    "nav_requests": "Requests",
+    "nav_settings": "Settings",
+    "logout": "Logout",
+    "notifications": "Notifications",
+    "service_manager_title": "Services",
+    "service_manager_subtitle": "Manage the services you offer to clients",
+    "add_service": "Add Service",
+    "loading_services": "Loading services...",
+    "edit_service": "Edit Service",
+    "new_service": "Add Service",
+    "delete_service_title": "Delete Service?",
+    "delete_service_body": "This action cannot be undone.",
+    "title_en": "Title (English) *",
+    "title_ps": "Title (Pashto)",
+    "title_fa": "Title (Dari)",
+    "description_en": "Description (English) *",
+    "description_ps": "Description (Pashto)",
+    "description_fa": "Description (Dari)",
+    "features_en": "Features — one per line (English)",
+    "features_ps": "Features — one per line (Pashto)",
+    "features_fa": "Features — one per line (Dari)",
+    "icon_label": "Icon (Material Symbol name)",
+    "category_label": "Category",
+    "cta_label": "CTA Link",
+    "status_label": "Status",
+    "save": "Save",
+    "cancel": "Cancel",
+    "active": "Active",
+    "inactive": "Inactive",
+    "locale_hint": "Fill English for all entries; Pashto and Dari show on the public site when that language is selected.",
+    "view_site": "View Site",
+    "admin_breadcrumb": "Admin",
+    "admin_brand": "QADAM Admin",
+    "notifications_title": "Notifications",
+    "no_notifications": "No notifications yet",
+    "view_all_requests": "View all requests",
+    "administrator": "Administrator",
+    "save_require_en": "Please fill in the English title and description (required)."
   }
 }

@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from app.extensions import get_mongo_db
+from app.services.cache_service import bump_public_cache
 from app.services.locale_content import localize_structure, normalize_lang
 
 SETTINGS_ID = "default"
@@ -20,7 +21,7 @@ def _default_document():
     return {
         "_id": SETTINGS_ID,
         "contact": {
-            "whatsapp": "+92 303 939 3438",
+            "whatsapp": "+92 303 939 3437",
             "phone": "+92 777 241 173",
             "email": "Qadamdigital.official@gmail.com",
             "location": "Kabul, Afghanistan",
@@ -176,3 +177,5 @@ def merge_settings_payload(payload: dict[str, Any], admin_id: str | None) -> Non
         {"$set": update_doc, "$setOnInsert": {"_id": SETTINGS_ID, "createdAt": now}},
         upsert=True,
     )
+
+    bump_public_cache()

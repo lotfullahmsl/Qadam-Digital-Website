@@ -7,7 +7,7 @@ import { portfolioService } from '../../services/portfolioService'
 import { cmsText } from '../../utils/cmsText'
 
 export default function About() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('All')
@@ -29,7 +29,7 @@ export default function About() {
     return () => {
       ignore = true
     }
-  }, [])
+  }, [i18n.language])
 
   const categories = useMemo(() => {
     const fromData = [...new Set(projects.map((p) => cmsText(p.category)).filter(Boolean))]
@@ -223,7 +223,7 @@ export default function About() {
               <span className="material-symbols-outlined text-base">arrow_forward</span>
             </Link>
             <a
-              href="https://wa.me/923039393438"
+              href="https://wa.me/923039393437"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold px-8 py-3.5 rounded-lg border border-white/30 hover:bg-white/25 transition-all duration-200"

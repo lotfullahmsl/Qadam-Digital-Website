@@ -28,12 +28,24 @@ class Config:
         "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000",
     )
 
-    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", str(BASE_DIR / "uploads"))
+    # On Vercel Functions only /tmp is writable; override with UPLOAD_FOLDER if needed.
+    _upload_default = "/tmp/qadam_uploads" if os.getenv("VERCEL") else str(BASE_DIR / "uploads")
+    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", _upload_default)
     MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "10"))
     MAX_CONTENT_LENGTH = MAX_UPLOAD_MB * 1024 * 1024
 
     # Optional: public origin for absolute file URLs (e.g. http://127.0.0.1:5001 for Vite + separate API host)
     SERVER_PUBLIC_BASE_URL = os.getenv("SERVER_PUBLIC_BASE_URL", "").rstrip("/")
+
+    # Optional: Redis (e.g. Upstash rediss://). Used for public API response cache and rate-limit storage.
+    REDIS_URL = (os.getenv("REDIS_URL") or "").strip()
+    CACHE_TTL_PUBLIC_SEC = int(os.getenv("CACHE_TTL_PUBLIC_SEC", "120"))
+    CACHE_TTL_STATIC_SEC = int(os.getenv("CACHE_TTL_STATIC_SEC", "300"))
+    RATELIMIT_STORAGE_URI = REDIS_URL or "memory://"
+
+    # Browser / CDN Cache-Control for public JSON & SEO GET responses (Redis still shields Mongo).
+    BROWSER_CACHE_PUBLIC_SEC = int(os.getenv("BROWSER_CACHE_PUBLIC_SEC", "120"))
+    BROWSER_CACHE_STATIC_SEC = int(os.getenv("BROWSER_CACHE_STATIC_SEC", "600"))
 
     JSON_SORT_KEYS = False
     FRONTEND_PUBLIC_URL = os.getenv("FRONTEND_PUBLIC_URL", "").rstrip("/")

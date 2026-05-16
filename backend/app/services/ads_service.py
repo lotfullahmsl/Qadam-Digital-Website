@@ -9,6 +9,7 @@ from bson.errors import InvalidId
 from pymongo import ASCENDING, DESCENDING
 
 from app.extensions import get_mongo_db
+from app.services.cache_service import bump_public_cache
 from app.services.content_service import serialize_document
 from app.services.locale_content import localize_structure, normalize_lang
 
@@ -165,6 +166,7 @@ def create_ad(payload: dict, admin_id: str) -> dict:
     }
     result = db[COLLECTION].insert_one(doc)
     doc["_id"] = result.inserted_id
+    bump_public_cache()
     return serialize_document(doc)
 
 
@@ -184,6 +186,7 @@ def update_ad(item_id: str, payload: dict, admin_id: str) -> dict | None:
     res = db[COLLECTION].update_one({"_id": oid}, {"$set": body})
     if res.matched_count == 0:
         return None
+    bump_public_cache()
     return get_admin_ad(item_id)
 
 
@@ -201,6 +204,7 @@ def update_ad_status(item_id: str, status: str, admin_id: str) -> dict | None:
         {"_id": oid},
         {"$set": {"status": status, "updatedAt": datetime.now(timezone.utc), "updatedBy": admin_id}},
     )
+    bump_public_cache()
     return get_admin_ad(item_id)
 
 
@@ -212,4 +216,7 @@ def delete_ad(item_id: str) -> bool:
     db = get_mongo_db()
     if db is None:
         return False
-    return db[COLLECTION].delete_one({"_id": oid}).deleted_count == 1
+    deleted = db[COLLECTION].delete_one({"_id": oid}).deleted_count == 1
+    if deleted:
+        bump_public_cache()
+    return deleted

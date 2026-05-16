@@ -7,9 +7,10 @@ from pymongo import MongoClient
 
 cors = CORS()
 jwt = JWTManager()
-limiter = Limiter(key_func=get_remote_address, default_limits=[], storage_uri="memory://")
+limiter = Limiter(key_func=get_remote_address, default_limits=[])
 mongo_client = None
 mongo_db = None
+redis_client = None
 
 
 def init_mongo(app):
@@ -34,3 +35,27 @@ def get_mongo_client():
 
 def get_mongo_db():
     return mongo_db
+
+
+def init_redis(app):
+    global redis_client
+
+    url = app.config.get("REDIS_URL")
+    if not url:
+        redis_client = None
+        app.logger.info("REDIS_URL not set; using in-process fallbacks for cache and rate limits.")
+        return
+
+    import redis as redis_lib
+
+    redis_client = redis_lib.from_url(url, decode_responses=True)
+    try:
+        redis_client.ping()
+        app.logger.info("Redis connected for public cache / rate limits.")
+    except Exception as exc:
+        app.logger.warning("Redis ping failed (%s); using MongoDB for HTTP cache and memory for rate limits.", exc)
+        redis_client = None
+
+
+def get_redis():
+    return redis_client

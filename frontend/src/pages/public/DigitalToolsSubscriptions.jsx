@@ -6,7 +6,7 @@ import { pricingService } from '../../services/pricingService'
 import { cmsText } from '../../utils/cmsText'
 
 export default function DigitalToolsSubscriptions() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [packages, setPackages] = useState([])
   const [packagesLoading, setPackagesLoading] = useState(true)
 
@@ -25,7 +25,7 @@ export default function DigitalToolsSubscriptions() {
     }
     loadPackages()
     return () => { ignore = true }
-  }, [])
+  }, [i18n.language])
 
   const planNames = packages.map((p) => cmsText(p.name)).filter(Boolean)
   const STEPS = [
@@ -100,7 +100,7 @@ export default function DigitalToolsSubscriptions() {
                       </li>
                     ))}
                   </ul>
-                  <a href="https://wa.me/923039393438" target="_blank" rel="noopener noreferrer"
+                  <a href="https://wa.me/923039393437" target="_blank" rel="noopener noreferrer"
                     className={`w-full text-center py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-all duration-200 ${sub.popular ? 'bg-white text-primary hover:bg-primary-pale' : 'border border-primary text-primary hover:bg-primary hover:text-white'}`}>
                     {t('digital_tools.request_sub')}
                   </a>

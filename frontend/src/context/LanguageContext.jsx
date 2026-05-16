@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+import { clearPublicApiCache } from '../utils/apiClient'
 
 export const LanguageContext = createContext()
 
@@ -15,6 +16,7 @@ export function LanguageProvider({ children }) {
     document.documentElement.lang = lang
     document.documentElement.dir = RTL_LANGS.includes(lang) ? 'rtl' : 'ltr'
     localStorage.setItem('i18nextLng', lang)
+    clearPublicApiCache()
   }
 
   useEffect(() => {
@@ -23,8 +25,14 @@ export function LanguageProvider({ children }) {
   }, [])
 
   return (
-    <LanguageContext.Provider value={{ language, changeLanguage }}>
+    <LanguageContext.Provider value={{ language, changeLanguage, dir: RTL_LANGS.includes(language) ? 'rtl' : 'ltr' }}>
       {children}
     </LanguageContext.Provider>
   )
+}
+
+export function useLanguage() {
+  const ctx = useContext(LanguageContext)
+  if (!ctx) throw new Error('useLanguage must be used within LanguageProvider')
+  return ctx
 }

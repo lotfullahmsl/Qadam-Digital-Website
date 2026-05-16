@@ -5,11 +5,10 @@ import { useLanguage } from '../../hooks/useLanguage'
 import { useAuth } from '../../hooks/useAuth'
 import { ROUTES } from '../../constants/routes'
 
-const LANGUAGES = [
-  { code: 'en', label: 'EN' },
-  { code: 'ps', label: 'PS' },
-  { code: 'fa', label: 'DA' },
-]
+const LANGUAGE_CODES = ['en', 'ps', 'fa']
+
+const languageShortLabel = (code) =>
+  code === 'en' ? 'EN' : code === 'ps' ? 'PS' : 'DA'
 
 export default function Navbar() {
   const { t } = useTranslation()
@@ -71,7 +70,7 @@ export default function Navbar() {
         <div className="flex items-center" style={{ height: '68px' }}>
 
           {/* ── Logo ── */}
-          <Link to={ROUTES.HOME} className="flex items-center gap-3 flex-shrink-0 mr-10">
+          <Link to={ROUTES.HOME} className="flex items-center gap-3 flex-shrink-0 me-10">
             <img
               src="/logo-dark.jpeg"
               alt="QADAM Digital"
@@ -113,35 +112,51 @@ export default function Navbar() {
           </nav>
 
           {/* ── Right Actions ── */}
-          <div className="hidden lg:flex items-center gap-3 ml-6 flex-shrink-0">
+          <div className="hidden lg:flex items-center gap-3 ms-6 flex-shrink-0">
 
             {/* Language Switcher */}
             <div className="relative" ref={langRef}>
               <button
+                type="button"
                 onClick={() => { setLangOpen(!langOpen); setUserMenuOpen(false) }}
-                className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-primary px-3 py-2 rounded-lg hover:bg-primary/5 transition-all duration-200"
+                className="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-primary px-3.5 py-2 rounded-xl border border-transparent hover:border-primary/15 hover:bg-primary/5 transition-all duration-200"
+                aria-haspopup="listbox"
+                aria-expanded={langOpen}
               >
-                <span className="material-symbols-outlined text-base">language</span>
-                {LANGUAGES.find((l) => l.code === language)?.label || 'EN'}
-                <span className="material-symbols-outlined text-sm">expand_more</span>
+                <span className="material-symbols-outlined text-base text-primary/80">language</span>
+                <span className="min-w-[4.5rem] text-start font-semibold">
+                  {languageShortLabel(language)}
+                </span>
+                <span className="material-symbols-outlined text-sm text-gray-400 rtl:rotate-180 transition-transform">expand_more</span>
               </button>
               {langOpen && (
-                <div className="absolute right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden z-50 min-w-[90px]">
-                  {LANGUAGES.map((lang) => (
+                <div
+                  className="absolute end-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] overflow-hidden z-50 min-w-[200px] py-1"
+                  role="listbox"
+                >
+                  {LANGUAGE_CODES.map((code) => (
                     <button
-                      key={lang.code}
-                      onClick={() => { changeLanguage(lang.code); setLangOpen(false) }}
-                      className={`flex items-center gap-2 w-full px-4 py-2.5 text-sm font-medium transition-colors ${
-                        language === lang.code
+                      key={code}
+                      type="button"
+                      role="option"
+                      aria-selected={language === code}
+                      onClick={() => { changeLanguage(code); setLangOpen(false) }}
+                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                        language === code
                           ? 'text-primary bg-primary/8 font-semibold'
-                          : 'text-gray-600 hover:text-primary hover:bg-primary/5'
+                          : 'text-gray-700 hover:text-primary hover:bg-primary/5'
                       }`}
-                      style={language === lang.code ? { backgroundColor: 'rgba(0,170,255,0.08)' } : {}}
+                      style={language === code ? { backgroundColor: 'rgba(0,170,255,0.08)' } : {}}
                     >
-                      {language === lang.code && (
-                        <span className="material-symbols-outlined text-primary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                      <span className="w-8 text-xs font-bold tracking-wider text-gray-400 tabular-nums">
+                        {languageShortLabel(code)}
+                      </span>
+                      <span className="flex-1 text-start break-words" dir="auto">
+                        {t(`nav.lang_${code}`)}
+                      </span>
+                      {language === code && (
+                        <span className="material-symbols-outlined text-primary text-lg shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                       )}
-                      {lang.label}
                     </button>
                   ))}
                 </div>
@@ -183,10 +198,10 @@ export default function Navbar() {
                   <span className="text-sm font-semibold text-navy max-w-[100px] truncate">
                     {admin?.name || 'Admin'}
                   </span>
-                  <span className="material-symbols-outlined text-gray-400 text-base">expand_more</span>
+                  <span className="material-symbols-outlined text-gray-400 text-base rtl:rotate-180">expand_more</span>
                 </button>
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-lg overflow-hidden z-50">
+                  <div className="absolute end-0 mt-2 w-56 bg-white border border-gray-100 rounded-2xl shadow-lg overflow-hidden z-50">
                     <div className="px-4 py-3 border-b border-gray-100 bg-primary/5">
                       <p className="text-sm font-semibold text-navy truncate">{admin?.name || 'Admin'}</p>
                       <p className="text-xs text-gray-500 truncate mt-0.5">{admin?.email}</p>
@@ -224,7 +239,7 @@ export default function Navbar() {
 
           {/* ── Mobile Hamburger ── */}
           <button
-            className="lg:hidden ml-auto p-2 text-gray-500 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
+            className="lg:hidden ms-auto p-2 text-gray-500 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -235,8 +250,8 @@ export default function Navbar() {
 
       {/* ── Mobile Menu ── */}
       {menuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
-          <div className="w-full px-6 xl:px-12 py-4 flex flex-col gap-1">
+        <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg max-h-[min(85vh,calc(100dvh-4.25rem))] overflow-y-auto overscroll-y-contain">
+          <div className="w-full px-6 xl:px-12 py-4 pb-6 flex flex-col gap-1" dir="auto">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
@@ -299,21 +314,40 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Mobile Language */}
-            <div className="border-t border-gray-100 mt-2 pt-3 flex gap-2">
-              {LANGUAGES.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => { changeLanguage(lang.code); setMenuOpen(false) }}
-                  className={`flex-1 py-2 rounded-lg text-xs font-semibold tracking-widest uppercase transition-colors ${
-                    language === lang.code
-                      ? 'bg-primary text-white'
-                      : 'border border-gray-200 text-gray-500 hover:border-primary hover:text-primary'
-                  }`}
-                >
-                  {lang.label}
-                </button>
-              ))}
+            {/* Mobile language — LTR control so locale order stays consistent in RTL layouts */}
+            <div className="border-t border-gray-100 mt-4 pt-4" dir="ltr">
+              <p className="text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400 mb-2.5">
+                {t('nav.language')}
+              </p>
+              <div
+                className="flex rounded-2xl bg-gray-100/90 p-1 gap-1 shadow-inner border border-gray-100"
+                role="group"
+                aria-label={t('nav.language')}
+              >
+                {LANGUAGE_CODES.map((code) => {
+                  const active = language === code
+                  return (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => { changeLanguage(code); setMenuOpen(false) }}
+                      className={`flex-1 min-h-[44px] rounded-xl text-xs font-bold tracking-wide transition-all duration-200 ${
+                        active
+                          ? 'bg-white text-primary shadow-sm ring-1 ring-primary/20'
+                          : 'text-gray-500 hover:text-gray-800 active:scale-[0.98]'
+                      }`}
+                      aria-pressed={active}
+                    >
+                      <span className="block text-[11px] font-extrabold text-gray-400 mb-0.5">
+                        {languageShortLabel(code)}
+                      </span>
+                      <span className="block text-[13px] font-semibold leading-tight px-0.5 break-words" dir="auto">
+                        {t(`nav.lang_${code}`)}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>

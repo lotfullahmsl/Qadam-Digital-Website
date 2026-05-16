@@ -181,7 +181,7 @@ export default function Settings() {
                     </label>
                     <input
                       className={inputClass}
-                      placeholder="+92 303 939 3438"
+                      placeholder="+92 303 939 3437"
                       value={contact.whatsapp ?? ''}
                       onChange={(e) => setContact({ ...contact, whatsapp: e.target.value })}
                     />

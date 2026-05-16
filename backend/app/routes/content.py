@@ -1,6 +1,7 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, current_app, jsonify, request
 
 from app.extensions import get_mongo_db
+from app.services.cache_service import public_cache_get_json, request_query_fragment
 from app.services.content_service import (
     find_public_by_id,
     paginated_public_query,
@@ -19,6 +20,10 @@ def _public_lang():
 
 def _not_found(resource):
     return jsonify({"message": f"{resource} not found"}), 404
+
+
+def _public_ttl():
+    return int(current_app.config.get("CACHE_TTL_PUBLIC_SEC", 120))
 
 
 @content_bp.get("/scholarships")
@@ -42,16 +47,30 @@ def list_scholarships():
     if tq:
         parts.append(tq)
     query = {"$and": [status_q, *parts]} if parts else status_q
-    return jsonify(paginated_public_query("scholarships", query, request.args, lang=lang))
+    frag = f"scholarships:{lang}:{request_query_fragment(request, 'q')}"
+    data = public_cache_get_json(
+        frag,
+        _public_ttl(),
+        lambda: paginated_public_query("scholarships", query, request.args, lang=lang),
+    )
+    return jsonify(data)
 
 
 @content_bp.get("/scholarships/<scholarship_id>")
 def get_scholarship(scholarship_id):
     lang = _public_lang()
-    scholarship = find_public_by_id("scholarships", scholarship_id, lang=lang)
-    if not scholarship:
+    frag = f"scholarship:{scholarship_id}:{lang}"
+
+    def compute():
+        s = find_public_by_id("scholarships", scholarship_id, lang=lang)
+        if not s:
+            return None
+        return {"scholarship": s}
+
+    data = public_cache_get_json(frag, _public_ttl(), compute)
+    if not data:
         return _not_found("Scholarship")
-    return jsonify({"scholarship": scholarship})
+    return jsonify(data)
 
 
 @content_bp.get("/blogs")
@@ -67,16 +86,30 @@ def list_blogs():
     if tq:
         parts.append(tq)
     query = {"$and": [public_filter({}), *parts]} if parts else public_filter({})
-    return jsonify(paginated_public_query("blogs", query, request.args, lang=lang))
+    frag = f"blogs:{lang}:{request_query_fragment(request, 'q')}"
+    data = public_cache_get_json(
+        frag,
+        _public_ttl(),
+        lambda: paginated_public_query("blogs", query, request.args, lang=lang),
+    )
+    return jsonify(data)
 
 
 @content_bp.get("/blogs/<slug>")
 def get_blog(slug):
     lang = _public_lang()
-    blog = get_mongo_db().blogs.find_one(public_filter({"slug": slug}))
-    if not blog:
+    frag = f"blog:{slug}:{lang}"
+
+    def compute():
+        blog = get_mongo_db().blogs.find_one(public_filter({"slug": slug}))
+        if not blog:
+            return None
+        return {"blog": localize_structure(serialize_document(blog), lang)}
+
+    data = public_cache_get_json(frag, _public_ttl(), compute)
+    if not data:
         return _not_found("Blog")
-    return jsonify({"blog": localize_structure(serialize_document(blog), lang)})
+    return jsonify(data)
 
 
 @content_bp.get("/services")
@@ -87,8 +120,14 @@ def list_services():
     if category and category.lower() != "all":
         filters["categoryKey"] = category
 
-    services = get_mongo_db().services.find(public_filter(filters)).sort("order", 1)
-    return jsonify({"items": [localize_structure(serialize_document(service), lang) for service in services]})
+    frag = f"services:{lang}:{request_query_fragment(request, 'q')}"
+
+    def compute():
+        services = get_mongo_db().services.find(public_filter(filters)).sort("order", 1)
+        return {"items": [localize_structure(serialize_document(service), lang) for service in services]}
+
+    data = public_cache_get_json(frag, _public_ttl(), compute)
+    return jsonify(data)
 
 
 @content_bp.get("/pricing-packages")
@@ -99,8 +138,14 @@ def list_pricing_packages():
     if category and category.lower() != "all":
         filters["category"] = category
 
-    packages = get_mongo_db().pricing_packages.find(public_filter(filters)).sort("order", 1)
-    return jsonify({"items": [localize_structure(serialize_document(package), lang) for package in packages]})
+    frag = f"pricing:{lang}:{request_query_fragment(request, 'q')}"
+
+    def compute():
+        packages = get_mongo_db().pricing_packages.find(public_filter(filters)).sort("order", 1)
+        return {"items": [localize_structure(serialize_document(package), lang) for package in packages]}
+
+    data = public_cache_get_json(frag, _public_ttl(), compute)
+    return jsonify(data)
 
 
 @content_bp.get("/portfolio-projects")
@@ -111,12 +156,24 @@ def list_portfolio_projects():
     if category and category.lower() != "all":
         filters["category"] = category
 
-    projects = get_mongo_db().portfolio_projects.find(public_filter(filters)).sort("order", 1)
-    return jsonify({"items": [localize_structure(serialize_document(project), lang) for project in projects]})
+    frag = f"portfolio:{lang}:{request_query_fragment(request, 'q')}"
+
+    def compute():
+        projects = get_mongo_db().portfolio_projects.find(public_filter(filters)).sort("order", 1)
+        return {"items": [localize_structure(serialize_document(project), lang) for project in projects]}
+
+    data = public_cache_get_json(frag, _public_ttl(), compute)
+    return jsonify(data)
 
 
 @content_bp.get("/testimonials")
 def list_testimonials():
     lang = _public_lang()
-    testimonials = get_mongo_db().testimonials.find(public_filter()).sort("order", 1)
-    return jsonify({"items": [localize_structure(serialize_document(testimonial), lang) for testimonial in testimonials]})
+    frag = f"testimonials:{lang}:{request_query_fragment(request, 'q')}"
+
+    def compute():
+        testimonials = get_mongo_db().testimonials.find(public_filter()).sort("order", 1)
+        return {"items": [localize_structure(serialize_document(testimonial), lang) for testimonial in testimonials]}
+
+    data = public_cache_get_json(frag, _public_ttl(), compute)
+    return jsonify(data)

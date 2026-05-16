@@ -1,42 +1,48 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
 import { ROUTES } from '../../constants/routes'
 import { notificationService } from '../../services/notificationService'
-
-const NAV_SECTIONS = [
-  {
-    label: 'CONTENT',
-    items: [
-      { label: 'Dashboard', icon: 'dashboard', to: ROUTES.ADMIN_DASHBOARD },
-      { label: 'Scholarships', icon: 'school', to: ROUTES.ADMIN_SCHOLARSHIPS },
-      { label: 'Blogs', icon: 'article', to: ROUTES.ADMIN_BLOGS },
-      { label: 'Portfolio', icon: 'work', to: ROUTES.ADMIN_PORTFOLIO },
-      { label: 'Services', icon: 'build', to: ROUTES.ADMIN_SERVICES },
-    ],
-  },
-  {
-    label: 'COMMERCE',
-    items: [
-      { label: 'Pricing', icon: 'sell', to: ROUTES.ADMIN_PRICING },
-      { label: 'Ads', icon: 'campaign', to: ROUTES.ADMIN_ADS },
-    ],
-  },
-  {
-    label: 'OPERATIONS',
-    items: [
-      { label: 'Requests', icon: 'inbox', to: ROUTES.ADMIN_REQUESTS },
-      { label: 'Settings', icon: 'settings', to: ROUTES.ADMIN_SETTINGS },
-    ],
-  },
-]
-
-const ALL_NAV_ITEMS = NAV_SECTIONS.flatMap((s) => s.items)
+import { useLanguage } from '../../context/LanguageContext'
 
 export default function AdminLayout({ children }) {
+  const { t, i18n } = useTranslation()
+  const { changeLanguage, language } = useLanguage()
   const { admin, logout } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
+  const NAV_SECTIONS = useMemo(
+    () => [
+      {
+        label: t('admin.nav_content'),
+        items: [
+          { label: t('admin.nav_dashboard'), icon: 'dashboard', to: ROUTES.ADMIN_DASHBOARD },
+          { label: t('admin.nav_scholarships'), icon: 'school', to: ROUTES.ADMIN_SCHOLARSHIPS },
+          { label: t('admin.nav_blogs'), icon: 'article', to: ROUTES.ADMIN_BLOGS },
+          { label: t('admin.nav_portfolio'), icon: 'work', to: ROUTES.ADMIN_PORTFOLIO },
+          { label: t('admin.nav_services'), icon: 'build', to: ROUTES.ADMIN_SERVICES },
+        ],
+      },
+      {
+        label: t('admin.nav_commerce'),
+        items: [
+          { label: t('admin.nav_pricing'), icon: 'sell', to: ROUTES.ADMIN_PRICING },
+          { label: t('admin.nav_ads'), icon: 'campaign', to: ROUTES.ADMIN_ADS },
+        ],
+      },
+      {
+        label: t('admin.nav_operations'),
+        items: [
+          { label: t('admin.nav_requests'), icon: 'inbox', to: ROUTES.ADMIN_REQUESTS },
+          { label: t('admin.nav_settings'), icon: 'settings', to: ROUTES.ADMIN_SETTINGS },
+        ],
+      },
+    ],
+    [t],
+  )
+
+  const ALL_NAV_ITEMS = useMemo(() => NAV_SECTIONS.flatMap((s) => s.items), [NAV_SECTIONS])
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [notifOpen, setNotifOpen] = useState(false)
   const [notifications, setNotifications] = useState([])
@@ -94,13 +100,21 @@ export default function AdminLayout({ children }) {
   const formatNotifTime = (iso) => {
     if (!iso) return ''
     try {
-      return new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+      const b = (i18n.language || 'en').split('-')[0].toLowerCase()
+      const loc = b === 'fa' ? 'fa-AF' : b === 'ps' ? 'ps-AF' : 'en-US'
+      return new Date(iso).toLocaleString(loc, { dateStyle: 'medium', timeStyle: 'short' })
     } catch {
       return ''
     }
   }
 
   const currentPage = ALL_NAV_ITEMS.find((n) => n.to === location.pathname)
+
+  const langCodes = [
+    { code: 'en', short: 'EN' },
+    { code: 'ps', short: 'PS' },
+    { code: 'fa', short: 'FA' },
+  ]
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -114,7 +128,7 @@ export default function AdminLayout({ children }) {
             className={`object-contain transition-all duration-300 ${sidebarOpen ? 'h-8 w-auto' : 'h-7 w-7'}`}
           />
           {sidebarOpen && (
-            <span className="font-heading font-bold text-white text-base whitespace-nowrap">QADAM Admin</span>
+            <span className="font-heading font-bold text-white text-base whitespace-nowrap">{t('admin.admin_brand')}</span>
           )}
         </div>
 
@@ -159,13 +173,13 @@ export default function AdminLayout({ children }) {
               <p className="text-xs text-white/40 truncate">{admin?.email || 'admin@qadam.com'}</p>
               <Link to="/" target="_blank" className="flex items-center gap-2 text-white/50 hover:text-primary transition-colors text-xs">
                 <span className="material-symbols-outlined text-base">open_in_new</span>
-                View Site
+                {t('admin.view_site')}
               </Link>
             </>
           )}
           <button onClick={handleLogout} className="flex items-center gap-2 text-white/50 hover:text-red-400 transition-colors text-sm w-full">
             <span className="material-symbols-outlined text-xl flex-shrink-0">logout</span>
-            {sidebarOpen && <span className="text-xs">Logout</span>}
+            {sidebarOpen && <span className="text-xs">{t('admin.logout')}</span>}
           </button>
         </div>
       </aside>
@@ -178,11 +192,25 @@ export default function AdminLayout({ children }) {
             <span className="material-symbols-outlined">menu</span>
           </button>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-400">Admin</span>
+            <span className="text-gray-400">{t('admin.admin_breadcrumb')}</span>
             <span className="text-gray-300">/</span>
-            <span className="font-semibold text-navy">{currentPage?.label || 'Dashboard'}</span>
+            <span className="font-semibold text-navy">{currentPage?.label || t('admin.nav_dashboard')}</span>
           </div>
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-2">
+            <div className="flex rounded-lg border border-gray-200 overflow-hidden mr-1">
+              {langCodes.map(({ code, short }) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => changeLanguage(code)}
+                  className={`px-2 py-1 text-[10px] font-bold transition-colors ${
+                    (language || '').split('-')[0] === code ? 'bg-primary text-white' : 'bg-white text-gray-500 hover:bg-gray-50'
+                  }`}
+                >
+                  {short}
+                </button>
+              ))}
+            </div>
             {/* Notification Bell */}
             <div className="relative" ref={notifRef}>
               <button
@@ -203,7 +231,7 @@ export default function AdminLayout({ children }) {
                   {/* Header */}
                   <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-heading font-bold text-navy text-sm">Notifications</h3>
+                      <h3 className="font-heading font-bold text-navy text-sm">{t('admin.notifications_title')}</h3>
                       {unreadCount > 0 && (
                         <span className="bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{unreadCount}</span>
                       )}
@@ -219,7 +247,7 @@ export default function AdminLayout({ children }) {
                   {/* Notification List */}
                   <div className="max-h-80 overflow-y-auto divide-y divide-gray-50">
                     {notifications.length === 0 && (
-                      <div className="px-4 py-8 text-center text-gray-400 text-sm">No notifications yet</div>
+                      <div className="px-4 py-8 text-center text-gray-400 text-sm">{t('admin.no_notifications')}</div>
                     )}
                     {notifications.map((notif) => (
                       <button
@@ -251,7 +279,7 @@ export default function AdminLayout({ children }) {
                       onClick={() => { navigate(ROUTES.ADMIN_REQUESTS); setNotifOpen(false) }}
                       className="w-full text-center text-xs font-semibold text-primary hover:text-primary-dark transition-colors"
                     >
-                      View all requests →
+                      {t('admin.view_all_requests')}
                     </button>
                   </div>
                 </div>
@@ -263,7 +291,7 @@ export default function AdminLayout({ children }) {
               </div>
               <div className="hidden sm:block">
                 <p className="text-sm font-semibold text-navy leading-none">{admin?.name || 'Admin'}</p>
-                <p className="text-xs text-gray-400 mt-0.5">Administrator</p>
+                <p className="text-xs text-gray-400 mt-0.5">{t('admin.administrator')}</p>
               </div>
             </div>
           </div>

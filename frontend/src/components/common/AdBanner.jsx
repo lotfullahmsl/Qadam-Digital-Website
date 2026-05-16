@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { adsService } from '../../services/adsService'
 
-function AdSlot({ ad }) {
+function AdSlot({ ad, iframeTitle }) {
   if (ad.contentMode === 'image' && ad.imageUrl) {
     const img = <img src={ad.imageUrl} alt={ad.imageAlt || ad.name || ''} className="w-full h-auto max-h-[280px] object-contain rounded-lg mx-auto" loading="lazy" />
     return (
@@ -21,7 +22,7 @@ function AdSlot({ ad }) {
     const doc = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;overflow:hidden">${ad.htmlContent}</body></html>`
     return (
       <iframe
-        title={ad.name || 'Advertisement'}
+        title={iframeTitle}
         srcDoc={doc}
         sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
         className="w-full min-h-[90px] border-0 rounded-xl bg-transparent"
@@ -33,6 +34,7 @@ function AdSlot({ ad }) {
 }
 
 export default function AdBanner({ className = '', placement = 'Home' }) {
+  const { t, i18n } = useTranslation()
   const [items, setItems] = useState([])
   const [ready, setReady] = useState(false)
 
@@ -52,12 +54,12 @@ export default function AdBanner({ className = '', placement = 'Home' }) {
     return () => {
       cancelled = true
     }
-  }, [placement])
+  }, [placement, i18n.language])
 
   if (!ready) {
     return (
       <div className={`w-full bg-primary-pale/50 border border-border border-dashed rounded-xl flex items-center justify-center min-h-[72px] animate-pulse ${className}`}>
-        <span className="text-xs font-medium text-text-muted">Loading…</span>
+        <span className="text-xs font-medium text-text-muted">{t('common.loading')}</span>
       </div>
     )
   }
@@ -65,7 +67,7 @@ export default function AdBanner({ className = '', placement = 'Home' }) {
   if (!items.length) {
     return (
       <div className={`w-full bg-primary-pale border border-border rounded-xl flex items-center justify-center min-h-[72px] ${className}`}>
-        <span className="text-xs font-semibold tracking-widest uppercase text-text-muted">Advertisement</span>
+        <span className="text-xs font-semibold tracking-widest uppercase text-text-muted">{t('common.advertisement')}</span>
       </div>
     )
   }
@@ -74,7 +76,7 @@ export default function AdBanner({ className = '', placement = 'Home' }) {
     <div className={`w-full space-y-3 ${className}`}>
       {items.map((ad) => (
         <div key={ad._id} className="rounded-xl overflow-hidden border border-border bg-white/60">
-          <AdSlot ad={ad} />
+          <AdSlot ad={ad} iframeTitle={t('common.ad_iframe_title')} />
         </div>
       ))}
     </div>

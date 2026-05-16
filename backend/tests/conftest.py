@@ -7,6 +7,8 @@ from app.config import Config
 class TestConfig(Config):
     TESTING = True
     MONGO_URI = ""
+    REDIS_URL = ""
+    RATELIMIT_STORAGE_URI = "memory://"
     RATE_LIMITING_ENABLED = False
     RATELIMIT_ENABLED = False
     PROPAGATE_EXCEPTIONS = True

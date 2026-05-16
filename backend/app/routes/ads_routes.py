@@ -1,6 +1,6 @@
 from bson import ObjectId
 from bson.errors import InvalidId
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import get_jwt_identity
 
 from app.services.ads_service import (
@@ -13,6 +13,7 @@ from app.services.ads_service import (
     update_ad_status,
     validate_ad_payload,
 )
+from app.services.cache_service import public_cache_get_json
 from app.services.locale_content import normalize_lang
 from app.utils.auth import admin_required
 
@@ -25,7 +26,10 @@ def public_ads():
     if placement not in PLACEMENTS:
         return jsonify({"message": "Invalid placement"}), 400
     lang = normalize_lang(request.args.get("lang"))
-    return jsonify({"items": list_public_ads(placement, lang)})
+    ttl = int(current_app.config.get("CACHE_TTL_PUBLIC_SEC", 120))
+    frag = f"ads:{placement}:{lang}"
+    data = public_cache_get_json(frag, ttl, lambda: {"items": list_public_ads(placement, lang)})
+    return jsonify(data)
 
 
 @ads_bp.get("/admin/ads")

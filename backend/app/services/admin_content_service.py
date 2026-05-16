@@ -5,6 +5,7 @@ from bson.errors import InvalidId
 from pymongo import ASCENDING, DESCENDING
 
 from app.extensions import get_mongo_db
+from app.services.cache_service import bump_public_cache
 from app.services.content_service import parse_pagination, serialize_document, text_or_regex_query
 from app.services.locale_content import is_i18n_dict, pick_i18n
 
@@ -168,6 +169,7 @@ def create_admin_resource(config, payload, admin_id):
 
     result = get_mongo_db()[config["collection"]].insert_one(document)
     document["_id"] = result.inserted_id
+    bump_public_cache()
     return serialize_document(document)
 
 
@@ -183,6 +185,7 @@ def update_admin_resource(config, item_id, payload, admin_id):
         "updatedBy": admin_id,
     }
     get_mongo_db()[config["collection"]].update_one({"_id": object_id}, {"$set": update})
+    bump_public_cache()
     return get_admin_resource(config, item_id)
 
 
@@ -193,4 +196,6 @@ def delete_admin_resource(config, item_id):
         return False
 
     result = get_mongo_db()[config["collection"]].delete_one({"_id": object_id})
+    if result.deleted_count == 1:
+        bump_public_cache()
     return result.deleted_count == 1

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { siteSettingsService } from '../services/siteSettingsService'
+import { clearPublicApiCache } from '../utils/apiClient'
+import { WHATSAPP_DISPLAY, WHATSAPP_WA_ME } from '../constants/whatsapp'
 
 function settingsLangKey(code) {
   const base = String(code || 'en').split('-')[0].toLowerCase()
@@ -9,8 +11,8 @@ function settingsLangKey(code) {
 }
 
 export const DEFAULT_CONTACT = {
-  whatsapp: '+92 303 939 3438',
-  whatsappLink: 'https://wa.me/923039393438',
+  whatsapp: WHATSAPP_DISPLAY,
+  whatsappLink: WHATSAPP_WA_ME,
   phone: '+92 777 241 173',
   email: 'Qadamdigital.official@gmail.com',
   location: 'Kabul, Afghanistan',
@@ -88,4 +90,5 @@ export function useContactInfo() {
 
 export function clearPublicSettingsCache() {
   cacheByLang = {}
+  clearPublicApiCache()
 }
